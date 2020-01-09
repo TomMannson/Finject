@@ -1,0 +1,21 @@
+name: finject_generator
+description: A new flutter package project.
+version: 0.1.0
+homepage: https://github.com/TomMannson/Finject
+
+environment:
+  sdk: ">=2.0.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  build: '>=0.12.0 <2.0.0'
+  source_gen: ^0.9.0
+  finject:
+    path: ../finject/
+  dartpoet: ^1.0.6+3
+  
+dev_dependencies:
+  build_test: ^0.10.0
+  build_runner: 1.7.2
+  test: ^1.0.0

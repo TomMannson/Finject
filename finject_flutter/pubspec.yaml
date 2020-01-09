@@ -1,0 +1,20 @@
+name: finject_flutter
+description: Package contains required classes and widgets for DI.
+version: 0.1.0
+homepage: https://github.com/TomMannson/Finject
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  finject:
+    path: ../finject/
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+

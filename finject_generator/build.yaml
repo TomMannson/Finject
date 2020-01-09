@@ -1,0 +1,23 @@
+targets:
+  $default:
+    builders:
+      finject_generator|finject:
+        enabled: true
+
+builders:
+  summary_builder:
+    target: ":finject_generator"
+    import: "package:finject_generator/builder.dart"
+    builder_factories: ["summaryBuilder" ]
+    build_extensions: {".dart": [".todo_reporter.g.part"]}
+    auto_apply: dependents
+    runs_before: [":injectorMapper"]
+    build_to: cache
+  injectorMapper:
+    target: ":finject_generator"
+    import: "package:finject_generator/builder.dart"
+    builder_factories: ["mapperBuilder"]
+    build_extensions: {".dart": [".summary.json"]}
+    auto_apply: dependents
+    build_to: source
+    applies_builders: ["source_gen|combining_builder"]
