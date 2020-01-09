@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 
 import 'package:build/build.dart';
 import 'package:dartpoet/dartpoet.dart';
@@ -29,7 +30,6 @@ class DiCodeBuilder implements Builder {
 
   @override
   Future<void> build(BuildStep buildStep) async {
-    final files = <String>[];
     List<ClassSpec> allInjectors = [];
     Map<String, List<InjectorDs>> scopes = {};
     List<InjectorDs> allTypes = [];

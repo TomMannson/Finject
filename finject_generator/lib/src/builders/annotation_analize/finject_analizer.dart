@@ -4,8 +4,7 @@ import '../../builders/code_info_extraction.dart';
 import '../../json_schema/injector_Info.dart';
 
 class Analizer {
-
-  InjectorDs prepareInjectionDefinition(ClassElement classInfo){
+  InjectorDs prepareInjectionDefinition(ClassElement classInfo) {
     InjectorDs injectionDefinition = InjectorDs();
     injectionDefinition.typeName = convert(classInfo);
 
@@ -68,7 +67,8 @@ class Analizer {
     }
   }
 
-  void _attachFieldsInjections(InjectorDs injection, List<FieldElement> fields) {
+  void _attachFieldsInjections(
+      InjectorDs injection, List<FieldElement> fields) {
     for (FieldElement element in fields) {
       if (hasAnnotation(element.metadata, "Inject")) {
         ClassElement classInfo = element.type.element;

@@ -1,9 +1,12 @@
 
 import '../finject.dart';
 
+Map<String, Map> rootDependencyResolver = {};
+ScopeFactory defaultScopeFactory;
+
 abstract class Injector<T> {
 
-  inject(T instance, InjectionProvider provider);
+  void inject(T instance, InjectionProvider provider);
 }
 
 abstract class Factory<T> {

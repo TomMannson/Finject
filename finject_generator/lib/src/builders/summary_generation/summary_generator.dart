@@ -32,11 +32,9 @@ abstract class SummaryGenerator extends Generator {
       values.addAll(processConfiguration(annotatedElement.element));
     }
 
-    if(values.length > 0){
+    if (values.length > 0) {
       return jsonEncode(values);
     }
     return "";
   }
-
-
 }

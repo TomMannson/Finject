@@ -55,8 +55,7 @@ class InjectorDs {
   void margeDependencies() {
     this.dependencies
       ..addAll(this.constructorInjection.orderedParameters)
-      ..addAll(this.constructorInjection.namedParameters.values
-          .toList())
+      ..addAll(this.constructorInjection.namedParameters.values.toList())
       ..addAll(this.setterInjection.namedParameter.values)
       ..addAll(this.fieldInjection.namedParameter.values);
 
@@ -193,12 +192,12 @@ class TypeInfo {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is TypeInfo &&
-              runtimeType == other.runtimeType &&
-              packageName == other.packageName &&
-              libraryName == other.libraryName &&
-              className == other.className &&
-              libraryId == other.libraryId;
+      other is TypeInfo &&
+          runtimeType == other.runtimeType &&
+          packageName == other.packageName &&
+          libraryName == other.libraryName &&
+          className == other.className &&
+          libraryId == other.libraryId;
 
   @override
   int get hashCode =>
@@ -206,9 +205,6 @@ class TypeInfo {
       libraryName.hashCode ^
       className.hashCode ^
       libraryId.hashCode;
-
-
-
 }
 
 class DependencyInfo {

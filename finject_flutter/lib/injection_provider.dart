@@ -16,7 +16,9 @@ class InjectionProviderImpl extends InjectionProvider {
 
     Qualifier qualifier = QualifierFactory.create(T, name);
 
-    if (scope != null && scope.factories[qualifier] != null && scope.injectors[qualifier] != null) {
+    if (scope != null &&
+        scope.factories[qualifier] != null &&
+        scope.injectors[qualifier] != null) {
       value = scope.factories[qualifier].create(this);
       scope.injectors[qualifier].inject(value, this);
       return value;
@@ -38,7 +40,6 @@ class InjectionProviderImpl extends InjectionProvider {
   }
 
   inject(Object target, [String name]) {
-
     Qualifier qualifier = QualifierFactory.create(target.runtimeType, name);
 
     if (scope != null && scope.injectors[qualifier] != null) {

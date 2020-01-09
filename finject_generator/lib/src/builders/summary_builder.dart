@@ -1,4 +1,3 @@
-
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -21,9 +20,9 @@ class BuildSummary extends Builder {
     final lib = await buildStep.inputLibrary;
 
     var createdUnit =
-    await _generators[0].generate(LibraryReader(lib), buildStep);
+        await _generators[0].generate(LibraryReader(lib), buildStep);
 
-    if (createdUnit?.isNotEmpty) {
+    if (createdUnit.isNotEmpty) {
       buildStep.writeAsString(output, createdUnit);
     }
   }

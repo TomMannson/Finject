@@ -28,8 +28,8 @@ TypeInfo convert(ClassElement element) {
   }
   libraryId = knownLibraries[uriOfClass.path];
 
-  return TypeInfo(uriOfClass.scheme, uriOfClass.path, element.name,
-      "id$libraryId");
+  return TypeInfo(
+      uriOfClass.scheme, uriOfClass.path, element.name, "id$libraryId");
 }
 
 ClassElement getType(DartType type) {

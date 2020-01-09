@@ -16,7 +16,6 @@ class FinjectConfigurationAnalizer extends Analizer {
       injections.add(injectionDefinition);
 
       for (MethodElement method in classInfo.methods) {
-
         if (method.isPrivate) {
           continue;
         }

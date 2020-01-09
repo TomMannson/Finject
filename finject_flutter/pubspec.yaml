@@ -9,8 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  finject:
-    path: ../finject/
+  finject: ^0.1.2
 
 dev_dependencies:
   flutter_test:

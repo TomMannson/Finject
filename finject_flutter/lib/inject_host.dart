@@ -56,7 +56,6 @@ class HostWidget extends StatefulWidget {
 }
 
 class _InjectHostState extends State<HostWidget> {
-
   InjectionProviderImpl provider;
 
   @override

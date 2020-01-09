@@ -1,7 +1,6 @@
-class Qualifier{}
+class Qualifier {}
 
-class NamedQualifier implements Qualifier{
-
+class NamedQualifier implements Qualifier {
   final Type type;
   final String name;
 
@@ -10,19 +9,16 @@ class NamedQualifier implements Qualifier{
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is NamedQualifier &&
-              runtimeType == other.runtimeType &&
-              type == other.type &&
-              name == other.name;
+      other is NamedQualifier &&
+          runtimeType == other.runtimeType &&
+          type == other.type &&
+          name == other.name;
 
   @override
-  int get hashCode =>
-      type.hashCode ^
-      name.hashCode;
+  int get hashCode => type.hashCode ^ name.hashCode;
 }
 
-class TypeQualifier implements Qualifier{
-
+class TypeQualifier implements Qualifier {
   final Type type;
 
   const TypeQualifier(this.type);
@@ -30,23 +26,20 @@ class TypeQualifier implements Qualifier{
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is TypeQualifier &&
-              runtimeType == other.runtimeType &&
-              type == other.type;
+      other is TypeQualifier &&
+          runtimeType == other.runtimeType &&
+          type == other.type;
 
   @override
   int get hashCode => type.hashCode;
 }
 
-class QualifierFactory{
-
-  static Qualifier create(Type type, String name){
-    if(name != null){
+class QualifierFactory {
+  static Qualifier create(Type type, String name) {
+    if (name != null) {
       return NamedQualifier(type, name);
-    }
-    else{
+    } else {
       return TypeQualifier(type);
     }
   }
-
 }

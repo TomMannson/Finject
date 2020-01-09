@@ -1,7 +1,4 @@
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/type.dart';
-import 'package:build/src/builder/build_step.dart';
-import 'package:source_gen/source_gen.dart';
 
 import '../../builders/code_info_extraction.dart';
 import '../../json_schema/injector_Info.dart';
