@@ -1,5 +1,11 @@
 # CHANGELOG.md
 
+## (0.1.1)
+
+Features:
+
+  - Examples
+
 ## (0.1.0)
 
 Features:
