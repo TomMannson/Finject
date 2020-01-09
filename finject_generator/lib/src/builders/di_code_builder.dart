@@ -138,12 +138,14 @@ Iterable<ClassSpec> createClassesForSummary(InjectorDs readData) sync* {
         parameters: [
           ParameterSpec.build(
             "instance",
-            type: TypeToken.ofName2(generateTypeFromTypeInfo(readData.typeName),
+            type: TypeToken.ofName2(
+              generateTypeFromTypeInfo(readData.typeName),
             ),
           ),
           ParameterSpec.normal("injectionProvider",
               type: TypeToken.ofFullName("InjectionProvider")),
         ],
+        returnType: TypeToken.ofVoid(),
         codeBlock: generateCodeForInjector(readData),
       ),
     ],
@@ -151,14 +153,17 @@ Iterable<ClassSpec> createClassesForSummary(InjectorDs readData) sync* {
   yield ClassSpec.build(
     generatePrefixClassName(readData) + "_Factory",
 //          metas: [MetaSpec.of('Object()')],
-    doc: DocSpec.text(
-        'this is factory for ' + generateTypeFromTypeInfo(readData.typeName) + ' class'),
-    superClass: TypeToken.ofFullName("Factory<${generateTypeFromTypeInfo(readData.typeName)}>"),
+    doc: DocSpec.text('this is factory for ' +
+        generateTypeFromTypeInfo(readData.typeName) +
+        ' class'),
+    superClass: TypeToken.ofFullName(
+        "Factory<${generateTypeFromTypeInfo(readData.typeName)}>"),
     properties: createPropertyFactoryForScopedSingleton(readData).toList(),
     methods: [
       MethodSpec.build(
         'create',
-        returnType: TypeToken.ofName2(generateTypeFromTypeInfo(readData.typeName)),
+        returnType:
+            TypeToken.ofName2(generateTypeFromTypeInfo(readData.typeName)),
         parameters: [
           ParameterSpec.normal("injectionProvider",
               type: TypeToken.ofFullName("InjectionProvider")),

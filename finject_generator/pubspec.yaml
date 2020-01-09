@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
   build: '>=0.12.0 <2.0.0'
   source_gen: ^0.9.0
-  finject: ^0.1.0
+  finject: ^0.1.1
   dartpoet: ^1.0.6+3
   path: ^1.6.4
   glob: ^1.2.0
