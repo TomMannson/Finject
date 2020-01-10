@@ -60,18 +60,18 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.display1,
             ),
-            InjectHost(
+            FInjectHost.scoped(
               scopeName: "test",
               child: Test(),
             ),
-            InjectHost(
+            FInjectHost.scoped(
               scopeName: "test",
               child: Column(
                 children: <Widget>[
-                  InjectHost(
+                  FInjectHost.inject(
                     child: Test(),
                   ),
-                  InjectHost(
+                  FInjectHost.inject(
                     child: Test(),
                   )
                 ],
