@@ -32,7 +32,7 @@ class FinjectConfigurationAnalizer extends Analizer {
         for (ElementAnnotation annotation in method.metadata) {
           ConstructorElement annotationInfo = annotation.element;
           ClassElement annotationType = annotationInfo.enclosingElement;
-          ;
+
           if (annotationType.name == "Scoped") {
             var result = annotation.computeConstantValue();
             injectionDefinition.scopeName =

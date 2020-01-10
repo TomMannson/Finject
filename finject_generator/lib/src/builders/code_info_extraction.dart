@@ -14,6 +14,7 @@ String findName(List<ElementAnnotation> annotations) {
       return result.getField("name").toStringValue();
     }
   }
+  return null;
 }
 
 TypeInfo convert(ClassElement element) {
