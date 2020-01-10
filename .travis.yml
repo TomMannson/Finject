@@ -1,6 +1,5 @@
-os:
-  - linux
-sudo: false
+language: dart
+dart: dev
 before_script:
   - git clone https://github.com/flutter/flutter.git -b beta
   - ./flutter/bin/flutter doctor
