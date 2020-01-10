@@ -15,7 +15,7 @@ for directory in $directories; do
   echo
   cd "$parent_directory/$directory"
 
-  flutter dartfmt -w $(find bin lib test -name \*.dart 2>/dev/null)
+  ./flutter/bin/flutter dartfmt -w $(find bin lib test -name \*.dart 2>/dev/null)
 done
 
 for directory in $directories; do
@@ -24,7 +24,7 @@ for directory in $directories; do
   echo
   cd "$parent_directory/$directory"
 
-  flutter dartanalyzer \
+  ./flutter/bin/flutter dartanalyzer \
       --fatal-warnings \
       --fatal-infos \
       --packages="$PWD/.packages" \
@@ -37,15 +37,15 @@ for directory in $directories; do
   echo
   cd "$parent_directory/$directory"
 
-  flutter pub get
-  flutter pub upgrade
+  ./flutter/bin/flutter pub get
+  ./flutter/bin/flutter pub upgrade
 
   # Clear any pre-existing build output so package:build doesn't get confused
   # when we use built_value to build itself.
   rm -rf .dart_tool/build/
 
   grep -q build_runner pubspec.yaml && \
-      flutter pub run build_runner build \
+      ./flutter/bin/flutter pub run build_runner build \
           --delete-conflicting-outputs \
           --fail-on-severe
 done
@@ -58,5 +58,5 @@ for directory in $directories; do
   echo
   cd "$parent_directory/$directory"
 
-  flutter pub run test
+  ./flutter/bin/flutter pub run test
 done
