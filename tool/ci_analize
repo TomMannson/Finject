@@ -15,7 +15,20 @@ for directory in $directories; do
   echo
   cd "$parent_directory/$directory"
 
-  dartfmt -w $(find bin lib test -name \*.dart 2>/dev/null)
+  flutter dartfmt -w $(find bin lib test -name \*.dart 2>/dev/null)
+done
+
+for directory in $directories; do
+  echo
+  echo "*** Analyzing $directory..."
+  echo
+  cd "$parent_directory/$directory"
+
+  flutter dartanalyzer \
+      --fatal-warnings \
+      --fatal-infos \
+      --packages="$PWD/.packages" \
+      $(find bin lib test -name \*.dart 2>/dev/null)
 done
 
 for directory in $directories; do
@@ -37,18 +50,7 @@ for directory in $directories; do
           --fail-on-severe
 done
 
-for directory in $directories; do
-  echo
-  echo "*** Analyzing $directory..."
-  echo
-  cd "$parent_directory/$directory"
 
-  dartanalyzer \
-      --fatal-warnings \
-      --fatal-infos \
-      --packages="$PWD/.packages" \
-      $(find bin lib test -name \*.dart 2>/dev/null)
-done
 
 for directory in $directories; do
   echo
