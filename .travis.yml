@@ -1,5 +1,8 @@
-
-language: dart
-dart: dev
+os:
+  - linux
+sudo: false
+before_script:
+  - git clone https://github.com/flutter/flutter.git -b beta
+  - ./flutter/bin/flutter doctor
 script:
   - tool/ci_analize
