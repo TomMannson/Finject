@@ -5,9 +5,7 @@ import '../../json_schema/injector_Info.dart';
 import 'finject_analizer.dart';
 
 class FinjectInjectableAnalizer extends Analizer {
-
-  Iterable<InjectorDs> analize(
-      Element element) {
+  Iterable<InjectorDs> analize(Element element) {
     List<InjectorDs> injections = [];
 
     if (element is ClassElement) {
@@ -27,11 +25,9 @@ class FinjectInjectableAnalizer extends Analizer {
         }
         if (annotationType.name == "Named") {
           var result = annotation.computeConstantValue();
-          injectionDefinition.name =
-              result.getField("name").toStringValue();
+          injectionDefinition.name = result.getField("name").toStringValue();
         }
       }
-
 
       injections.add(injectionDefinition);
     }

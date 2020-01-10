@@ -121,7 +121,7 @@ CodeBlockSpec generateCodeForMappers(List<InjectorDs> allTypes) {
     if (injector.scopeName != null) {
       continue;
     }
-    TypeInfo type = injector.typeName;
+
     lines.add(
         "injectorMapper[${generateKeyForInjector(injector)}] = ${generatePrefixClassName(injector)}_Injector();");
     lines.add(
