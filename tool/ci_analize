@@ -23,6 +23,8 @@ for directory in $directories; do
   echo "*** Building $directory..."
   echo
   cd "$parent_directory/$directory"
+  
+  rm "example"
 
   ../flutter/bin/flutter pub get
   ../flutter/bin/flutter pub upgrade

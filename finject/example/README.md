@@ -1,0 +1,1 @@
+ - [Basic configuration usage](https://github.com/TomMannson/Finject/blob/master/example/lib/configuration.dart)
