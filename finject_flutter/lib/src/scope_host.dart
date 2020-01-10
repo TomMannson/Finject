@@ -116,7 +116,7 @@ class _ScopeInjectionProviderImpl extends AbstractInjectionProvider {
       return;
     }
 
-    FoundInjection foundInjection = findParrent(context as BuildContext);
+    FoundInjection foundInjection = findParrent(context);
     InjectionProvider parentInjector = foundInjection.provider;
     if (parentInjector != null) {
       parentInjector.inject(target, name);

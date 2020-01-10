@@ -33,6 +33,7 @@ class JustInjectionProviderImpl extends AbstractInjectionProvider {
       rootDependencyResolver["injector"][qualifier].inject(value, this);
       return value;
     }
+    return null;
   }
 
   inject(Object target, [String name]) {
