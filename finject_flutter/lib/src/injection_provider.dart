@@ -8,8 +8,8 @@ abstract class AbstractInjectionProvider extends InjectionProvider {
   BuildContext context;
 
   FoundInjection findParrent(BuildContext context) {
-    Element element = (context as BuildContext)
-        .getElementForInheritedWidgetOfExactType<ScopeInjectHost>();
+    Element element =
+        context.getElementForInheritedWidgetOfExactType<ScopeInjectHost>();
 
     if (context is StatelessElement) {
       ScopeInjectHost widget = element.widget as ScopeInjectHost;

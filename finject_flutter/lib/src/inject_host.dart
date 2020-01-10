@@ -5,12 +5,11 @@ import 'injection_provider.dart';
 
 class InjectHost extends StatelessWidget {
   final Widget child;
-  _InjectionProviderImpl _provider;
+  final _InjectionProviderImpl _provider;
 
   @protected
-  InjectHost({this.child}) {
-    _provider = _InjectionProviderImpl();
-  }
+  InjectHost({this.child}):
+        _provider = _InjectionProviderImpl();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class _InjectionProviderImpl extends AbstractInjectionProvider {
     T value;
     Qualifier qualifier = QualifierFactory.create(T, name);
 
-    FoundInjection foundInjection = findParrent(context as BuildContext);
+    FoundInjection foundInjection = findParrent(context);
     InjectionProvider parentInjector = foundInjection.provider;
     if (parentInjector != null) {
       value = parentInjector.get(name);
@@ -43,12 +42,13 @@ class _InjectionProviderImpl extends AbstractInjectionProvider {
       rootDependencyResolver["injector"][qualifier].inject(value, this);
       return value;
     }
+    return null;
   }
 
   inject(Object target, [String name]) {
     Qualifier qualifier = QualifierFactory.create(target.runtimeType, name);
 
-    FoundInjection foundInjection = findParrent(context as BuildContext);
+    FoundInjection foundInjection = findParrent(context);
     InjectionProvider parentInjector = foundInjection.provider;
     if (parentInjector != null) {
       parentInjector.inject(target, name);

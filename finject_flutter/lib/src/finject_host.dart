@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../finject_flutter.dart';
 
 class FInjectHost extends StatelessWidget {
-  Widget host;
+  final Widget host;
 
   FInjectHost.scoped({@required Widget child, String scopeName})
       : host = ScopeInjectHost(child: child, scopeName: scopeName);

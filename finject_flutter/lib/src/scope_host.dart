@@ -39,15 +39,14 @@ class ScopeInjecHostElement extends InheritedElement {
 }
 
 class HostStatefulWidget extends StatefulWidget {
-  ScopeInjectHost parent;
-  Widget child;
+  final ScopeInjectHost parent;
+  final Widget child;
 
   HostStatefulWidget(this.parent, this.child);
 
   @override
   State<StatefulWidget> createState() {
     return _InjectHostState();
-    ;
   }
 }
 
@@ -93,7 +92,7 @@ class _ScopeInjectionProviderImpl extends AbstractInjectionProvider {
       return value;
     }
 
-    FoundInjection foundInjection = findParrent(context as BuildContext);
+    FoundInjection foundInjection = findParrent(context);
     InjectionProvider parentInjector = foundInjection.provider;
     if (parentInjector != null) {
       value = parentInjector.get(name);
@@ -106,6 +105,7 @@ class _ScopeInjectionProviderImpl extends AbstractInjectionProvider {
       rootDependencyResolver["injector"][qualifier].inject(value, this);
       return value;
     }
+    return null;
   }
 
   inject(Object target, [String name]) {

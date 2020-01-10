@@ -5,12 +5,12 @@ import 'injection_provider.dart';
 
 class JustInjectHost extends StatelessWidget {
   final Widget child;
-  JustInjectionProviderImpl _provider;
+  final JustInjectionProviderImpl _provider;
 
   @protected
-  JustInjectHost({this.child}) {
-    _provider = JustInjectionProviderImpl();
-  }
+  JustInjectHost({this.child}):
+        _provider = JustInjectionProviderImpl();
+
 
   @override
   Widget build(BuildContext context) {
