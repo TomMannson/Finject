@@ -24,7 +24,7 @@ for directory in $directories; do
   echo
   cd "$parent_directory/$directory"
   
-  rm "example"
+  rm example -r
 
   ../flutter/bin/flutter pub get
   ../flutter/bin/flutter pub upgrade
