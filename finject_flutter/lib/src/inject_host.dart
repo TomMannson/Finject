@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'injection_provider.dart';
 
 class InjectHost extends StatelessWidget {
-
   final Widget child;
   _InjectionProviderImpl _provider;
 

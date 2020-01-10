@@ -6,12 +6,11 @@ environment:
   sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
-  finject_flutter:
-    path: ../finject_flutter
+  finject_flutter: ^1.0.3
 
 
 dev_dependencies:
   build_runner: 1.7.2
   flutter_test:
     sdk: flutter
-  finject_generator: ^0.1.0
+  finject_generator: ^0.1.2

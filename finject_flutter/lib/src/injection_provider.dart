@@ -4,16 +4,14 @@ import 'package:flutter/material.dart';
 
 import 'scope_host.dart';
 
-
 abstract class AbstractInjectionProvider extends InjectionProvider {
-
   BuildContext context;
 
   FoundInjection findParrent(BuildContext context) {
     Element element = (context as BuildContext)
         .getElementForInheritedWidgetOfExactType<ScopeInjectHost>();
 
-    if(context is StatelessElement){
+    if (context is StatelessElement) {
       ScopeInjectHost widget = element.widget as ScopeInjectHost;
       return FoundInjection(widget.getIt(), element);
     }
@@ -23,7 +21,8 @@ abstract class AbstractInjectionProvider extends InjectionProvider {
       return false;
     });
 
-    element = element.getElementForInheritedWidgetOfExactType<ScopeInjectHost>();
+    element =
+        element.getElementForInheritedWidgetOfExactType<ScopeInjectHost>();
     if (element == null) {
       return FoundInjection(null, null);
     }

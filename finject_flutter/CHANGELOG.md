@@ -2,15 +2,16 @@
 
 ## (0.1.3)
 
+Breaking Changes
+
+Breaking Changes:
+
+  - Use FinjectHost class instead of InjectHost class.
+
 Features:
 
   - Separation of scoping and injection
 
-## (0.1.2)
-
-Features:
-
-  - Injecting with constructor
 
 ## (0.1.2)
 

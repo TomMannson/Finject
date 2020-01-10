@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'injection_provider.dart';
 
 class JustInjectHost extends StatelessWidget {
-
   final Widget child;
   JustInjectionProviderImpl _provider;
 
@@ -21,7 +20,6 @@ class JustInjectHost extends StatelessWidget {
 }
 
 class JustInjectionProviderImpl extends AbstractInjectionProvider {
-
   JustInjectionProviderImpl();
 
   @override
