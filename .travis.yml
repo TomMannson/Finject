@@ -1,0 +1,5 @@
+
+language: dart
+dart: dev
+script:
+  - tool/ci_analize
