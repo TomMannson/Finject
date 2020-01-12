@@ -1,6 +1,7 @@
-import 'dart:convert';
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:dartpoet/dartpoet.dart';
 import 'package:finject/finject.dart';
@@ -12,6 +13,7 @@ import 'build_utils.dart';
 
 class DiCodeBuilder implements Builder {
   static final _allFilesInLib = new Glob('lib/**');
+  static final declaratedProfiles = new Glob('lib/declarated_profiles.dart');
   static const output_file = 'finject_config.dart';
 
   static AssetId _allFileOutput(BuildStep buildStep) {
@@ -28,11 +30,42 @@ class DiCodeBuilder implements Builder {
     };
   }
 
+  bool notContainsOneOf(Set<String> injectorProfiles,
+      List<String> activeProfiles) {
+    for (String injectorProfile in injectorProfiles) {
+      if (activeProfiles.contains(injectorProfile)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   @override
   Future<void> build(BuildStep buildStep) async {
     List<ClassSpec> allInjectors = [];
     Map<String, List<InjectorDs>> scopes = {};
     List<InjectorDs> allTypes = [];
+    List<String> profiles = [];
+
+    await for (final input in buildStep.findAssets(declaratedProfiles)) {
+      var library = await buildStep.resolver.libraryFor(input);
+      var profilesValue = library.topLevelElements
+          .where((element) => element is TopLevelVariableElement)
+          .cast<TopLevelVariableElement>()
+          .where(
+              (TopLevelVariableElement element) => element.name == "profiles")
+          .map((TopLevelVariableElement element) =>
+          element.computeConstantValue())
+          .toList();
+
+      if (profilesValue.length == 1) {
+        profiles = profilesValue[0]
+            .toListValue()
+            .map((dartObject) => dartObject.toStringValue())
+            .toList();
+      }
+    }
+
     await for (final input in buildStep.findAssets(_allFilesInLib)) {
       if (input.path.endsWith("summary.json")) {
         String injectorJson = await buildStep.readAsString(input);
@@ -42,6 +75,11 @@ class DiCodeBuilder implements Builder {
             .toList();
 
         for (InjectorDs oneInjectable in readData) {
+          if (oneInjectable.profiles.length > 0 &&
+              notContainsOneOf(oneInjectable.profiles, profiles)) {
+            continue;
+          }
+
           if (oneInjectable.scopeName != null) {
             List<InjectorDs> scopeList = scopes[oneInjectable.scopeName];
             if (scopeList == null) {
@@ -97,7 +135,7 @@ class DiCodeBuilder implements Builder {
                 ParameterSpec.build("scopeName", type: TypeToken.ofString())
               ],
               codeBlock:
-                  CodeBlockSpec.lines(generateMethodCodeForScopes(scopes)))
+              CodeBlockSpec.lines(generateMethodCodeForScopes(scopes)))
         ]);
   }
 }
@@ -110,9 +148,13 @@ List<String> generateMethodCodeForScopes(Map<String, List<InjectorDs>> scopes) {
     linesOfCode.add("return Scope([");
     for (InjectorDs injectable in scopes[scope]) {
       linesOfCode.add(
-          "ScopeEntry<Injector>(const ${generateKeyForInjector(injectable)}, ${generatePrefixClassName(injectable)}_Injector()),");
+          "ScopeEntry<Injector>(const ${generateKeyForInjector(
+              injectable)}, ${generatePrefixClassName(
+              injectable)}_Injector()),");
       linesOfCode.add(
-          "ScopeEntry<Factory>(const ${generateKeyForInjector(injectable)}, ${generatePrefixClassName(injectable)}_Factory()),");
+          "ScopeEntry<Factory>(const ${generateKeyForInjector(
+              injectable)}, ${generatePrefixClassName(
+              injectable)}_Factory()),");
     }
     linesOfCode.add("]);");
     linesOfCode.add("}");
@@ -163,7 +205,7 @@ Iterable<ClassSpec> createClassesForSummary(InjectorDs readData) sync* {
       MethodSpec.build(
         'create',
         returnType:
-            TypeToken.ofName2(generateTypeFromTypeInfo(readData.typeName)),
+        TypeToken.ofName2(generateTypeFromTypeInfo(readData.typeName)),
         parameters: [
           ParameterSpec.normal("injectionProvider",
               type: TypeToken.ofFullName("InjectionProvider")),

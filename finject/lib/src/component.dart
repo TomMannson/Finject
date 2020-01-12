@@ -30,6 +30,12 @@ class Named {
   const Named(this.name);
 }
 
+class Profile {
+  final List<String> profileNames;
+
+  const Profile(this.profileNames);
+}
+
 class OnDestroy {
   const OnDestroy();
 }
