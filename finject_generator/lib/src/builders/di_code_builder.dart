@@ -11,11 +11,11 @@ import '../json_schema/injector_Info.dart';
 import 'build_utils.dart';
 
 class DiCodeBuilder implements Builder {
-  static final _allFilesInLib = new Glob('lib/**');
+  static final _allFilesInLib = Glob('lib/**');
   static const output_file = 'finject_config.dart';
 
   static AssetId _allFileOutput(BuildStep buildStep) {
-    return new AssetId(
+    return AssetId(
       buildStep.inputId.package,
       p.join('lib', output_file),
     );
@@ -24,28 +24,28 @@ class DiCodeBuilder implements Builder {
   @override
   Map<String, List<String>> get buildExtensions {
     return const {
-      r'$lib$': const [output_file],
+      r'$lib$': [output_file],
     };
   }
 
   @override
   Future<void> build(BuildStep buildStep) async {
-    List<ClassSpec> allInjectors = [];
-    Map<String, List<InjectorDs>> scopes = {};
+    var allInjectors = <ClassSpec>[];
+    var scopes = <String, List<InjectorDs>>{};
     List<InjectorDs> allTypes = [];
     await for (final input in buildStep.findAssets(_allFilesInLib)) {
-      if (input.path.endsWith("summary.json")) {
+      if (input.path.endsWith('summary.json')) {
         String injectorJson = await buildStep.readAsString(input);
 
         List<InjectorDs> readData = (jsonDecode(injectorJson) as Iterable)
-            .map((value) => InjectorDs.fromJson(value))
+            .map((value) => InjectorDs.fromJson(value as Map<String, dynamic>))
             .toList();
 
         for (InjectorDs oneInjectable in readData) {
           if (oneInjectable.scopeName != null) {
             List<InjectorDs> scopeList = scopes[oneInjectable.scopeName];
             if (scopeList == null) {
-              scopeList = List<InjectorDs>();
+              scopeList = <InjectorDs>[];
               scopes[oneInjectable.scopeName] = scopeList;
             }
 
@@ -65,20 +65,20 @@ class DiCodeBuilder implements Builder {
         classes: allInjectors,
         properties: [
           PropertySpec.ofMapByToken(
-            "injectorMapper",
+            'injectorMapper',
             keyType: TypeToken.of(Qualifier),
-            valueType: TypeToken.ofFullName("Injector"),
+            valueType: TypeToken.ofFullName('Injector'),
             defaultValue: {},
           ),
           PropertySpec.ofMapByToken(
-            "factoryMapper",
+            'factoryMapper',
             keyType: TypeToken.of(Qualifier),
-            valueType: TypeToken.ofFullName("Factory"),
+            valueType: TypeToken.ofFullName('Factory'),
             defaultValue: {},
           ),
         ],
         methods: [
-          MethodSpec.build("init", codeBlock: generateCodeForMappers(allTypes))
+          MethodSpec.build('init', codeBlock: generateCodeForMappers(allTypes))
         ]);
 
     DartFile dartFile = DartFile.fromFileSpec(fileSpec);
@@ -88,13 +88,13 @@ class DiCodeBuilder implements Builder {
   }
 
   ClassSpec createClassesForScope(Map<String, List<InjectorDs>> scopes) {
-    return ClassSpec.build("ScopeFactoryImpl",
+    return ClassSpec.build('ScopeFactoryImpl',
         superClass: TypeToken.of(ScopeFactory),
         methods: [
-          MethodSpec.build("createScope",
+          MethodSpec.build('createScope',
               returnType: TypeToken.of(Scope),
               parameters: [
-                ParameterSpec.build("scopeName", type: TypeToken.ofString())
+                ParameterSpec.build('scopeName', type: TypeToken.ofString())
               ],
               codeBlock:
                   CodeBlockSpec.lines(generateMethodCodeForScopes(scopes)))
@@ -107,27 +107,27 @@ List<String> generateMethodCodeForScopes(Map<String, List<InjectorDs>> scopes) {
 
   for (String scope in scopes.keys) {
     linesOfCode.add("if (scopeName == '$scope') {");
-    linesOfCode.add("return Scope([");
+    linesOfCode.add('return Scope([');
     for (InjectorDs injectable in scopes[scope]) {
       linesOfCode.add(
-          "ScopeEntry<Injector>(const ${generateKeyForInjector(injectable)}, ${generatePrefixClassName(injectable)}_Injector()),");
+          'ScopeEntry<Injector>(const ${generateKeyForInjector(injectable)}, ${generatePrefixClassName(injectable)}_Injector()),');
       linesOfCode.add(
-          "ScopeEntry<Factory>(const ${generateKeyForInjector(injectable)}, ${generatePrefixClassName(injectable)}_Factory()),");
+          'ScopeEntry<Factory>(const ${generateKeyForInjector(injectable)}, ${generatePrefixClassName(injectable)}_Factory()),');
     }
-    linesOfCode.add("]);");
-    linesOfCode.add("}");
+    linesOfCode.add(']);');
+    linesOfCode.add('}');
   }
 
-  linesOfCode.add("//default value");
-  linesOfCode.add("return null;");
+  linesOfCode.add('//default value');
+  linesOfCode.add('return null;');
   return linesOfCode;
 }
 
 Iterable<ClassSpec> createClassesForSummary(InjectorDs readData) sync* {
   yield ClassSpec.build(
-    generatePrefixClassName(readData) + "_Injector",
+    generatePrefixClassName(readData) + '_Injector',
     superClass: TypeToken.ofFullName(
-      "Injector<${generateTypeFromTypeInfo(readData.typeName)}>",
+      'Injector<${generateTypeFromTypeInfo(readData.typeName)}>',
     ),
     doc: DocSpec.text(
         'this is injector for ' + readData.typeName.className + ' class'),
@@ -137,13 +137,13 @@ Iterable<ClassSpec> createClassesForSummary(InjectorDs readData) sync* {
         'inject',
         parameters: [
           ParameterSpec.build(
-            "instance",
+            'instance',
             type: TypeToken.ofName2(
               generateTypeFromTypeInfo(readData.typeName),
             ),
           ),
-          ParameterSpec.normal("injectionProvider",
-              type: TypeToken.ofFullName("InjectionProvider")),
+          ParameterSpec.normal('injectionProvider',
+              type: TypeToken.ofFullName('InjectionProvider')),
         ],
         returnType: TypeToken.ofVoid(),
         codeBlock: generateCodeForInjector(readData),
@@ -151,13 +151,13 @@ Iterable<ClassSpec> createClassesForSummary(InjectorDs readData) sync* {
     ],
   );
   yield ClassSpec.build(
-    generatePrefixClassName(readData) + "_Factory",
+    generatePrefixClassName(readData) + '_Factory',
 //          metas: [MetaSpec.of('Object()')],
     doc: DocSpec.text('this is factory for ' +
         generateTypeFromTypeInfo(readData.typeName) +
         ' class'),
     superClass: TypeToken.ofFullName(
-        "Factory<${generateTypeFromTypeInfo(readData.typeName)}>"),
+        'Factory<${generateTypeFromTypeInfo(readData.typeName)}>'),
     properties: createPropertyFactoryForScopedSingleton(readData).toList(),
     methods: [
       MethodSpec.build(
@@ -165,8 +165,8 @@ Iterable<ClassSpec> createClassesForSummary(InjectorDs readData) sync* {
         returnType:
             TypeToken.ofName2(generateTypeFromTypeInfo(readData.typeName)),
         parameters: [
-          ParameterSpec.normal("injectionProvider",
-              type: TypeToken.ofFullName("InjectionProvider")),
+          ParameterSpec.normal('injectionProvider',
+              type: TypeToken.ofFullName('InjectionProvider')),
         ],
         codeBlock: generateCodeForFactory(readData),
       ),
@@ -177,7 +177,7 @@ Iterable<ClassSpec> createClassesForSummary(InjectorDs readData) sync* {
 Iterable<PropertySpec> createPropertyFactoryForScopedSingleton(
     InjectorDs data) sync* {
   if (data.singleton) {
-    yield PropertySpec.of("cache",
+    yield PropertySpec.of('cache',
         type: TypeToken.ofName2(generateTypeFromTypeInfo(data.typeName)));
   }
 }
@@ -185,7 +185,7 @@ Iterable<PropertySpec> createPropertyFactoryForScopedSingleton(
 Iterable<PropertySpec> createPropertyInjectorForScopedSingleton(
     InjectorDs data) sync* {
   if (data.singleton) {
-    yield PropertySpec.of("cache",
+    yield PropertySpec.of('cache',
         type: TypeToken.ofBool(), defaultValue: false);
   }
 }

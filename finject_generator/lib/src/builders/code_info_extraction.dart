@@ -7,11 +7,11 @@ int currentLibraryNumber = 0;
 
 String findName(List<ElementAnnotation> annotations) {
   for (ElementAnnotation annotation in annotations) {
-    ConstructorElement annotationInfo = annotation.element;
+    ConstructorElement annotationInfo = annotation.element as ConstructorElement;
     ClassElement annotationType = annotationInfo.enclosingElement;
-    if (annotationType.name == "Named") {
+    if (annotationType.name == 'Named') {
       var result = annotation.computeConstantValue();
-      return result.getField("name").toStringValue();
+      return result.getField('name').toStringValue();
     }
   }
   return null;
@@ -30,7 +30,7 @@ TypeInfo convert(ClassElement element) {
   libraryId = knownLibraries[uriOfClass.path];
 
   return TypeInfo(
-      uriOfClass.scheme, uriOfClass.path, element.name, "id$libraryId");
+      uriOfClass.scheme, uriOfClass.path, element.name, 'id$libraryId');
 }
 
 ClassElement getType(DartType type) {
@@ -43,7 +43,7 @@ ClassElement getType(DartType type) {
 
 bool hasAnnotation(List<ElementAnnotation> metadata, String type) {
   for (ElementAnnotation annotation in metadata) {
-    ConstructorElement annotationInfo = annotation.element;
+    ConstructorElement annotationInfo = annotation.element as ConstructorElement;
     ClassElement classInfo = annotationInfo.enclosingElement;
     if (classInfo.name == type) {
       return true;

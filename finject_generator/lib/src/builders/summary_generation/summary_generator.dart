@@ -22,7 +22,7 @@ abstract class SummaryGenerator extends Generator {
 
   @override
   FutureOr<String> generate(LibraryReader library, BuildStep buildStep) async {
-    final values = List<InjectorDs>();
+    final values = <InjectorDs>[];
 
     for (var annotatedElement in library.annotatedWith(injectableChecker)) {
       values.addAll(processInjectable(annotatedElement.element));
@@ -32,9 +32,9 @@ abstract class SummaryGenerator extends Generator {
       values.addAll(processConfiguration(annotatedElement.element));
     }
 
-    if (values.length > 0) {
+    if (values.isNotEmpty) {
       return jsonEncode(values);
     }
-    return "";
+    return '';
   }
 }

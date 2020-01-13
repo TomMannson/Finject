@@ -1,3 +1,5 @@
+import 'dart:core';
+
 class InjectorDs {
   TypeInfo typeName;
   TypeInfo factoryTypeName;
@@ -17,20 +19,24 @@ class InjectorDs {
 
   InjectorDs.fromJson(Map<String, dynamic> json)
       : typeName =
-            getFromJson(json['typeName'], (value) => TypeInfo.fromJson(value)),
-        scopeName = json['scopeName'],
-        singleton = json['singleton'],
-        name = json['name'],
+            getFromJson(json['typeName'], (dynamic value) => TypeInfo.fromJson(value as Map<String, dynamic>)),
+        scopeName = json['scopeName'] as String,
+        singleton = json['singleton'] as bool,
+        name = json['name'] as String,
         factoryTypeName = getFromJson(
-            json['factoryTypeName'], (value) => TypeInfo.fromJson(value)),
-        constructorInjection = getFromJson(json['constructorInjection'],
-            (value) => MethodInjection.fromJson(value)),
-        fieldInjection = FieldInjection.fromJson(json['fieldInjection']),
+          json['factoryTypeName'],
+          (value) => TypeInfo.fromJson(value as Map<String, dynamic>),
+        ),
+        constructorInjection = getFromJson(
+          json['constructorInjection'],
+          (value) => MethodInjection.fromJson(value as Map<String, dynamic>),
+        ),
+        fieldInjection = FieldInjection.fromJson(json['fieldInjection'] as Map<String, dynamic>),
         methodInjections = (json['methodInjections'] as Iterable)
-            .map((item) => MethodInjection.fromJson(item))
+            .map((item) => MethodInjection.fromJson(item as Map<String, dynamic>))
             .toList(),
-        dependencies = (json["dependencies"] as Iterable)
-            .map<TypeInfo>((dynamic item) => TypeInfo.fromJson(item))
+        dependencies = (json['dependencies'] as Iterable)
+            .map<TypeInfo>((dynamic item) => TypeInfo.fromJson(item as Map<String, dynamic>))
             .toSet();
 
   Map<String, dynamic> toJson() => {
@@ -47,21 +53,21 @@ class InjectorDs {
       };
 
   void prunRedundantInjections() {
-    for (String itemFromBlackList in this.constructorInjection.blackList) {
-      this.fieldInjection.namedParameter.remove(itemFromBlackList);
+    for (String itemFromBlackList in constructorInjection.blackList) {
+      fieldInjection.namedParameter.remove(itemFromBlackList);
     }
   }
 
   void margeDependencies() {
-    this.dependencies
-      ..addAll(this.constructorInjection.orderedParameters)
-      ..addAll(this.constructorInjection.namedParameters.values.toList())
-      ..addAll(this.setterInjection.namedParameter.values)
-      ..addAll(this.fieldInjection.namedParameter.values);
+    dependencies
+      ..addAll(constructorInjection.orderedParameters)
+      ..addAll(constructorInjection.namedParameters.values.toList())
+      ..addAll(setterInjection.namedParameter.values)
+      ..addAll(fieldInjection.namedParameter.values);
 
-    this.methodInjections.forEach((value) {
-      this.dependencies.addAll(value.orderedParameters);
-      this.dependencies.addAll(value.namedParameters.values);
+    methodInjections.forEach((value) {
+      dependencies.addAll(value.orderedParameters);
+      dependencies.addAll(value.namedParameters.values);
     });
   }
 }
@@ -86,13 +92,13 @@ class MethodInjection {
   MethodInjection();
 
   MethodInjection.fromJson(Map<String, dynamic> json)
-      : name = json["name"],
+      : name = json['name'] as String ,
         orderedParameters = (json['orderedParameters'] as Iterable)
-            .map((item) => TypeInfo.fromJson(item))
+            .map((item) => TypeInfo.fromJson(item as Map<String, dynamic>))
             .toList(),
         namedParameters = (json['namedParameters'] as Map<String, dynamic>).map(
             (String key, dynamic value) =>
-                MapEntry(key, TypeInfo.fromJson(value))),
+                MapEntry(key, TypeInfo.fromJson(value as Map<String, dynamic>))),
         blackList = (json['blackList'] as Iterable)
             .map((dynamic value) => value as String)
             .toList(),
@@ -111,12 +117,12 @@ class MethodInjection {
         'namedNames': namedNames,
       };
 
-  addOrderedParameter(TypeInfo type, [String name]) {
+  void addOrderedParameter(TypeInfo type, [String name]) {
     orderedParameters.add(type);
     orderedNames.add(name);
   }
 
-  addNamedParameter(String name, TypeInfo type, [String namedDependency]) {
+  void addNamedParameter(String name, TypeInfo type, [String namedDependency]) {
     namedParameters[name] = type;
     namedNames[name] = namedDependency;
   }
@@ -130,7 +136,7 @@ class SetterInjection {
 
   SetterInjection.fromJson(Map<String, dynamic> json)
       : namedParameter = (json['namedParameters'] as Map<String, dynamic>)
-            .map((key, value) => MapEntry(key, TypeInfo.fromJson(value))),
+            .map((key, value) => MapEntry(key, TypeInfo.fromJson(value as Map<String, dynamic>))),
         namedName = (json['namedName'] as Map<String, dynamic>)
             .map((String key, dynamic value) => MapEntry(key, value as String));
 
@@ -138,7 +144,7 @@ class SetterInjection {
         'namedParameter': namedParameter,
       };
 
-  addNamedParameter(String name, TypeInfo type, [String namedDependency]) {
+  void addNamedParameter(String name, TypeInfo type, [String namedDependency]) {
     namedParameter[name] = type;
     namedName[name] = namedDependency;
   }
@@ -153,11 +159,11 @@ class FieldInjection {
   FieldInjection.fromJson(Map<String, dynamic> json)
       : namedParameter = (json['namedParameter'] as Map<String, dynamic>).map(
             (String key, dynamic value) =>
-                MapEntry(key, TypeInfo.fromJson(value))),
+                MapEntry(key, TypeInfo.fromJson(value as Map<String, dynamic>))),
         namedNames = (json['namedNames'] as Map<String, dynamic>)
             .map((String key, dynamic value) => MapEntry(key, value as String));
 
-  addNamedParameter(String name, TypeInfo type, [String namedDependency]) {
+  void addNamedParameter(String name, TypeInfo type, [String namedDependency]) {
     namedParameter[name] = type;
     namedNames[name] = namedDependency;
   }
@@ -177,10 +183,10 @@ class TypeInfo {
   TypeInfo(this.packageName, this.libraryName, this.className, this.libraryId);
 
   TypeInfo.fromJson(Map<String, dynamic> json)
-      : packageName = json['packageName'],
-        libraryName = json['libraryName'],
-        className = json["className"],
-        libraryId = json["libraryId"];
+      : packageName = json['packageName'] as String,
+        libraryName = json['libraryName'] as String,
+        className = json['className'] as String,
+        libraryId = json['libraryId'] as String;
 
   Map<String, dynamic> toJson() => {
         'packageName': packageName,
@@ -219,4 +225,4 @@ T getFromJson<T>(dynamic input, Extractor<T> extractor) {
   }
 }
 
-typedef T Extractor<T>(dynamic value);
+typedef Extractor<T> = T Function(dynamic value);
