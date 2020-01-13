@@ -1,4 +1,4 @@
-import 'package:finject/finject.dart';
+
 
 
 
@@ -7,3 +7,5 @@ class TestClass {
 
   TestClass(this.value);
 }
+
+Function asd;

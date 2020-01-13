@@ -12,12 +12,12 @@ import '../json_schema/injector_Info.dart';
 import 'build_utils.dart';
 
 class DiCodeBuilder implements Builder {
-  static final _allFilesInLib = new Glob('lib/**');
-  static final declaratedProfiles = new Glob('lib/declarated_profiles.dart');
+  static final _allFilesInLib = Glob('lib/**');
+  static final declaratedProfiles = Glob('lib/declarated_profiles.dart');
   static const output_file = 'finject_config.dart';
 
   static AssetId _allFileOutput(BuildStep buildStep) {
-    return new AssetId(
+    return AssetId(
       buildStep.inputId.package,
       p.join('lib', output_file),
     );
@@ -26,7 +26,7 @@ class DiCodeBuilder implements Builder {
   @override
   Map<String, List<String>> get buildExtensions {
     return const {
-      r'$lib$': const [output_file],
+      r'$lib$': [output_file],
     };
   }
 
@@ -50,8 +50,7 @@ class DiCodeBuilder implements Builder {
     await for (final input in buildStep.findAssets(declaratedProfiles)) {
       var library = await buildStep.resolver.libraryFor(input);
       var profilesValue = library.topLevelElements
-          .where((element) => element is TopLevelVariableElement)
-          .cast<TopLevelVariableElement>()
+          .whereType<TopLevelVariableElement>()
           .where(
               (TopLevelVariableElement element) => element.name == "profiles")
           .map((TopLevelVariableElement element) =>
@@ -71,11 +70,11 @@ class DiCodeBuilder implements Builder {
         String injectorJson = await buildStep.readAsString(input);
 
         List<InjectorDs> readData = (jsonDecode(injectorJson) as Iterable)
-            .map((value) => InjectorDs.fromJson(value))
+            .map((value) => InjectorDs.fromJson(value as Map<String, dynamic>))
             .toList();
 
         for (InjectorDs oneInjectable in readData) {
-          if (oneInjectable.profiles.length > 0 &&
+          if (oneInjectable.profiles.isNotEmpty &&
               notContainsOneOf(oneInjectable.profiles, profiles)) {
             continue;
           }
@@ -83,7 +82,7 @@ class DiCodeBuilder implements Builder {
           if (oneInjectable.scopeName != null) {
             List<InjectorDs> scopeList = scopes[oneInjectable.scopeName];
             if (scopeList == null) {
-              scopeList = List<InjectorDs>();
+              scopeList = <InjectorDs>[];
               scopes[oneInjectable.scopeName] = scopeList;
             }
 

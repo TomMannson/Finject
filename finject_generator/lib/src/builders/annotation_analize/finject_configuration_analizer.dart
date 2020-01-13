@@ -21,7 +21,7 @@ class FinjectConfigurationAnalizer extends Analizer {
         }
 
         injectionDefinition = InjectorDs();
-        injectionDefinition.typeName = convert(method.returnType.element);
+        injectionDefinition.typeName = convert(method.returnType.element as ClassElement);
         injectionDefinition.factoryTypeName = convert(classInfo);
 
         attachFactoryMethod(injectionDefinition, method);
@@ -30,7 +30,7 @@ class FinjectConfigurationAnalizer extends Analizer {
             hasAnnotation(method.metadata, "Singleton");
 
         for (ElementAnnotation annotation in method.metadata) {
-          ConstructorElement annotationInfo = annotation.element;
+          ConstructorElement annotationInfo = annotation.element as ConstructorElement;
           ClassElement annotationType = annotationInfo.enclosingElement;
 
           if (annotationType.name == "Scoped") {

@@ -28,7 +28,7 @@ AssetId changeExtension(AssetId assetId, String newExtension) => AssetId(
     p.withoutExtension(p.withoutExtension(assetId.path)) + newExtension);
 
 CodeBlockSpec generateCodeForFactory(InjectorDs ds) {
-  var lines = List<String>();
+  var lines = <String>[];
 
   if (ds.singleton) {
     lines.add("if(cache != null){");
@@ -78,7 +78,7 @@ CodeBlockSpec generateCodeForFactory(InjectorDs ds) {
 }
 
 CodeBlockSpec generateCodeForInjector(InjectorDs ds) {
-  var lines = List<String>();
+  var lines = <String>[];
 
   if (ds.singleton) {
     lines.add("if(cache){");
@@ -95,7 +95,7 @@ CodeBlockSpec generateCodeForInjector(InjectorDs ds) {
     lines.add("cache = true;");
   }
 
-  if (lines.length == 0) {
+  if (lines.isEmpty) {
     return CodeBlockSpec.lines(["//no injection", "//no injection"]);
   }
 
@@ -111,7 +111,7 @@ String injectNamedIndicator(String name) {
 }
 
 CodeBlockSpec generateCodeForMappers(List<InjectorDs> allTypes) {
-  var lines = List<String>();
+  var lines = <String>[];
 
   lines.add("defaultScopeFactory = ScopeFactoryImpl();");
   lines.add("injectorMapper.clear();");
@@ -135,7 +135,7 @@ CodeBlockSpec generateCodeForMappers(List<InjectorDs> allTypes) {
 }
 
 String generatePrefixClassName(InjectorDs data) {
-  StringBuffer buffer = new StringBuffer(data.typeName.className);
+  StringBuffer buffer = StringBuffer(data.typeName.className);
 
   buffer.write("_${data.typeName.libraryId}");
 

@@ -16,7 +16,7 @@ class FinjectInjectableAnalizer extends Analizer {
           hasAnnotation(classInfo.metadata, "Singleton");
 
       for (ElementAnnotation annotation in classInfo.metadata) {
-        ConstructorElement annotationInfo = annotation.element;
+        ConstructorElement annotationInfo = annotation.element as ConstructorElement;
         ClassElement annotationType = annotationInfo.enclosingElement;
         if (annotationType.name == "Scoped") {
           var result = annotation.computeConstantValue();

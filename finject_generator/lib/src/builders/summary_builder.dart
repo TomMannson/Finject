@@ -23,7 +23,7 @@ class BuildSummary extends Builder {
         await _generators[0].generate(LibraryReader(lib), buildStep);
 
     if (createdUnit.isNotEmpty) {
-      buildStep.writeAsString(output, createdUnit);
+      await buildStep.writeAsString(output, createdUnit);
     }
   }
 }

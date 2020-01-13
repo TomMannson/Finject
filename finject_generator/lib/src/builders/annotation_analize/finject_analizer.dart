@@ -5,7 +5,7 @@ import '../../json_schema/injector_Info.dart';
 
 class Analizer {
   InjectorDs prepareInjectionDefinition(ClassElement classInfo) {
-    InjectorDs injectionDefinition = InjectorDs();
+    var injectionDefinition = InjectorDs();
     injectionDefinition.typeName = convert(classInfo);
 
     _attachConstructorInjection(injectionDefinition, classInfo.constructors);
@@ -16,10 +16,10 @@ class Analizer {
     return injectionDefinition;
   }
 
-  _attachConstructorInjection(
+  void _attachConstructorInjection(
       InjectorDs injection, List<ConstructorElement> constructors) {
     _validateInjectConstructor(constructors);
-    for (ConstructorElement element in constructors) {
+    for (var element in constructors) {
       MethodInjection constructorInjection =
           _processParemetersOfCostructor(element.parameters);
       injection.constructorInjection = constructorInjection;
@@ -62,7 +62,7 @@ class Analizer {
         throw InjectorValidationError();
       }
     }
-    if (numberOfInjection < 1 && constructors.length > 0) {
+    if (numberOfInjection < 1 && constructors.isNotEmpty) {
       throw InjectorValidationError();
     }
   }
@@ -71,7 +71,7 @@ class Analizer {
       InjectorDs injection, List<FieldElement> fields) {
     for (FieldElement element in fields) {
       if (hasAnnotation(element.metadata, "Inject")) {
-        ClassElement classInfo = element.type.element;
+        ClassElement classInfo = element.type.element as ClassElement;
         injection.fieldInjection.addNamedParameter(
             element.name, convert(classInfo), findName(element.metadata));
       }

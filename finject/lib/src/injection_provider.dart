@@ -4,7 +4,7 @@ abstract class InjectionProvider {
 
   T get<T>([String name]);
 
-  inject(Object target, [String name]);
+  void inject(Object target, [String name]);
 }
 
 class InjectionContext {
