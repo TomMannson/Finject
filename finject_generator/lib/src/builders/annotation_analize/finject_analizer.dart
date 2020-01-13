@@ -10,6 +10,7 @@ class Analizer {
 
     _attachConstructorInjection(injectionDefinition, classInfo.constructors);
     _attachFieldsInjections(injectionDefinition, classInfo.fields);
+    _attachSuperClassInjections(injectionDefinition, classInfo);
     _attachMethodsInjection(injectionDefinition, classInfo.methods);
     injectionDefinition.prunRedundantInjections();
     injectionDefinition.margeDependencies();
@@ -76,6 +77,24 @@ class Analizer {
             element.name, convert(classInfo), findName(element.metadata));
       }
     }
+  }
+
+  void _attachSuperClassInjections(InjectorDs injection, ClassElement element) {
+    if (element.supertype == null) {
+      return;
+    }
+
+    ClassElement superTypeElement = element.supertype.element;
+
+    for (FieldElement element in superTypeElement.fields) {
+      if (hasAnnotation(element.metadata, "Inject")) {
+        ClassElement classInfo = element.type.element;
+        injection.fieldInjection.addNamedParameter(
+            element.name, convert(classInfo), findName(element.metadata));
+      }
+    }
+
+    _attachSuperClassInjections(injection, superTypeElement);
   }
 
   void _attachMethodsInjection(
