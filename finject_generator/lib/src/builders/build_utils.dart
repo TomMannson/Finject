@@ -164,5 +164,8 @@ String libraryPath(TypeInfo typeInfo) {
 }
 
 String generateTypeFromTypeInfo(TypeInfo typeInfo) {
+  if('${typeInfo.packageName}:${typeInfo.libraryName}' == 'dart:core'){
+    return "${typeInfo.className}";
+  }
   return "${typeInfo.libraryId}.${typeInfo.className}";
 }
