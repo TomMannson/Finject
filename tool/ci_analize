@@ -6,6 +6,7 @@
 set -e
 
 directories="finject finject_generator finject_flutter"
+testDirectories="finject finject_flutter"
 
 parent_directory=$PWD
 
@@ -54,7 +55,7 @@ done
 
 
 
-for directory in $directories; do
+for directory in $testDirectories; do
   echo
   echo "*** Testing $directory..."
   echo
@@ -62,3 +63,9 @@ for directory in $directories; do
 
   ../flutter/bin/flutter pub run test
 done
+
+echo
+echo "*** Testing finject_generator..."
+echo
+cd "$parent_directory/finject_generator"
+pub run test test/test_summary_builder.dart
