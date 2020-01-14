@@ -16,7 +16,7 @@ class BuildSummary extends Builder {
 
   @override
   Future<void> build(BuildStep buildStep) async {
-    AssetId output = buildStep.inputId.changeExtension(_extension);
+    var output = buildStep.inputId.changeExtension(_extension);
     final lib = await buildStep.inputLibrary;
 
     var createdUnit =

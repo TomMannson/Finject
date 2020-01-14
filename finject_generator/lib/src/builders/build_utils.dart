@@ -17,7 +17,7 @@ Iterable<DependencySpec> generateImportSpec(InjectorDs ds) sync* {
 
 Iterable<DependencySpec> generateImport(List<InjectorDs> allTypes) sync* {
   yield DependencySpec.import('package:finject/finject.dart');
-  for (InjectorDs injectable in allTypes) {
+  for (var injectable in allTypes) {
     var info = injectable.typeName;
     yield DependencySpecExt.import(libraryPath(info), info.libraryId);
   }
@@ -41,7 +41,7 @@ CodeBlockSpec generateCodeForFactory(InjectorDs ds) {
         '${generateTypeFromTypeInfo(ds.factoryTypeName)} factory = injectionProvider.get();');
     lines.add('var value = factory.${ds.methodInjections[0].name}(');
 
-    for (int i = 0; i < ds.methodInjections[0].orderedParameters.length; i++) {
+    for (var i = 0; i < ds.methodInjections[0].orderedParameters.length; i++) {
       lines.add(
           'injectionProvider.get(${injectNamedIndicator(ds.methodInjections[0].orderedNames[i])}),');
     }
@@ -55,7 +55,7 @@ CodeBlockSpec generateCodeForFactory(InjectorDs ds) {
   } else {
     lines.add('var value = ' + generateTypeFromTypeInfo(ds.typeName) + '(');
 
-    for (int i = 0; i < ds.constructorInjection.orderedParameters.length; i++) {
+    for (var i = 0; i < ds.constructorInjection.orderedParameters.length; i++) {
       lines.add(
           'injectionProvider.get(${injectNamedIndicator(ds.constructorInjection.orderedNames[i])}),');
     }
@@ -117,7 +117,7 @@ CodeBlockSpec generateCodeForMappers(List<InjectorDs> allTypes) {
   lines.add('injectorMapper.clear();');
   lines.add('factoryMapper.clear();');
 
-  for (InjectorDs injector in allTypes) {
+  for (var injector in allTypes) {
     if (injector.scopeName != null) {
       continue;
     }
@@ -135,7 +135,7 @@ CodeBlockSpec generateCodeForMappers(List<InjectorDs> allTypes) {
 }
 
 String generatePrefixClassName(InjectorDs data) {
-  StringBuffer buffer = StringBuffer(data.typeName.className);
+  var buffer = StringBuffer(data.typeName.className);
 
   buffer.write('_${data.typeName.libraryId}');
 

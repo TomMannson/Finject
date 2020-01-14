@@ -21,7 +21,7 @@ class Analizer {
       InjectorDs injection, List<ConstructorElement> constructors) {
     _validateInjectConstructor(constructors);
     for (var element in constructors) {
-      MethodInjection constructorInjection =
+      var constructorInjection =
           _processParemetersOfCostructor(element.parameters);
       injection.constructorInjection = constructorInjection;
       break;
@@ -31,8 +31,8 @@ class Analizer {
   MethodInjection _processParemetersOfCostructor(
       List<ParameterElement> parameters) {
     var constructorInjection = MethodInjection();
-    for (ParameterElement element in parameters) {
-      ClassElement classInfo = getType(element.type);
+    for (var element in parameters) {
+      var classInfo = getType(element.type);
       if (element.isPositional) {
         constructorInjection.addOrderedParameter(
             convert(classInfo), findName(element.metadata));
@@ -51,8 +51,8 @@ class Analizer {
   }
 
   void _validateInjectConstructor(List<ConstructorElement> constructors) {
-    int numberOfInjection = 0;
-    for (ConstructorElement element in constructors) {
+    var numberOfInjection = 0;
+    for (var element in constructors) {
       if (hasAnnotation(element.metadata, 'Inject')) {
         numberOfInjection++;
       }
@@ -70,9 +70,9 @@ class Analizer {
 
   void _attachFieldsInjections(
       InjectorDs injection, List<FieldElement> fields) {
-    for (FieldElement element in fields) {
+    for (var element in fields) {
       if (hasAnnotation(element.metadata, 'Inject')) {
-        ClassElement classInfo = element.type.element as ClassElement;
+        var classInfo = element.type.element as ClassElement;
         injection.fieldInjection.addNamedParameter(
             element.name, convert(classInfo), findName(element.metadata));
       }
@@ -84,11 +84,11 @@ class Analizer {
       return;
     }
 
-    ClassElement superTypeElement = element.supertype.element;
+    var superTypeElement = element.supertype.element;
 
-    for (FieldElement element in superTypeElement.fields) {
+    for (var element in superTypeElement.fields) {
       if (hasAnnotation(element.metadata, 'Inject')) {
-        ClassElement classInfo = element.type.element as ClassElement;
+        var classInfo = element.type.element as ClassElement;
         injection.fieldInjection.addNamedParameter(
             element.name, convert(classInfo), findName(element.metadata));
       }

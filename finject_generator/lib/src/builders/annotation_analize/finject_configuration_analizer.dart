@@ -6,16 +6,16 @@ import 'finject_analizer.dart';
 
 class FinjectConfigurationAnalizer extends Analizer {
   Iterable<InjectorDs> analize(Element element) {
-    List<InjectorDs> injections = [];
+    var injections = <InjectorDs>[];
     if (element is ClassElement) {
-      ClassElement classInfo = element;
-      InjectorDs injectionDefinition = prepareInjectionDefinition(classInfo);
+      var classInfo = element;
+      var injectionDefinition = prepareInjectionDefinition(classInfo);
 
       injectionDefinition.singleton = true;
 
       injections.add(injectionDefinition);
 
-      for (MethodElement method in classInfo.methods) {
+      for (var method in classInfo.methods) {
         if (method.isPrivate) {
           continue;
         }
@@ -29,9 +29,9 @@ class FinjectConfigurationAnalizer extends Analizer {
         injectionDefinition.singleton =
             hasAnnotation(method.metadata, 'Singleton');
 
-        for (ElementAnnotation annotation in method.metadata) {
-          ConstructorElement annotationInfo = annotation.element as ConstructorElement;
-          ClassElement annotationType = annotationInfo.enclosingElement;
+        for (var annotation in method.metadata) {
+          var annotationInfo = annotation.element as ConstructorElement;
+          var annotationType = annotationInfo.enclosingElement;
 
           if (annotationType.name == 'Scoped') {
             var result = annotation.computeConstantValue();
@@ -54,8 +54,8 @@ class FinjectConfigurationAnalizer extends Analizer {
   void attachFactoryMethod(InjectorDs injection, MethodElement method) {
     var methodInjection = MethodInjection();
     methodInjection.name = method.name;
-    for (ParameterElement element in method.parameters) {
-      ClassElement classInfo = getType(element.type);
+    for (var element in method.parameters) {
+      var classInfo = getType(element.type);
       if (element.isPositional) {
         methodInjection.addOrderedParameter(
             convert(classInfo), findName(method.metadata));

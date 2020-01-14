@@ -53,7 +53,7 @@ class InjectorDs {
       };
 
   void prunRedundantInjections() {
-    for (String itemFromBlackList in constructorInjection.blackList) {
+    for (var itemFromBlackList in constructorInjection.blackList) {
       fieldInjection.namedParameter.remove(itemFromBlackList);
     }
   }

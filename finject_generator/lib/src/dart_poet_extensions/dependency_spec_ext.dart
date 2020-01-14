@@ -8,7 +8,7 @@ class DependencySpecExt extends DependencySpec {
   @override
   String code({Map<String, dynamic> args = const {}}) {
     if(!route.contains('dart:core')) {
-      String result = super.code(args: args).replaceAll(';', '');
+      var result = super.code(args: args).replaceAll(';', '');
       return '$result as $libraryId;';
     }
     else{

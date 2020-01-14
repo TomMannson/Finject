@@ -6,18 +6,18 @@ import 'finject_analizer.dart';
 
 class FinjectInjectableAnalizer extends Analizer {
   Iterable<InjectorDs> analize(Element element) {
-    List<InjectorDs> injections = [];
+    var injections = <InjectorDs>[];
 
     if (element is ClassElement) {
-      ClassElement classInfo = element;
-      InjectorDs injectionDefinition = prepareInjectionDefinition(classInfo);
+      var classInfo = element;
+      var injectionDefinition = prepareInjectionDefinition(classInfo);
 
       injectionDefinition.singleton =
           hasAnnotation(classInfo.metadata, 'Singleton');
 
-      for (ElementAnnotation annotation in classInfo.metadata) {
-        ConstructorElement annotationInfo = annotation.element as ConstructorElement;
-        ClassElement annotationType = annotationInfo.enclosingElement;
+      for (var annotation in classInfo.metadata) {
+        var annotationInfo = annotation.element as ConstructorElement;
+        var annotationType = annotationInfo.enclosingElement;
         if (annotationType.name == 'Scoped') {
           var result = annotation.computeConstantValue();
           injectionDefinition.scopeName =

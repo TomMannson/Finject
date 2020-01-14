@@ -32,18 +32,18 @@ class DiCodeBuilder implements Builder {
   Future<void> build(BuildStep buildStep) async {
     var allInjectors = <ClassSpec>[];
     var scopes = <String, List<InjectorDs>>{};
-    List<InjectorDs> allTypes = [];
+    var allTypes = <InjectorDs>[];
     await for (final input in buildStep.findAssets(_allFilesInLib)) {
       if (input.path.endsWith('summary.json')) {
-        String injectorJson = await buildStep.readAsString(input);
+        var injectorJson = await buildStep.readAsString(input);
 
-        List<InjectorDs> readData = (jsonDecode(injectorJson) as Iterable)
+        var readData = (jsonDecode(injectorJson) as Iterable)
             .map((value) => InjectorDs.fromJson(value as Map<String, dynamic>))
             .toList();
 
-        for (InjectorDs oneInjectable in readData) {
+        for (var oneInjectable in readData) {
           if (oneInjectable.scopeName != null) {
-            List<InjectorDs> scopeList = scopes[oneInjectable.scopeName];
+            var scopeList = scopes[oneInjectable.scopeName];
             if (scopeList == null) {
               scopeList = <InjectorDs>[];
               scopes[oneInjectable.scopeName] = scopeList;
@@ -60,7 +60,7 @@ class DiCodeBuilder implements Builder {
 
     allInjectors.add(createClassesForScope(scopes));
 
-    FileSpec fileSpec = FileSpec.build(
+    var fileSpec = FileSpec.build(
         dependencies: [...generateImport(allTypes)],
         classes: allInjectors,
         properties: [
@@ -81,7 +81,7 @@ class DiCodeBuilder implements Builder {
           MethodSpec.build('init', codeBlock: generateCodeForMappers(allTypes))
         ]);
 
-    DartFile dartFile = DartFile.fromFileSpec(fileSpec);
+    var dartFile = DartFile.fromFileSpec(fileSpec);
 
     final output = _allFileOutput(buildStep);
     return buildStep.writeAsString(output, dartFile.outputContent());
@@ -103,12 +103,12 @@ class DiCodeBuilder implements Builder {
 }
 
 List<String> generateMethodCodeForScopes(Map<String, List<InjectorDs>> scopes) {
-  List<String> linesOfCode = [];
+  var linesOfCode = <String>[];
 
-  for (String scope in scopes.keys) {
+  for (var scope in scopes.keys) {
     linesOfCode.add("if (scopeName == '$scope') {");
     linesOfCode.add('return Scope([');
-    for (InjectorDs injectable in scopes[scope]) {
+    for (var injectable in scopes[scope]) {
       linesOfCode.add(
           'ScopeEntry<Injector>(const ${generateKeyForInjector(injectable)}, ${generatePrefixClassName(injectable)}_Injector()),');
       linesOfCode.add(
