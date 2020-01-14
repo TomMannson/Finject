@@ -12,14 +12,10 @@ class FInjectHost extends StatelessWidget {
       : host = InjectHost(child: child);
 
   FInjectHost.flat({@required Widget child})
-      : host = JustInjectHost(
-          child: child,
-        );
+      : host = JustInjectHost(child: child);
 
   @override
   Widget build(BuildContext context) {
     return host;
   }
 }
-
-

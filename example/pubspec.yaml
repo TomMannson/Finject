@@ -14,10 +14,10 @@ dev_dependencies:
     sdk: flutter
   finject_generator: ^0.1.8
 
-#dependency_overrides:
-#  finject_flutter:
-#    path: ../finject_flutter
-#  finject_generator:
-#    path: ../finject_generator
-#  finject:
-#    path: ../finject
+dependency_overrides:
+  finject_flutter:
+    path: ../finject_flutter
+  finject_generator:
+    path: ../finject_generator
+  finject:
+    path: ../finject

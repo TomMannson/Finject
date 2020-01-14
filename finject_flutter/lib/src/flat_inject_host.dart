@@ -25,9 +25,9 @@ class _JustInjectionProviderImpl extends AbstractInjectionProvider {
   @override
   T get<T>([String name]) {
     T value;
-    Qualifier qualifier = QualifierFactory.create(T, name);
+    var qualifier = QualifierFactory.create(T, name);
 
-    Factory factory = rootDependencyResolver["factory"][qualifier] as Factory;
+    var factory = rootDependencyResolver["factory"][qualifier] as Factory;
     if (factory != null) {
       value = factory.create(this) as T;
       rootDependencyResolver["injector"][qualifier].inject(value, this);
@@ -37,9 +37,9 @@ class _JustInjectionProviderImpl extends AbstractInjectionProvider {
   }
 
   void inject(Object target, [String name]) {
-    Qualifier qualifier = QualifierFactory.create(target.runtimeType, name);
+    var qualifier = QualifierFactory.create(target.runtimeType, name);
 
-    Injector injector = rootDependencyResolver["injector"][qualifier] as Injector;
+    var injector = rootDependencyResolver["injector"][qualifier] as Injector;
     if (injector != null) {
       injector.inject(target, this);
     }

@@ -82,7 +82,7 @@ class _ScopeInjectionProviderImpl extends AbstractInjectionProvider {
   T get<T>([String name]) {
     T value;
 
-    Qualifier qualifier = QualifierFactory.create(T, name);
+    var qualifier = QualifierFactory.create(T, name);
 
     if (scope != null &&
         scope.factories[qualifier] != null &&
@@ -92,14 +92,14 @@ class _ScopeInjectionProviderImpl extends AbstractInjectionProvider {
       return value;
     }
 
-    FoundInjection foundInjection = findParrent(context);
-    InjectionProvider parentInjector = foundInjection.provider;
+    var foundInjection = findParrent(context);
+    var parentInjector = foundInjection.provider;
     if (parentInjector != null) {
       value = parentInjector.get(name);
       return value;
     }
 
-    Factory factory = rootDependencyResolver["factory"][qualifier] as Factory;
+    var factory = rootDependencyResolver["factory"][qualifier] as Factory;
     if (factory != null) {
       value = factory.create(this) as T;
       rootDependencyResolver["injector"][qualifier].inject(value, this);
@@ -109,21 +109,21 @@ class _ScopeInjectionProviderImpl extends AbstractInjectionProvider {
   }
 
   inject(Object target, [String name]) {
-    Qualifier qualifier = QualifierFactory.create(target.runtimeType, name);
+    var qualifier = QualifierFactory.create(target.runtimeType, name);
 
     if (scope != null && scope.injectors[qualifier] != null) {
       scope.injectors[qualifier].inject(target, this);
       return;
     }
 
-    FoundInjection foundInjection = findParrent(context);
-    InjectionProvider parentInjector = foundInjection.provider;
+    var foundInjection = findParrent(context);
+    var parentInjector = foundInjection.provider;
     if (parentInjector != null) {
       parentInjector.inject(target, name);
       return;
     }
 
-    Injector injector = rootDependencyResolver["injector"][qualifier] as Injector;
+    var injector = rootDependencyResolver["injector"][qualifier] as Injector;
     if (injector != null) {
       injector.inject(target, this);
     }
