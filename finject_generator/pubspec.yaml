@@ -1,6 +1,6 @@
 name: finject_generator
 description: Dart code generator for dependency injection finject library. Inspired with SpringFramework, Dagger2, and Angular DI solution
-version: 0.1.7
+version: 0.1.8
 homepage: https://github.com/TomMannson/Finject
 
 environment:
