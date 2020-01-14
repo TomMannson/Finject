@@ -9,8 +9,8 @@ void main() {
     });
 
     test('null name returns TypeQualifier', () {
-      expect(QualifierFactory.create(TestClass2, null),
-          TypeQualifier(TestClass2));
+      expect(
+          QualifierFactory.create(TestClass2, null), TypeQualifier(TestClass2));
     });
   });
 }

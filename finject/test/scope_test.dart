@@ -19,13 +19,14 @@ void main() {
     });
 
     test('map should return valid injector', () {
-      expect(scopeToTest.injectors[const TypeQualifier(TestClass)], testInjector);
-      expect(scopeToTest.injectors[const NamedQualifier(TestClass, 'two')], testScopedInjector);
+      expect(
+          scopeToTest.injectors[const TypeQualifier(TestClass)], testInjector);
+      expect(scopeToTest.injectors[const NamedQualifier(TestClass, 'two')],
+          testScopedInjector);
       expect(scopeToTest.injectors[const TypeQualifier(TestClass2)], null);
     });
   });
 }
-
 
 class TestClass2 {}
 

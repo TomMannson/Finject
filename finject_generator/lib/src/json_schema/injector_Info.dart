@@ -18,8 +18,10 @@ class InjectorDs {
   InjectorDs();
 
   InjectorDs.fromJson(Map<String, dynamic> json)
-      : typeName =
-            getFromJson(json['typeName'], (dynamic value) => TypeInfo.fromJson(value as Map<String, dynamic>)),
+      : typeName = getFromJson(
+            json['typeName'],
+            (dynamic value) =>
+                TypeInfo.fromJson(value as Map<String, dynamic>)),
         scopeName = json['scopeName'] as String,
         singleton = json['singleton'] as bool,
         name = json['name'] as String,
@@ -31,12 +33,15 @@ class InjectorDs {
           json['constructorInjection'],
           (value) => MethodInjection.fromJson(value as Map<String, dynamic>),
         ),
-        fieldInjection = FieldInjection.fromJson(json['fieldInjection'] as Map<String, dynamic>),
+        fieldInjection = FieldInjection.fromJson(
+            json['fieldInjection'] as Map<String, dynamic>),
         methodInjections = (json['methodInjections'] as Iterable)
-            .map((item) => MethodInjection.fromJson(item as Map<String, dynamic>))
+            .map((item) =>
+                MethodInjection.fromJson(item as Map<String, dynamic>))
             .toList(),
         dependencies = (json['dependencies'] as Iterable)
-            .map<TypeInfo>((dynamic item) => TypeInfo.fromJson(item as Map<String, dynamic>))
+            .map<TypeInfo>((dynamic item) =>
+                TypeInfo.fromJson(item as Map<String, dynamic>))
             .toSet();
 
   Map<String, dynamic> toJson() => {
@@ -92,13 +97,13 @@ class MethodInjection {
   MethodInjection();
 
   MethodInjection.fromJson(Map<String, dynamic> json)
-      : name = json['name'] as String ,
+      : name = json['name'] as String,
         orderedParameters = (json['orderedParameters'] as Iterable)
             .map((item) => TypeInfo.fromJson(item as Map<String, dynamic>))
             .toList(),
         namedParameters = (json['namedParameters'] as Map<String, dynamic>).map(
-            (String key, dynamic value) =>
-                MapEntry(key, TypeInfo.fromJson(value as Map<String, dynamic>))),
+            (String key, dynamic value) => MapEntry(
+                key, TypeInfo.fromJson(value as Map<String, dynamic>))),
         blackList = (json['blackList'] as Iterable)
             .map((dynamic value) => value as String)
             .toList(),
@@ -135,8 +140,9 @@ class SetterInjection {
   SetterInjection();
 
   SetterInjection.fromJson(Map<String, dynamic> json)
-      : namedParameter = (json['namedParameters'] as Map<String, dynamic>)
-            .map((key, value) => MapEntry(key, TypeInfo.fromJson(value as Map<String, dynamic>))),
+      : namedParameter = (json['namedParameters'] as Map<String, dynamic>).map(
+            (key, value) => MapEntry(
+                key, TypeInfo.fromJson(value as Map<String, dynamic>))),
         namedName = (json['namedName'] as Map<String, dynamic>)
             .map((String key, dynamic value) => MapEntry(key, value as String));
 
@@ -158,8 +164,8 @@ class FieldInjection {
 
   FieldInjection.fromJson(Map<String, dynamic> json)
       : namedParameter = (json['namedParameter'] as Map<String, dynamic>).map(
-            (String key, dynamic value) =>
-                MapEntry(key, TypeInfo.fromJson(value as Map<String, dynamic>))),
+            (String key, dynamic value) => MapEntry(
+                key, TypeInfo.fromJson(value as Map<String, dynamic>))),
         namedNames = (json['namedNames'] as Map<String, dynamic>)
             .map((String key, dynamic value) => MapEntry(key, value as String));
 

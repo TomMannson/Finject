@@ -21,7 +21,8 @@ class FinjectConfigurationAnalizer extends Analizer {
         }
 
         injectionDefinition = InjectorDs();
-        injectionDefinition.typeName = convert(method.returnType.element as ClassElement);
+        injectionDefinition.typeName =
+            convert(method.returnType.element as ClassElement);
         injectionDefinition.factoryTypeName = convert(classInfo);
 
         attachFactoryMethod(injectionDefinition, method);

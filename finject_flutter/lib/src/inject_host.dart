@@ -8,8 +8,7 @@ class InjectHost extends StatelessWidget {
   final _InjectionProviderImpl _provider;
 
   @protected
-  InjectHost({this.child}):
-        _provider = _InjectionProviderImpl();
+  InjectHost({this.child}) : _provider = _InjectionProviderImpl();
 
   @override
   Widget build(BuildContext context) {

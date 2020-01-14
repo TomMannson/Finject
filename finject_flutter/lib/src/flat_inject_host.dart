@@ -8,9 +8,7 @@ class JustInjectHost extends StatelessWidget {
   final _JustInjectionProviderImpl _provider;
 
   @protected
-  JustInjectHost({this.child}):
-        _provider = _JustInjectionProviderImpl();
-
+  JustInjectHost({this.child}) : _provider = _JustInjectionProviderImpl();
 
   @override
   Widget build(BuildContext context) {
