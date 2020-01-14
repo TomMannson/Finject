@@ -1,0 +1,14 @@
+include: package:pedantic/analysis_options.yaml
+
+analyzer:
+  strong-mode:
+    implicit-casts: false
+
+  errors:
+    # Ignore still failing lints from latest pkg:pedantic
+
+linter:
+  rules:
+    avoid_shadowing_type_parameters: false
+    await_only_futures: true
+    omit_local_variable_types: false

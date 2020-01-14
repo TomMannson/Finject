@@ -7,3 +7,5 @@ class TestClass {
 
   TestClass(this.value);
 }
+
+Function asd;

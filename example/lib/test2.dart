@@ -1,4 +1,4 @@
-import 'package:finject/finject.dart';
+
 
 @Injectable()
 class TestClass extends SuperTestClass {
