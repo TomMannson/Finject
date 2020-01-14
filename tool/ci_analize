@@ -55,7 +55,7 @@ done
 
 
 
-for directory in testDirectories; do
+for directory in $testDirectories; do
   echo
   echo "*** Testing $directory..."
   echo
