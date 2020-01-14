@@ -68,4 +68,4 @@ echo
 echo "*** Testing finject_generator..."
 echo
 cd "$parent_directory/finject_generator"
-pub.bat run test test/test_summary_builder.dart
+pub run test test/test_summary_builder.dart
