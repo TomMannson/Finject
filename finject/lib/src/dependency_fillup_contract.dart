@@ -22,7 +22,7 @@ class Scope {
 
 
   Scope(List<ScopeEntry> list){
-    for(ScopeEntry entry in list){
+    for(var entry in list){
       if(entry is ScopeEntry<Injector>){
         injectors[entry.qualifier] = entry.element;
       }

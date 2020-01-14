@@ -27,9 +27,9 @@ class _JustInjectionProviderImpl extends AbstractInjectionProvider {
     T value;
     Qualifier qualifier = QualifierFactory.create(T, name);
 
-    Factory factory = rootDependencyResolver["factory"][qualifier];
+    Factory factory = rootDependencyResolver["factory"][qualifier] as Factory;
     if (factory != null) {
-      value = factory.create(this);
+      value = factory.create(this) as T;
       rootDependencyResolver["injector"][qualifier].inject(value, this);
       return value;
     }
@@ -39,7 +39,7 @@ class _JustInjectionProviderImpl extends AbstractInjectionProvider {
   void inject(Object target, [String name]) {
     Qualifier qualifier = QualifierFactory.create(target.runtimeType, name);
 
-    Injector injector = rootDependencyResolver["injector"][qualifier];
+    Injector injector = rootDependencyResolver["injector"][qualifier] as Injector;
     if (injector != null) {
       injector.inject(target, this);
     }

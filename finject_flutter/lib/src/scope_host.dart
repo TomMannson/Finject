@@ -34,7 +34,7 @@ class ScopeInjecHostElement extends InheritedElement {
 
   @override
   Widget build() {
-    return HostStatefulWidget(widget, super.build());
+    return HostStatefulWidget(widget as ScopeInjectHost, super.build());
   }
 }
 
@@ -60,7 +60,7 @@ class _InjectHostState extends State<HostStatefulWidget> {
 
   @override
   Widget build(BuildContext context) {
-    provider = widget.parent.getIt();
+    provider = widget.parent.getIt() as _ScopeInjectionProviderImpl;
     provider.context = context;
     provider.inject(widget.child);
     return widget.child;
@@ -87,7 +87,7 @@ class _ScopeInjectionProviderImpl extends AbstractInjectionProvider {
     if (scope != null &&
         scope.factories[qualifier] != null &&
         scope.injectors[qualifier] != null) {
-      value = scope.factories[qualifier].create(this);
+      value = scope.factories[qualifier].create(this) as T;
       scope.injectors[qualifier].inject(value, this);
       return value;
     }
@@ -99,9 +99,9 @@ class _ScopeInjectionProviderImpl extends AbstractInjectionProvider {
       return value;
     }
 
-    Factory factory = rootDependencyResolver["factory"][qualifier];
+    Factory factory = rootDependencyResolver["factory"][qualifier] as Factory;
     if (factory != null) {
-      value = factory.create(this);
+      value = factory.create(this) as T;
       rootDependencyResolver["injector"][qualifier].inject(value, this);
       return value;
     }
@@ -123,7 +123,7 @@ class _ScopeInjectionProviderImpl extends AbstractInjectionProvider {
       return;
     }
 
-    Injector injector = rootDependencyResolver["injector"][qualifier];
+    Injector injector = rootDependencyResolver["injector"][qualifier] as Injector;
     if (injector != null) {
       injector.inject(target, this);
     }

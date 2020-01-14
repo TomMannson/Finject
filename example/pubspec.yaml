@@ -12,12 +12,12 @@ dev_dependencies:
   build_runner: 1.7.2
   flutter_test:
     sdk: flutter
-  finject_generator: ^0.1.4
+  finject_generator: ^0.1.8
 
-dependency_overrides:
-  finject_flutter:
-    path: ../finject_flutter
-  finject_generator:
-    path: ../finject_generator
-  finject:
-    path: ../finject
+#dependency_overrides:
+#  finject_flutter:
+#    path: ../finject_flutter
+#  finject_generator:
+#    path: ../finject_generator
+#  finject:
+#    path: ../finject
