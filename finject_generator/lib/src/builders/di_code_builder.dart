@@ -32,7 +32,7 @@ class DiCodeBuilder implements Builder {
 
   bool notContainsOneOf(
       Set<String> injectorProfiles, List<String> activeProfiles) {
-    for (String injectorProfile in injectorProfiles) {
+    for (final injectorProfile in injectorProfiles) {
       if (activeProfiles.contains(injectorProfile)) {
         return false;
       }
@@ -52,7 +52,7 @@ class DiCodeBuilder implements Builder {
       var profilesValue = library.topLevelElements
           .whereType<TopLevelVariableElement>()
           .where(
-              (TopLevelVariableElement element) => element.name == "profiles")
+              (TopLevelVariableElement element) => element.name == 'profiles')
           .map((TopLevelVariableElement element) =>
               element.computeConstantValue())
           .toList();

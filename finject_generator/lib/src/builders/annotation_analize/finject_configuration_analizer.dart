@@ -43,10 +43,10 @@ class FinjectConfigurationAnalizer extends Analizer {
             var result = annotation.computeConstantValue();
             injectionDefinition.name = result.getField('name').toStringValue();
           }
-          if (annotationType.name == "Profile") {
+          if (annotationType.name == 'Profile') {
             var result = annotation.computeConstantValue();
             injectionDefinition.profiles = result
-                .getField("profileNames")
+                .getField('profileNames')
                 .toListValue()
                 .map((value) => value.toStringValue())
                 .toSet();
