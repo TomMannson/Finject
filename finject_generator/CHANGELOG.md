@@ -1,5 +1,17 @@
 # CHANGELOG.md
 
+## (0.2.0)
+
+Features:
+
+  - Generating profiles based on Annotations and declarated_profiles.dart info
+
+## (0.1.8)
+
+Features:
+
+  - New contract for profiles
+
 ## (0.1.8)
 
 Features:
