@@ -1,3 +1,4 @@
+import 'package:finject_flutter/src/builder_inject_host.dart';
 import 'package:flutter/material.dart';
 
 import '../finject_flutter.dart';
@@ -14,20 +15,12 @@ class FInjectHost extends StatelessWidget {
   FInjectHost.flat({@required Widget child})
       : host = JustInjectHost(child: child);
 
+  FInjectHost.builder(
+      {@required LayoutInjectWidgetBuilder builder})
+      : host = BuilderInjectHost(builder);
+
   @override
   Widget build(BuildContext context) {
     return host;
-  }
-}
-
-class FInject {
-  static T get<T>({String name}) {
-    return JustInjectionProviderImpl().get<T>(name);
-  }
-
-  static T getWithContext<T>(BuildContext context, {String name}) {
-    final injectionProviderImpl = InjectionProviderImpl();
-    injectionProviderImpl.context = context;
-    return injectionProviderImpl.get<T>(name);
   }
 }
