@@ -71,7 +71,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   FInjectHost.inject(
                     child: Test(),
                   ),
-                  Test2(FInject.get(), FInject.get(), FInject.get()),
+                  FInjectHost.inject(
+                    child: Test(),
+                  ),
+                  FInjectHost.builder(
+                      builder: (BuildContext ctx, InjectionProvider provider) =>
+                          Test2(
+                            provider.get('one'),
+                            provider.get('two'),
+                            provider.get(),
+                          )),
                 ],
               ),
             ),
@@ -88,6 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 @Injectable()
+// ignore: must_be_immutable
 class Test extends StatelessWidget {
   @Inject()
   @Named("one")
@@ -108,21 +118,22 @@ class Test extends StatelessWidget {
   }
 }
 
-@Injectable()
 class Test2 extends StatelessWidget {
-  @Inject()
-  Test2(@Named("one") this.one, @Named("two") this.two, this.three);
-
   final TestClass one;
-
   final TestClass two;
-
   final a.TestClass three;
+
+  Test2(this.one, this.two, this.three);
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[Text(one.value), Text(two.value), Text(three.value)],
+      children: <Widget>[
+        Text("Test2"),
+        Text(one.value),
+        Text(two.value),
+        Text(three.value)
+      ],
     );
   }
 }

@@ -9,7 +9,7 @@ class ScopeInjectHost extends InheritedWidget {
 
   @protected
   ScopeInjectHost({Widget child, this.scopeName})
-      : _getItContainer = _ScopeInjectionProviderImpl(
+      : _getItContainer = ScopeInjectionProviderImpl(
           defaultScopeFactory.createScope(scopeName),
         ),
         super(child: child);
@@ -51,7 +51,7 @@ class HostStatefulWidget extends StatefulWidget {
 }
 
 class _InjectHostState extends State<HostStatefulWidget> {
-  _ScopeInjectionProviderImpl provider;
+  ScopeInjectionProviderImpl provider;
 
   @override
   void initState() {
@@ -60,7 +60,7 @@ class _InjectHostState extends State<HostStatefulWidget> {
 
   @override
   Widget build(BuildContext context) {
-    provider = widget.parent.getIt() as _ScopeInjectionProviderImpl;
+    provider = widget.parent.getIt() as ScopeInjectionProviderImpl;
     provider.context = context;
     provider.inject(widget.child);
     return widget.child;
@@ -73,10 +73,10 @@ class _InjectHostState extends State<HostStatefulWidget> {
   }
 }
 
-class _ScopeInjectionProviderImpl extends AbstractInjectionProvider {
+class ScopeInjectionProviderImpl extends AbstractInjectionProvider {
   Scope scope;
 
-  _ScopeInjectionProviderImpl(this.scope);
+  ScopeInjectionProviderImpl(this.scope);
 
   @override
   T get<T>([String name]) {
