@@ -1,22 +1,19 @@
 import 'package:example/test.dart';
-import 'package:example/test2.dart' as a;
 import 'package:finject/finject.dart';
-
 
 @Configuration()
 class Config {
-
   @Named("one")
   @Scoped("test")
   @Singleton()
-  TestClass one(){
+  TestClass one() {
     return TestClass("one");
   }
 
   @Named("two")
   @Profile(["dev"])
   @Scoped("test")
-  TestClass two(){
+  TestClass two() {
     return TestClass("two");
   }
 
@@ -27,8 +24,7 @@ class Config {
     return TestClass("two test");
   }
 
-
-  a.TestClass three(){
-    return a.TestClass("three");
+  String valueString() {
+    return "three";
   }
 }

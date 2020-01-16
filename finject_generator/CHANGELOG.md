@@ -1,5 +1,15 @@
 # CHANGELOG.md
 
+## (0.1.8)
+
+Features:
+
+  - Injecting super class members
+
+Bugfixes:
+
+  - Injecting core dart classes
+
 ## (0.1.4)
 
 Features:

@@ -34,7 +34,7 @@ class ScopeInjecHostElement extends InheritedElement {
 
   @override
   Widget build() {
-    return HostStatefulWidget(widget, super.build());
+    return HostStatefulWidget(widget as ScopeInjectHost, super.build());
   }
 }
 
@@ -60,7 +60,7 @@ class _InjectHostState extends State<HostStatefulWidget> {
 
   @override
   Widget build(BuildContext context) {
-    provider = widget.parent.getIt();
+    provider = widget.parent.getIt() as _ScopeInjectionProviderImpl;
     provider.context = context;
     provider.inject(widget.child);
     return widget.child;
@@ -82,26 +82,26 @@ class _ScopeInjectionProviderImpl extends AbstractInjectionProvider {
   T get<T>([String name]) {
     T value;
 
-    Qualifier qualifier = QualifierFactory.create(T, name);
+    var qualifier = QualifierFactory.create(T, name);
 
     if (scope != null &&
         scope.factories[qualifier] != null &&
         scope.injectors[qualifier] != null) {
-      value = scope.factories[qualifier].create(this);
+      value = scope.factories[qualifier].create(this) as T;
       scope.injectors[qualifier].inject(value, this);
       return value;
     }
 
-    FoundInjection foundInjection = findParrent(context);
-    InjectionProvider parentInjector = foundInjection.provider;
+    var foundInjection = findParrent(context);
+    var parentInjector = foundInjection.provider;
     if (parentInjector != null) {
       value = parentInjector.get(name);
       return value;
     }
 
-    Factory factory = rootDependencyResolver["factory"][qualifier];
+    var factory = rootDependencyResolver["factory"][qualifier] as Factory;
     if (factory != null) {
-      value = factory.create(this);
+      value = factory.create(this) as T;
       rootDependencyResolver["injector"][qualifier].inject(value, this);
       return value;
     }
@@ -109,21 +109,21 @@ class _ScopeInjectionProviderImpl extends AbstractInjectionProvider {
   }
 
   inject(Object target, [String name]) {
-    Qualifier qualifier = QualifierFactory.create(target.runtimeType, name);
+    var qualifier = QualifierFactory.create(target.runtimeType, name);
 
     if (scope != null && scope.injectors[qualifier] != null) {
       scope.injectors[qualifier].inject(target, this);
       return;
     }
 
-    FoundInjection foundInjection = findParrent(context);
-    InjectionProvider parentInjector = foundInjection.provider;
+    var foundInjection = findParrent(context);
+    var parentInjector = foundInjection.provider;
     if (parentInjector != null) {
       parentInjector.inject(target, name);
       return;
     }
 
-    Injector injector = rootDependencyResolver["injector"][qualifier];
+    var injector = rootDependencyResolver["injector"][qualifier] as Injector;
     if (injector != null) {
       injector.inject(target, this);
     }

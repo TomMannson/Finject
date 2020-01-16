@@ -27,7 +27,7 @@ abstract class AbstractInjectionProvider extends InjectionProvider {
       return FoundInjection(null, null);
     }
 
-    ScopeInjectHost widget = element.widget as ScopeInjectHost;
+    var widget = element.widget as ScopeInjectHost;
     return FoundInjection(widget.getIt(), element);
   }
 }

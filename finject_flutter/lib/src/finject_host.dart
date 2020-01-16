@@ -12,9 +12,7 @@ class FInjectHost extends StatelessWidget {
       : host = InjectHost(child: child);
 
   FInjectHost.flat({@required Widget child})
-      : host = JustInjectHost(
-          child: child,
-        );
+      : host = JustInjectHost(child: child);
 
   @override
   Widget build(BuildContext context) {
@@ -22,4 +20,14 @@ class FInjectHost extends StatelessWidget {
   }
 }
 
+class FInject {
+  static T get<T>({String name}) {
+    return JustInjectionProviderImpl().get<T>(name);
+  }
 
+  static T getWithContext<T>(BuildContext context, {String name}) {
+    final injectionProviderImpl = InjectionProviderImpl();
+    injectionProviderImpl.context = context;
+    return injectionProviderImpl.get<T>(name);
+  }
+}

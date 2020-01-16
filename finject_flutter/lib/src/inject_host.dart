@@ -5,11 +5,10 @@ import 'injection_provider.dart';
 
 class InjectHost extends StatelessWidget {
   final Widget child;
-  final _InjectionProviderImpl _provider;
+  final InjectionProviderImpl _provider;
 
   @protected
-  InjectHost({this.child}):
-        _provider = _InjectionProviderImpl();
+  InjectHost({this.child}) : _provider = InjectionProviderImpl();
 
   @override
   Widget build(BuildContext context) {
@@ -19,26 +18,26 @@ class InjectHost extends StatelessWidget {
   }
 }
 
-class _InjectionProviderImpl extends AbstractInjectionProvider {
+class InjectionProviderImpl extends AbstractInjectionProvider {
   BuildContext context;
 
-  _InjectionProviderImpl();
+  InjectionProviderImpl();
 
   @override
   T get<T>([String name]) {
     T value;
-    Qualifier qualifier = QualifierFactory.create(T, name);
+    var qualifier = QualifierFactory.create(T, name);
 
-    FoundInjection foundInjection = findParrent(context);
-    InjectionProvider parentInjector = foundInjection.provider;
+    var foundInjection = findParrent(context);
+    var parentInjector = foundInjection.provider;
     if (parentInjector != null) {
       value = parentInjector.get(name);
       return value;
     }
 
-    Factory factory = rootDependencyResolver["factory"][qualifier];
+    Factory factory = rootDependencyResolver['factory'][qualifier] as Factory;
     if (factory != null) {
-      value = factory.create(this);
+      value = factory.create(this) as T;
       rootDependencyResolver["injector"][qualifier].inject(value, this);
       return value;
     }
@@ -46,16 +45,16 @@ class _InjectionProviderImpl extends AbstractInjectionProvider {
   }
 
   inject(Object target, [String name]) {
-    Qualifier qualifier = QualifierFactory.create(target.runtimeType, name);
+    var qualifier = QualifierFactory.create(target.runtimeType, name);
 
-    FoundInjection foundInjection = findParrent(context);
-    InjectionProvider parentInjector = foundInjection.provider;
+    var foundInjection = findParrent(context);
+    var parentInjector = foundInjection.provider;
     if (parentInjector != null) {
       parentInjector.inject(target, name);
       return;
     }
 
-    Injector injector = rootDependencyResolver["injector"][qualifier];
+    var injector = rootDependencyResolver["injector"][qualifier] as Injector;
     if (injector != null) {
       injector.inject(target, this);
     }

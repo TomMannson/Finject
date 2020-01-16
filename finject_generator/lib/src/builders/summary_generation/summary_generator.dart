@@ -35,6 +35,6 @@ abstract class SummaryGenerator extends Generator {
     if (values.isNotEmpty) {
       return jsonEncode(values);
     }
-    return "";
+    return '';
   }
 }

@@ -1,1 +1,1 @@
-const profiles = ["test"];
+const profiles = ["dev"];

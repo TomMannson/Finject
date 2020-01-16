@@ -5,12 +5,10 @@ import 'injection_provider.dart';
 
 class JustInjectHost extends StatelessWidget {
   final Widget child;
-  final _JustInjectionProviderImpl _provider;
+  final JustInjectionProviderImpl _provider;
 
   @protected
-  JustInjectHost({this.child}):
-        _provider = _JustInjectionProviderImpl();
-
+  JustInjectHost({this.child}) : _provider = JustInjectionProviderImpl();
 
   @override
   Widget build(BuildContext context) {
@@ -19,17 +17,17 @@ class JustInjectHost extends StatelessWidget {
   }
 }
 
-class _JustInjectionProviderImpl extends AbstractInjectionProvider {
-  _JustInjectionProviderImpl();
+class JustInjectionProviderImpl extends AbstractInjectionProvider {
+  JustInjectionProviderImpl();
 
   @override
   T get<T>([String name]) {
     T value;
-    Qualifier qualifier = QualifierFactory.create(T, name);
+    var qualifier = QualifierFactory.create(T, name);
 
-    Factory factory = rootDependencyResolver["factory"][qualifier];
+    var factory = rootDependencyResolver["factory"][qualifier] as Factory;
     if (factory != null) {
-      value = factory.create(this);
+      value = factory.create(this) as T;
       rootDependencyResolver["injector"][qualifier].inject(value, this);
       return value;
     }
@@ -37,9 +35,9 @@ class _JustInjectionProviderImpl extends AbstractInjectionProvider {
   }
 
   void inject(Object target, [String name]) {
-    Qualifier qualifier = QualifierFactory.create(target.runtimeType, name);
+    var qualifier = QualifierFactory.create(target.runtimeType, name);
 
-    Injector injector = rootDependencyResolver["injector"][qualifier];
+    var injector = rootDependencyResolver["injector"][qualifier] as Injector;
     if (injector != null) {
       injector.inject(target, this);
     }

@@ -1,10 +1,17 @@
+import 'package:finject/finject.dart';
 
-
-
-
-class TestClass {
+@Injectable()
+class TestClass extends SuperTestClass {
   String value;
 
-  TestClass(this.value);
+  @Inject()
+  TestClass(this.value) : super(value);
+}
 
+class SuperTestClass {
+
+  @Inject()
+  String superValue;
+
+  SuperTestClass(this.superValue);
 }
