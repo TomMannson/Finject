@@ -1,5 +1,11 @@
 # CHANGELOG.md
 
+## (0.2.0)
+
+Features:
+
+  - Added Profile Annotation for generating profile specific dependencies
+
 ## (0.1.4)
 
 Features:
