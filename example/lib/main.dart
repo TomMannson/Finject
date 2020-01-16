@@ -71,9 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   FInjectHost.inject(
                     child: Test(),
                   ),
-                  FInjectHost.inject(
-                    child: Test(),
-                  )
+                  Test2(FInject.get(), FInject.get(), FInject.get()),
                 ],
               ),
             ),
@@ -101,6 +99,25 @@ class Test extends StatelessWidget {
 
   @Inject()
   a.TestClass three;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[Text(one.value), Text(two.value), Text(three.value)],
+    );
+  }
+}
+
+@Injectable()
+class Test2 extends StatelessWidget {
+  @Inject()
+  Test2(@Named("one") this.one, @Named("two") this.two, this.three);
+
+  final TestClass one;
+
+  final TestClass two;
+
+  final a.TestClass three;
 
   @override
   Widget build(BuildContext context) {

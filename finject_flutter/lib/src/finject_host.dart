@@ -19,3 +19,15 @@ class FInjectHost extends StatelessWidget {
     return host;
   }
 }
+
+class FInject {
+  static T get<T>({String name}) {
+    return JustInjectionProviderImpl().get<T>(name);
+  }
+
+  static T getWithContext<T>(BuildContext context, {String name}) {
+    final injectionProviderImpl = InjectionProviderImpl();
+    injectionProviderImpl.context = context;
+    return injectionProviderImpl.get<T>(name);
+  }
+}

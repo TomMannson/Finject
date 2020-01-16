@@ -1,6 +1,7 @@
-import 'dart:convert';
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:dartpoet/dartpoet.dart';
 import 'package:finject/finject.dart';
@@ -12,6 +13,7 @@ import 'build_utils.dart';
 
 class DiCodeBuilder implements Builder {
   static final _allFilesInLib = Glob('lib/**');
+  static final declaratedProfiles = Glob('lib/declarated_profiles.dart');
   static const output_file = 'finject_config.dart';
 
   static AssetId _allFileOutput(BuildStep buildStep) {
@@ -28,11 +30,41 @@ class DiCodeBuilder implements Builder {
     };
   }
 
+  bool notContainsOneOf(
+      Set<String> injectorProfiles, List<String> activeProfiles) {
+    for (final injectorProfile in injectorProfiles) {
+      if (activeProfiles.contains(injectorProfile)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   @override
   Future<void> build(BuildStep buildStep) async {
     var allInjectors = <ClassSpec>[];
     var scopes = <String, List<InjectorDs>>{};
     var allTypes = <InjectorDs>[];
+    var profiles = <String>[];
+
+    await for (final input in buildStep.findAssets(declaratedProfiles)) {
+      var library = await buildStep.resolver.libraryFor(input);
+      var profilesValue = library.topLevelElements
+          .whereType<TopLevelVariableElement>()
+          .where(
+              (TopLevelVariableElement element) => element.name == 'profiles')
+          .map((TopLevelVariableElement element) =>
+              element.computeConstantValue())
+          .toList();
+
+      if (profilesValue.length == 1) {
+        profiles = profilesValue[0]
+            .toListValue()
+            .map((dartObject) => dartObject.toStringValue())
+            .toList();
+      }
+    }
+
     await for (final input in buildStep.findAssets(_allFilesInLib)) {
       if (input.path.endsWith('summary.json')) {
         var injectorJson = await buildStep.readAsString(input);
@@ -42,6 +74,11 @@ class DiCodeBuilder implements Builder {
             .toList();
 
         for (var oneInjectable in readData) {
+          if (oneInjectable.profiles.isNotEmpty &&
+              notContainsOneOf(oneInjectable.profiles, profiles)) {
+            continue;
+          }
+
           if (oneInjectable.scopeName != null) {
             var scopeList = scopes[oneInjectable.scopeName];
             if (scopeList == null) {

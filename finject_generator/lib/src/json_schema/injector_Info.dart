@@ -7,6 +7,7 @@ class InjectorDs {
   bool singleton = false;
   String scopeName;
   String name;
+  Set<String> profiles = {};
   MethodInjection constructorInjection;
   SetterInjection setterInjection = SetterInjection();
   FieldInjection fieldInjection = FieldInjection();
@@ -25,6 +26,9 @@ class InjectorDs {
         scopeName = json['scopeName'] as String,
         singleton = json['singleton'] as bool,
         name = json['name'] as String,
+        profiles = (json['profiles'] as Iterable)
+            .map<String>((dynamic item) => item as String)
+            .toSet(),
         factoryTypeName = getFromJson(
           json['factoryTypeName'],
           (value) => TypeInfo.fromJson(value as Map<String, dynamic>),
@@ -49,6 +53,7 @@ class InjectorDs {
         'singleton': singleton,
         'scopeName': scopeName,
         'name': name,
+        'profiles': profiles.toList(),
         'factoryTypeName': factoryTypeName?.toJson(),
         'constructorInjection': constructorInjection?.toJson(),
         'setterInjection': setterInjection?.toJson(),
