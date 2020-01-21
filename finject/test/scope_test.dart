@@ -5,25 +5,22 @@ void main() {
   group('when scope is creating', () {
     var testInjector = TestClass_Injector();
     var testScopedInjector = TestClass_withScope_id1_Injector();
+    var testFactory = TestClass_Factory();
 
     var scopeToTest = Scope([
       ScopeEntry<Injector>(const TypeQualifier(TestClass), testInjector),
-      ScopeEntry<Factory>(const TypeQualifier(TestClass), TestClass_Factory()),
+      ScopeEntry<Factory>(const TypeQualifier(TestClass), testFactory),
       ScopeEntry<Injector>(
           const NamedQualifier(TestClass, 'two'), testScopedInjector),
     ]);
 
-    test('scope contains 2 injectors and 1 factory', () {
-      expect(scopeToTest.factories.length, 1);
-      expect(scopeToTest.injectors.length, 2);
-    });
-
     test('map should return valid injector', () {
       expect(
-          scopeToTest.injectors[const TypeQualifier(TestClass)], testInjector);
-      expect(scopeToTest.injectors[const NamedQualifier(TestClass, 'two')],
+          scopeToTest.injector(const TypeQualifier(TestClass)), testInjector);
+      expect(scopeToTest.injector(const NamedQualifier(TestClass, 'two')),
           testScopedInjector);
-      expect(scopeToTest.injectors[const TypeQualifier(TestClass2)], null);
+      expect(scopeToTest.injector(const TypeQualifier(TestClass2)), null);
+      expect(scopeToTest.factory(const TypeQualifier(TestClass)), testFactory);
     });
   });
 }
