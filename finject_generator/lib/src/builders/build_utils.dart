@@ -1,7 +1,5 @@
-import 'package:build/build.dart';
 import 'package:dartpoet/dartpoet.dart';
 import 'package:finject_generator/src/dart_poet_extensions/dependency_spec_ext.dart';
-import 'package:path/path.dart' as p;
 
 import '../json_schema/injector_Info.dart';
 
