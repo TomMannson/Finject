@@ -12,9 +12,18 @@ void main() {
       expect(await generate(basicInjectable),
           '''[{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test","libraryId":"id1"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{"value":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"}},"namedNames":{"value":"value_one"}},"methodInjections":[],"dependencies":[{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"}]},{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[]}]''');
     });
+    test('valid Injectable with constructor', () async {
+      expect(await generate(basicConstructorInjectable),
+          '''[{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test","libraryId":"id1"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"}],"namedParameters":{"value2":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"}},"blackList":["value","value2"],"orderedNames":[null],"namedNames":{"value2":null}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"}]},{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[]}]''');
+    });
+
     test('valid Configuration', () async {
       expect(await generate(basicConfiguration),
           '''[{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"TestConfig","libraryId":"id1"},"singleton":true,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[]},{"typeName":{"packageName":"dart","libraryName":"core","className":"String","libraryId":"id2"},"singleton":true,"scopeName":"test","name":"value_one","profiles":[],"factoryTypeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"TestConfig","libraryId":"id1"},"constructorInjection":null,"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[{"name":"value","orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}}],"dependencies":[]}]''');
+    });
+    test('valid Configuration with profile and parameters', () async {
+      expect(await generate(configurationWithProfile),
+          '''[{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"TestConfig","libraryId":"id1"},"singleton":true,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[]},{"typeName":{"packageName":"dart","libraryName":"core","className":"String","libraryId":"id2"},"singleton":false,"scopeName":null,"name":null,"profiles":["test"],"factoryTypeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"TestConfig","libraryId":"id1"},"constructorInjection":null,"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[{"name":"value","orderedParameters":[{"packageName":"dart","libraryName":"core","className":"int","libraryId":"id2"}],"namedParameters":{"value2":{"packageName":"dart","libraryName":"async","className":"Future","libraryId":"id3"}},"blackList":[],"orderedNames":[null],"namedNames":{"value2":null}}],"dependencies":[]}]''');
     });
     test('valid Injectable with superClass', () async {
       expect(await generate(basicInjectableWithSuperClass),
@@ -79,6 +88,40 @@ class Test {
 
 @Injectable()
 class Test2 {
+
+}
+''';
+
+String basicConstructorInjectable = r'''
+import 'package:finject/finject.dart';
+
+@Injectable()
+class Test {
+
+  final Test2 value;
+  final Test2 value2;
+
+  @Inject()
+  Test(this.value, {this.value2});
+
+}
+
+@Injectable()
+class Test2 {
+
+}
+''';
+
+String configurationWithProfile = r'''
+import 'package:finject/finject.dart';
+
+@Configuration()
+class TestConfig {
+
+  @Profile(['test'])
+  String value(@Named('test') int value, {Future value2}){
+    return '';
+  }
 
 }
 ''';

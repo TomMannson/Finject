@@ -12,25 +12,25 @@ abstract class Factory<T> {
 }
 
 class Scope {
-  Map<Qualifier, Injector> injectors = {};
-  Map<Qualifier, Factory> factories = {};
+  final _injectors = <Qualifier, Injector>{};
+  final _factories = <Qualifier, Factory>{};
 
   Scope(List<ScopeEntry> list) {
     for (var entry in list) {
       if (entry is ScopeEntry<Injector>) {
-        injectors[entry.qualifier] = entry.element;
+        _injectors[entry.qualifier] = entry.element;
       } else if (entry is ScopeEntry<Factory>) {
-        factories[entry.qualifier] = entry.element;
+        _factories[entry.qualifier] = entry.element;
       }
     }
   }
 
-  Injector injector(Type type) {
-    return injectors[type];
+  Injector injector(Qualifier type) {
+    return _injectors[type];
   }
 
-  Factory factory(Type type) {
-    return factories[type];
+  Factory factory(Qualifier type) {
+    return _factories[type];
   }
 }
 

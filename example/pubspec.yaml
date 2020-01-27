@@ -13,11 +13,3 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   finject_generator: '>=0.2.0 <0.3.0'
-
-dependency_overrides:
-  finject_flutter:
-    path: ../finject_flutter
-  finject_generator:
-    path: ../finject_generator
-  finject:
-    path: ../finject
