@@ -5,16 +5,6 @@ import 'package:path/path.dart' as p;
 
 import '../json_schema/injector_Info.dart';
 
-Iterable<DependencySpec> generateImportSpec(InjectorDs ds) sync* {
-  yield DependencySpec.import(
-      '${ds.typeName.packageName}:${ds.typeName.libraryName}');
-  yield DependencySpec.import('package:finject/finject.dart');
-
-  for (var info in ds.dependencies) {
-    yield DependencySpecExt.import(libraryPath(info), info.libraryId);
-  }
-}
-
 Iterable<DependencySpec> generateImport(List<InjectorDs> allTypes) sync* {
   yield DependencySpec.import('package:finject/finject.dart');
   for (var injectable in allTypes) {
@@ -22,10 +12,6 @@ Iterable<DependencySpec> generateImport(List<InjectorDs> allTypes) sync* {
     yield DependencySpecExt.import(libraryPath(info), info.libraryId);
   }
 }
-
-AssetId changeExtension(AssetId assetId, String newExtension) => AssetId(
-    assetId.package,
-    p.withoutExtension(p.withoutExtension(assetId.path)) + newExtension);
 
 CodeBlockSpec generateCodeForFactory(InjectorDs ds) {
   var lines = <String>[];
@@ -62,7 +48,7 @@ CodeBlockSpec generateCodeForFactory(InjectorDs ds) {
 
     ds.constructorInjection.namedParameters.forEach((key, value) {
       lines.add(key +
-          ': injectionProvider.get(${injectNamedIndicator(ds.methodInjections[0].namedNames[key])}),');
+          ': injectionProvider.get(${injectNamedIndicator(ds.constructorInjection.namedNames[key])}),');
     });
 
     lines.add(');');

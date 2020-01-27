@@ -15,25 +15,9 @@ class FinjectInjectableAnalizer extends Analizer {
       injectionDefinition.singleton =
           hasAnnotation(classInfo.metadata, 'Singleton');
 
-      for (var annotation in classInfo.metadata) {
-        var annotationInfo = annotation.element as ConstructorElement;
-        var annotationType = annotationInfo.enclosingElement;
-        if (annotationType.name == 'Scoped') {
-          var result = annotation.computeConstantValue();
-          injectionDefinition.scopeName =
-              result.getField('name').toStringValue();
-        }
-        if (annotationType.name == 'Named') {
-          var result = annotation.computeConstantValue();
-          injectionDefinition.name = result.getField('name').toStringValue();
-        }
-      }
-
       injections.add(injectionDefinition);
     }
 
     return injections;
   }
-
-  void processMethod(List<MethodElement> methods) {}
 }
