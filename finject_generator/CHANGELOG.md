@@ -1,5 +1,11 @@
 # CHANGELOG.md
 
+## (0.2.1)
+
+Bugfix:
+
+  - Imposible to generate Factory class on constructor with parameters
+
 ## (0.2.0)
 
 Features:
