@@ -16,21 +16,50 @@ void main() {
       expect(await generate(basicConstructorInjectable),
           '''[{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test","libraryId":"id1"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"}],"namedParameters":{"value2":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"}},"blackList":["value","value2"],"orderedNames":[null],"namedNames":{"value2":null}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"}]},{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[]}]''');
     });
-
+    test('valid Injectable with named constructor', () async {
+      expect(await generate(namedConstructorInjectable),
+          '''[{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test","libraryId":"id1"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":"name","orderedParameters":[{"packageName":"dart","libraryName":"core","className":"String","libraryId":"id2"}],"namedParameters":{"value2":{"packageName":"dart","libraryName":"core","className":"String","libraryId":"id2"}},"blackList":["value","value2"],"orderedNames":[null],"namedNames":{"value2":null}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[{"packageName":"dart","libraryName":"core","className":"String","libraryId":"id2"}]}]''');
+    });
     test('valid Configuration', () async {
       expect(await generate(basicConfiguration),
           '''[{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"TestConfig","libraryId":"id1"},"singleton":true,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[]},{"typeName":{"packageName":"dart","libraryName":"core","className":"String","libraryId":"id2"},"singleton":true,"scopeName":"test","name":"value_one","profiles":[],"factoryTypeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"TestConfig","libraryId":"id1"},"constructorInjection":null,"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[{"name":"value","orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}}],"dependencies":[]}]''');
     });
+    test('valid Configuration with optional formal setter', () async {
+      expect(await generate(basicConfigurationWithOptional),
+          '''[{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"TestConfig","libraryId":"id1"},"singleton":true,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[]},{"typeName":{"packageName":"dart","libraryName":"core","className":"String","libraryId":"id2"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"TestConfig","libraryId":"id1"},"constructorInjection":null,"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[{"name":"value","orderedParameters":[{"packageName":"dart","libraryName":"core","className":"String","libraryId":"id2"}],"namedParameters":{},"blackList":[],"orderedNames":[null],"namedNames":{}}],"dependencies":[]}]''');
+    });
     test('valid Configuration with profile and parameters', () async {
       expect(await generate(configurationWithProfile),
-          '''[{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"TestConfig","libraryId":"id1"},"singleton":true,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[]},{"typeName":{"packageName":"dart","libraryName":"core","className":"String","libraryId":"id2"},"singleton":false,"scopeName":null,"name":null,"profiles":["test"],"factoryTypeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"TestConfig","libraryId":"id1"},"constructorInjection":null,"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[{"name":"value","orderedParameters":[{"packageName":"dart","libraryName":"core","className":"int","libraryId":"id2"}],"namedParameters":{"value2":{"packageName":"dart","libraryName":"async","className":"Future","libraryId":"id3"}},"blackList":[],"orderedNames":[null],"namedNames":{"value2":null}}],"dependencies":[]}]''');
+          '''[{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"TestConfig","libraryId":"id1"},"singleton":true,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[]},{"typeName":{"packageName":"dart","libraryName":"core","className":"String","libraryId":"id2"},"singleton":false,"scopeName":null,"name":null,"profiles":["test"],"factoryTypeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"TestConfig","libraryId":"id1"},"constructorInjection":null,"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[{"name":"value","orderedParameters":[{"packageName":"dart","libraryName":"core","className":"int","libraryId":"id2"}],"namedParameters":{"value2":{"packageName":"dart","libraryName":"async","className":"Future","libraryId":"id3"}},"blackList":[],"orderedNames":[null],"namedNames":{"value2":null}}],"dependencies":[{"packageName":"dart","libraryName":"core","className":"int","libraryId":"id2"},{"packageName":"dart","libraryName":"async","className":"Future","libraryId":"id3"}]}]''');
     });
     test('valid Injectable with superClass', () async {
       expect(await generate(basicInjectableWithSuperClass),
           '''[{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test","libraryId":"id1"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{"value":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"},"superValue":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"}},"namedNames":{"value":"value_one","superValue":"value_one"}},"methodInjections":[],"dependencies":[{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"}]},{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"SuperTest","libraryId":"id1"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{"superValue":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"}},"namedNames":{"superValue":"value_one"}},"methodInjections":[],"dependencies":[{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"}]},{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[]}]''');
     });
+    test('valid Injectable with setter', () async {
+      expect(await generate(injectableWithSetter),
+          '''[{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"TestConfig","libraryId":"id1"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{"value=":{"packageName":"dart","libraryName":"core","className":"String","libraryId":"id2"}},"namedNames":{"value=":null}},"methodInjections":[],"dependencies":[{"packageName":"dart","libraryName":"core","className":"String","libraryId":"id2"}]}]''');
+    });
     test('no file if no injectable', () async {
       expect(await generate(noInjectableNorConfiguration), null);
+    });
+  });
+  group('error when', (){
+    test('invalid Injectable private class', () async {
+      expect(await generate(privateClass),
+          '''Class which is @Injectable can't be  private''');
+    });
+    test('invalid Injectable with no injection at any constructor', () async {
+      expect(await generate(privateNoAnnotatedConstructor),
+          '''No constructor found with annotation @Inject''');
+    });
+    test('invalid Injectable with 2 injections', () async {
+      expect(await generate(moreThenOneConstructorAnnotated),
+          '''Class should have exacly one constructor with inject annotation''');
+    });
+    test('invalid Injectable when no Type information', () async {
+      expect(await generate(noTypeInformationForInjection),
+          '''Unknown type found, no import or something. Find compilation error''');
     });
   });
 }
@@ -46,22 +75,26 @@ Future<String> generate(String source) async {
 
   void captureErrorLog(LogRecord logRecord) {
     if (logRecord.error is InvalidGenerationSourceError) {
-      if (errorText != null) throw StateError('Expected max one error');
-      errorText = logRecord.error.toString();
+//      if (errorText != null) throw StateError('Expected max one error');
+//      errorText = logRecord.error.toString();
     }
   }
 
   var writer = InMemoryAssetWriter();
-  await testBuilder(
-    builder,
-    srcs,
-    rootPackage: pkgName,
-    writer: writer,
-    onLog: captureErrorLog,
-    reader: await PackageAssetReader.currentIsolate(
-      rootPackage: 'finject',
-    ),
-  );
+  try {
+    await testBuilder(
+      builder,
+      srcs,
+      rootPackage: pkgName,
+      writer: writer,
+      onLog: captureErrorLog,
+      reader: await PackageAssetReader.currentIsolate(
+        rootPackage: 'finject',
+      ),
+    );
+  }on InvalidGenerationSourceError catch(e){
+    errorText = e.message;
+  }
   if (errorText != null) {
     return errorText;
   } else if (writer.assets[AssetId(pkgName, 'lib/test.summary.json')] != null) {
@@ -108,6 +141,21 @@ class Test {
 
 @Injectable()
 class Test2 {
+
+}
+''';
+
+String namedConstructorInjectable = r'''
+import 'package:finject/finject.dart';
+
+@Injectable()
+class Test {
+
+  final String value;
+  final String value2;
+
+  @Inject()
+  Test.name(this.value, {this.value2});
 
 }
 ''';
@@ -171,6 +219,37 @@ class TestConfig {
 }
 ''';
 
+String basicConfigurationWithOptional = r'''
+import 'package:finject/finject.dart';
+
+@Configuration()
+class TestConfig {
+
+  String value([String param]){
+    return "";
+  }
+
+}
+''';
+
+String injectableWithSetter = r'''
+import 'package:finject/finject.dart';
+
+@Injectable()
+class TestConfig {
+
+  String _value;
+
+  @Inject()
+  set value(String value){
+    _value = value;
+  }
+
+}
+''';
+
+
+
 String noInjectableNorConfiguration = r'''
 import 'package:finject/finject.dart';
 
@@ -178,6 +257,61 @@ class TestConfig {
 
   String value(){
     return "";
+  }
+
+}
+''';
+
+String privateClass = r'''
+import 'package:finject/finject.dart';
+
+@Injectable()
+class _Test2 {
+
+}
+''';
+
+String privateNoAnnotatedConstructor = r'''
+import 'package:finject/finject.dart';
+
+@Injectable()
+class Test2 {
+
+  Test2(String value){
+  
+  }
+
+}
+''';
+
+String moreThenOneConstructorAnnotated = r'''
+import 'package:finject/finject.dart';
+
+@Injectable()
+class Test2 {
+
+  @Inject()
+  Test2(String value){
+  
+  }
+  
+  @Inject()
+  Test2.named(String value){
+  
+  }
+
+}
+''';
+
+String noTypeInformationForInjection = r'''
+import 'package:finject/finject.dart';
+
+@Injectable()
+class Test2 {
+  
+  @Inject()
+  Test2.named(UnknownType value){
+  
   }
 
 }

@@ -1,4 +1,5 @@
 import 'package:analyzer/dart/element/element.dart';
+import 'package:source_gen/source_gen.dart';
 
 import '../../builders/code_info_extraction.dart';
 import '../../json_schema/injector_Info.dart';
@@ -6,10 +7,19 @@ import '../../json_schema/injector_Info.dart';
 class Analizer {
   InjectorDs prepareInjectionDefinition(ClassElement classInfo) {
     var injectionDefinition = InjectorDs();
+
+    if (classInfo.isPrivate) {
+      throw throw InvalidGenerationSourceError(
+          'Class which is @Injectable can\'t be  private',
+          todo: 'Consider deleting one or more @Inject annotation:\n\n',
+          element: classInfo);
+    }
+
     injectionDefinition.typeName = convert(classInfo);
 
     _attachConstructorInjection(injectionDefinition, classInfo.constructors);
-    _attachFieldsInjections(injectionDefinition, classInfo.fields);
+    _attachFieldsInjections(
+        injectionDefinition, classInfo.fields, classInfo.accessors);
     _attachSuperClassInjections(injectionDefinition, classInfo);
     _attachMethodsInjection(injectionDefinition, classInfo.methods);
     injectionDefinition.prunRedundantInjections();
@@ -23,6 +33,9 @@ class Analizer {
     for (var element in constructors) {
       var constructorInjection =
           _processParemetersOfCostructor(element.parameters);
+      if (element.name.isNotEmpty) {
+        constructorInjection.name = element.name;
+      }
       injection.constructorInjection = constructorInjection;
       break;
     }
@@ -34,9 +47,6 @@ class Analizer {
     for (var element in parameters) {
       var classInfo = getType(element.type);
       if (element.isPositional) {
-        constructorInjection.addOrderedParameter(
-            convert(classInfo), findName(element.metadata));
-      } else if (element.isOptionalPositional) {
         constructorInjection.addOrderedParameter(
             convert(classInfo), findName(element.metadata));
       } else if (element.isNamed) {
@@ -60,19 +70,33 @@ class Analizer {
         return;
       }
       if (numberOfInjection > 1) {
-        throw InjectorValidationError();
+        throw InvalidGenerationSourceError(
+            'Class should have exacly one constructor with inject annotation',
+            todo: 'Consider deleting one or more @Inject annotation:\n\n',
+            element: constructors[0].enclosingElement);
       }
     }
     if (numberOfInjection < 1 && constructors.isNotEmpty) {
-      throw InjectorValidationError();
+      throw InvalidGenerationSourceError(
+          'No constructor found with annotation @Inject',
+          todo: 'Consider adding one to existing constructor:\n\n',
+          element: constructors[0].enclosingElement);
     }
   }
 
-  void _attachFieldsInjections(
-      InjectorDs injection, List<FieldElement> fields) {
+  void _attachFieldsInjections(InjectorDs injection, List<FieldElement> fields,
+      List<PropertyAccessorElement> accessors) {
     for (var element in fields) {
       if (hasAnnotation(element.metadata, 'Inject')) {
         var classInfo = element.type.element as ClassElement;
+        injection.fieldInjection.addNamedParameter(
+            element.name, convert(classInfo), findName(element.metadata));
+      }
+    }
+    for (var element in accessors) {
+      if (element.isSetter && hasAnnotation(element.metadata, 'Inject')) {
+        var function = element.type.element as PropertyAccessorElement;
+        var classInfo = function.parameters[0].type.element as ClassElement;
         injection.fieldInjection.addNamedParameter(
             element.name, convert(classInfo), findName(element.metadata));
       }

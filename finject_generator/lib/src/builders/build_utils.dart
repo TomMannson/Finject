@@ -37,7 +37,7 @@ CodeBlockSpec generateCodeForFactory(InjectorDs ds) {
 
     lines.add(');');
   } else {
-    lines.add('var value = ' + generateTypeFromTypeInfo(ds.typeName) + '(');
+    lines.add('var value = ' + generateTypeFromTypeInfo(ds.typeName) + generateNamedConstructorPart(ds) +'(');
 
     for (var i = 0; i < ds.constructorInjection.orderedParameters.length; i++) {
       lines.add(
@@ -152,4 +152,11 @@ String generateTypeFromTypeInfo(TypeInfo typeInfo) {
     return '${typeInfo.className}';
   }
   return '${typeInfo.libraryId}.${typeInfo.className}';
+}
+
+String generateNamedConstructorPart(InjectorDs typeInfo) {
+  if(typeInfo.constructorInjection.name != null){
+    return '.${typeInfo.constructorInjection.name}';
+  }
+  return '';
 }
