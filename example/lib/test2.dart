@@ -9,7 +9,6 @@ class TestClass extends SuperTestClass {
 }
 
 class SuperTestClass {
-
   @Inject()
   String superValue;
 
