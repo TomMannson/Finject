@@ -51,6 +51,7 @@ class FinjectConfigurationAnalizer extends Analizer {
                 .map((value) => value.toStringValue())
                 .toSet();
           }
+          injectionDefinition.margeDependencies();
         }
 
         injections.add(injectionDefinition);
@@ -68,15 +69,9 @@ class FinjectConfigurationAnalizer extends Analizer {
       if (element.isPositional) {
         methodInjection.addOrderedParameter(
             convert(classInfo), findName(method.metadata));
-      } else if (element.isOptionalPositional) {
-        methodInjection.addOrderedParameter(
-            convert(classInfo), findName(method.metadata));
       } else if (element.isNamed) {
         methodInjection.addNamedParameter(
             element.name, convert(classInfo), findName(method.metadata));
-      }
-      if (element.isInitializingFormal) {
-        methodInjection.blackList.add(element.name);
       }
     }
     injection.methodInjections.add(methodInjection);

@@ -1,10 +1,17 @@
 # CHANGELOG.md
 
+## (0.2.2)
+
+Features:
+
+  - Added support for named constructors
+  -
+
 ## (0.2.1)
 
 Bugfix:
 
-  - Imposible to generate Factory class on constructor with parameters
+  - Impossible to generate Factory class on constructor with parameters
 
 ## (0.2.0)
 

@@ -1,6 +1,7 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:finject_generator/src/json_schema/injector_Info.dart';
+import 'package:source_gen/source_gen.dart';
 
 Map<String, int> knownLibraries = {};
 int currentLibraryNumber = 0;
@@ -19,7 +20,9 @@ String findName(List<ElementAnnotation> annotations) {
 
 TypeInfo convert(ClassElement element) {
   if (element == null) {
-    throw InjectorValidationError();
+    throw InvalidGenerationSourceError(
+        'Unknown type found, no import or something. Find compilation error',
+        todo: 'Unknown type found, no import or something. Find compilation error');
   }
   var uriOfClass = element.librarySource.uri;
   var libraryId = 0;

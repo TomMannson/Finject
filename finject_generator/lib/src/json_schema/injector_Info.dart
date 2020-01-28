@@ -69,11 +69,12 @@ class InjectorDs {
   }
 
   void margeDependencies() {
-    dependencies
-      ..addAll(constructorInjection.orderedParameters)
-      ..addAll(constructorInjection.namedParameters.values.toList())
-      ..addAll(setterInjection.namedParameter.values)
-      ..addAll(fieldInjection.namedParameter.values);
+    if (factoryTypeName == null) {
+      dependencies
+        ..addAll(constructorInjection.orderedParameters)
+        ..addAll(constructorInjection.namedParameters.values.toList());
+    }
+    dependencies..addAll(fieldInjection.namedParameter.values);
 
     methodInjections.forEach((value) {
       dependencies.addAll(value.orderedParameters);
@@ -142,23 +143,9 @@ class SetterInjection {
   Map<String, TypeInfo> namedParameter = {};
   Map<String, String> namedName = {};
 
-  SetterInjection();
-
-  SetterInjection.fromJson(Map<String, dynamic> json)
-      : namedParameter = (json['namedParameters'] as Map<String, dynamic>).map(
-            (key, value) => MapEntry(
-                key, TypeInfo.fromJson(value as Map<String, dynamic>))),
-        namedName = (json['namedName'] as Map<String, dynamic>)
-            .map((String key, dynamic value) => MapEntry(key, value as String));
-
   Map<String, dynamic> toJson() => {
         'namedParameter': namedParameter,
       };
-
-  void addNamedParameter(String name, TypeInfo type, [String namedDependency]) {
-    namedParameter[name] = type;
-    namedName[name] = namedDependency;
-  }
 }
 
 class FieldInjection {

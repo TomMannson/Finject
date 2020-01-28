@@ -56,7 +56,7 @@ Future<String> generate(String source) async {
 }
 
 String basicInjectable = r'''
-[{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test","libraryId":"id1"},"singleton":false,"scopeName":"test","name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[ 
+[{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test","libraryId":"id1"},"singleton":false,"scopeName":"test","name":"name","profiles":[],"factoryTypeName":null,"constructorInjection":{"name":"name","orderedParameters":[ 
             { 
                "packageName":"package",
                "libraryName":"pkg/test.dart",
