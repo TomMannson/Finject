@@ -55,12 +55,12 @@ class _InjectHostState extends State<HostStatefulWidget> {
 
   @override
   void initState() {
+    provider = widget.parent.getIt() as ScopeInjectionProviderImpl;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    provider = widget.parent.getIt() as ScopeInjectionProviderImpl;
     provider.context = context;
     provider.inject(widget.child);
     return widget.child;
@@ -69,12 +69,14 @@ class _InjectHostState extends State<HostStatefulWidget> {
   @override
   void dispose() {
     provider.context = null;
+    provider.clean();
     super.dispose();
   }
 }
 
 class ScopeInjectionProviderImpl extends AbstractInjectionProvider {
   Scope scope;
+  Set<DisposableScopedObject> disposables = {};
 
   ScopeInjectionProviderImpl(this.scope);
 
@@ -85,10 +87,13 @@ class ScopeInjectionProviderImpl extends AbstractInjectionProvider {
     var qualifier = QualifierFactory.create(T, name);
 
     if (scope != null &&
-        scope.factories[qualifier] != null &&
-        scope.injectors[qualifier] != null) {
-      value = scope.factories[qualifier].create(this) as T;
-      scope.injectors[qualifier].inject(value, this);
+        scope.factory(qualifier) != null &&
+        scope.injector(qualifier) != null) {
+      value = scope.factory(qualifier).create(this) as T;
+      scope.injector(qualifier).inject(value, this);
+      if (value is DisposableScopedObject) {
+        disposables.add(value);
+      }
       return value;
     }
 
@@ -103,6 +108,7 @@ class ScopeInjectionProviderImpl extends AbstractInjectionProvider {
     if (factory != null) {
       value = factory.create(this) as T;
       rootDependencyResolver["injector"][qualifier].inject(value, this);
+
       return value;
     }
     return null;
@@ -111,8 +117,8 @@ class ScopeInjectionProviderImpl extends AbstractInjectionProvider {
   inject(Object target, [String name]) {
     var qualifier = QualifierFactory.create(target.runtimeType, name);
 
-    if (scope != null && scope.injectors[qualifier] != null) {
-      scope.injectors[qualifier].inject(target, this);
+    if (scope != null && scope.injector(qualifier) != null) {
+      scope.injector(qualifier).inject(target, this);
       return;
     }
 
@@ -127,5 +133,9 @@ class ScopeInjectionProviderImpl extends AbstractInjectionProvider {
     if (injector != null) {
       injector.inject(target, this);
     }
+  }
+
+  void clean() {
+    disposables.forEach((value) => value.onDispose());
   }
 }

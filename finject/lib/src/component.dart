@@ -35,7 +35,3 @@ class Profile {
 
   const Profile(this.profileNames);
 }
-
-class OnDestroy {
-  const OnDestroy();
-}

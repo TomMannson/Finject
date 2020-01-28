@@ -5,3 +5,9 @@ abstract class InjectionProvider {
 
   void inject(Object target, [String name]);
 }
+
+class ScopedObject {}
+
+abstract class DisposableScopedObject implements ScopedObject {
+  void onDispose();
+}
