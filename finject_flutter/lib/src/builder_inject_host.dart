@@ -11,7 +11,7 @@ class BuilderInjectHost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _provider.context = context;
+    _provider.context = context.getElementForInheritedWidgetOfExactType<ScopeInjectHost>();
     Widget child = builder(context, _provider);
     _provider.inject(child);
     return child;

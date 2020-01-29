@@ -14,12 +14,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     finject.init();
 
-    return new MaterialApp(
+    return MaterialApp(
       title: 'Flutter Demo',
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: "root",
+      routes: {
+        "root": (context) => new MyHomePage(title: 'Flutter Demo Home Page'),
+        'route': (context) => new SubHomePage(),
+      },
     );
   }
 }
@@ -38,9 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 //  HelloWorld hh = new HelloWorld();
   void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+    Navigator.pushReplacementNamed(context, "route");
   }
 
   @override
@@ -74,13 +76,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   FInjectHost.inject(
                     child: Test(),
                   ),
-                  FInjectHost.builder(
-                      builder: (BuildContext ctx, InjectionProvider provider) =>
-                          Test2(
-                            provider.get('one'),
-                            provider.get('two'),
-                            provider.get(),
-                          )),
+//                  FInjectHost.builder(
+//                      builder: (BuildContext ctx, InjectionProvider provider) =>
+//                          Test2(
+//                            provider.get('one'),
+//                            provider.get('two'),
+//                            provider.get(),
+//                          )),
                 ],
               ),
             ),
@@ -102,6 +104,7 @@ class Test extends StatelessWidget {
   @Inject()
   @Named("one")
   TestClass one;
+  Object asd;
 
   @Inject()
   @Named("two")
@@ -134,6 +137,18 @@ class Test2 extends StatelessWidget {
         Text(two.value),
         Text(three.value)
       ],
+    );
+  }
+}
+
+class SubHomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return SafeArea(
+      child: Scaffold(
+        body: Text("sub"),
+      ),
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:finject/finject.dart';
 import 'package:flutter/material.dart';
 
@@ -10,8 +12,8 @@ class ScopeInjectHost extends InheritedWidget {
   @protected
   ScopeInjectHost({Widget child, this.scopeName})
       : _getItContainer = ScopeInjectionProviderImpl(
-          defaultScopeFactory.createScope(scopeName),
-        ),
+    defaultScopeFactory.createScope(scopeName),
+  ),
         super(child: child);
 
   @override
@@ -21,10 +23,10 @@ class ScopeInjectHost extends InheritedWidget {
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) {
-    return true;
+    return false;
   }
 
-  InjectionProvider getIt() {
+  InjectionProvider get currentInjector {
     return _getItContainer;
   }
 }
@@ -46,35 +48,44 @@ class HostStatefulWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _InjectHostState();
+    return _ScopeInjectHostState();
   }
 }
 
-class _InjectHostState extends State<HostStatefulWidget> {
+class _ScopeInjectHostState extends State<HostStatefulWidget> {
   ScopeInjectionProviderImpl provider;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    provider = widget.parent.getIt() as ScopeInjectionProviderImpl;
-    provider.context = context;
+    if (provider != null) {
+      var lastDisposables = provider.disposables;
+      var lastScope = provider.scope;
+      provider = widget.parent.currentInjector as ScopeInjectionProviderImpl;
+
+      provider.disposables = lastDisposables;
+      provider.scope = lastScope;
+    }
+    else{
+      provider = widget.parent.currentInjector as ScopeInjectionProviderImpl;
+    }
+
+    provider.context =
+        context.getElementForInheritedWidgetOfExactType<ScopeInjectHost>();
     provider.inject(widget.child);
+    log("_ScopeInjectHostState build");
     return widget.child;
   }
 
   @override
   void dispose() {
-    provider.context = null;
+    provider.clean();
     super.dispose();
   }
 }
 
 class ScopeInjectionProviderImpl extends AbstractInjectionProvider {
   Scope scope;
+  Set<DisposableScopedObject> disposables = {};
 
   ScopeInjectionProviderImpl(this.scope);
 
@@ -85,10 +96,13 @@ class ScopeInjectionProviderImpl extends AbstractInjectionProvider {
     var qualifier = QualifierFactory.create(T, name);
 
     if (scope != null &&
-        scope.factories[qualifier] != null &&
-        scope.injectors[qualifier] != null) {
-      value = scope.factories[qualifier].create(this) as T;
-      scope.injectors[qualifier].inject(value, this);
+        scope.factory(qualifier) != null &&
+        scope.injector(qualifier) != null) {
+      value = scope.factory(qualifier).create(this) as T;
+      scope.injector(qualifier).inject(value, this);
+      if (value is DisposableScopedObject) {
+        disposables.add(value);
+      }
       return value;
     }
 
@@ -103,6 +117,7 @@ class ScopeInjectionProviderImpl extends AbstractInjectionProvider {
     if (factory != null) {
       value = factory.create(this) as T;
       rootDependencyResolver["injector"][qualifier].inject(value, this);
+
       return value;
     }
     return null;
@@ -111,8 +126,8 @@ class ScopeInjectionProviderImpl extends AbstractInjectionProvider {
   inject(Object target, [String name]) {
     var qualifier = QualifierFactory.create(target.runtimeType, name);
 
-    if (scope != null && scope.injectors[qualifier] != null) {
-      scope.injectors[qualifier].inject(target, this);
+    if (scope != null && scope.injector(qualifier) != null) {
+      scope.injector(qualifier).inject(target, this);
       return;
     }
 
@@ -127,5 +142,30 @@ class ScopeInjectionProviderImpl extends AbstractInjectionProvider {
     if (injector != null) {
       injector.inject(target, this);
     }
+  }
+
+  @override
+  FoundInjection findParrent(BuildContext context) {
+    Element firstParentOfScopedHost;
+
+    context.visitAncestorElements((el) {
+      firstParentOfScopedHost = el;
+      return false;
+    });
+
+    ScopeInjecHostElement foundScopeInjectHost =
+    firstParentOfScopedHost.getElementForInheritedWidgetOfExactType<
+        ScopeInjectHost>() as ScopeInjecHostElement;
+    if (foundScopeInjectHost == null) {
+      return FoundInjection(null, null);
+    }
+
+    var widget = foundScopeInjectHost.widget as ScopeInjectHost;
+    return FoundInjection(widget.currentInjector, foundScopeInjectHost);
+  }
+
+  void clean() {
+    disposables.forEach((value) => value.onDispose());
+    disposables = {};
   }
 }

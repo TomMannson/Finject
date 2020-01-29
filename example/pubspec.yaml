@@ -18,5 +18,7 @@ dev_dependencies:
 dependency_overrides:
   finject_generator:
     path: ..\finject_generator
+  finject_flutter:
+    path: ..\finject_flutter
   finject:
     path: ..\finject

@@ -2,6 +2,12 @@
 
 ## (0.2.0)
 
+Features:
+
+  - Added disposability for
+
+## (0.2.0)
+
 Breaking Changes:
 
   - Added new method of injecting class which are annotated with @immutable. Now you can use manualInjecting in context of buildMethod
