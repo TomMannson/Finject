@@ -22,6 +22,7 @@ FInject provides:
 ## Annotations and Contract classes for DI
 
 [![Pub](https://img.shields.io/pub/v/finject.svg)](https://pub.dev/packages/finject)
+![alt text](https://raw.githubusercontent.com/TomMannson/Finject/master/finject/coverage_badge.svg "Finject Logo")
 
 The core package providing the annotations which describes dependency graph.
 
