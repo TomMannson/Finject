@@ -1,11 +1,15 @@
 # CHANGELOG.md
 
+## (0.3.0)
+
+  - Performance improvements
+  - Version up
+
 ## (0.2.2)
 
 Features:
 
   - Added support for named constructors
-  -
 
 ## (0.2.1)
 
