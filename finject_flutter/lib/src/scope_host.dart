@@ -72,6 +72,7 @@ class _ScopeInjectHostState extends State<HostStatefulWidget> {
     provider.context =
         context.getElementForInheritedWidgetOfExactType<ScopeInjectHost>();
     provider.inject(widget.child);
+
     log("_ScopeInjectHostState build");
     return widget.child;
   }

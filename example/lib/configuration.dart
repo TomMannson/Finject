@@ -20,7 +20,7 @@ class Config {
   @Named("two")
   @Profile(["test"])
   @Scoped("test")
-  TestClass twoTest(){
+  TestClass twoTest() {
     return TestClass("two test");
   }
 
