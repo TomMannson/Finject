@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:finject/finject.dart';
 import 'package:flutter/material.dart';
 
+import '../finject_flutter.dart';
 import 'injection_provider.dart';
 
 class InjectHost extends StatelessWidget {
@@ -12,8 +15,9 @@ class InjectHost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _provider.context = context;
+    _provider.context = context.getElementForInheritedWidgetOfExactType<ScopeInjectHost>();
     _provider.inject(child);
+    log("InjectHost build");
     return child;
   }
 }
@@ -58,5 +62,15 @@ class InjectionProviderImpl extends AbstractInjectionProvider {
     if (injector != null) {
       injector.inject(target, this);
     }
+  }
+
+  @override
+  FoundInjection findParrent(BuildContext context) {
+    ScopeInjecHostElement scopeElement = context as ScopeInjecHostElement;
+    ScopeInjectHost scopeHost = scopeElement.widget as ScopeInjectHost;
+    if (context == null) {
+      return FoundInjection(null, null);
+    }
+    return FoundInjection(scopeHost.currentInjector, scopeElement);
   }
 }
