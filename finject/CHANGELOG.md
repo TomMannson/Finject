@@ -1,5 +1,11 @@
 # CHANGELOG.md
 
+## (0.3.0)
+
+Features:
+
+  - ScopedObject and DisposableScopedObject interfaces added for Disposability feature
+
 ## (0.2.0)
 
 Features:
