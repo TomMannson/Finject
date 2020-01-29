@@ -13,7 +13,6 @@ void main() {
       Singleton();
       Named('name');
       Profile(['dev']);
-      OnDestroy();
       expect(rootDependencyResolver != null, true);
     });
   });
