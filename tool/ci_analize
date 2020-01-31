@@ -9,19 +9,25 @@ directories="finject finject_generator finject_flutter"
 
 parent_directory=$PWD
 
+echo ""
+echo "##### CODE_FORMATTING"
+echo "#####"
+echo ""
+
 for directory in $directories; do
-  echo
   echo "*** Formatting $directory..."
-  echo
   cd "$parent_directory/$directory"
 
   dartfmt -w $(find bin lib test -name \*.dart 2>/dev/null)
 done
 
+echo ""
+echo "##### BUILD_RUNNER"
+echo "#####"
+echo ""
+
 for directory in $directories; do
-  echo
   echo "*** Building $directory..."
-  echo
   cd "$parent_directory/$directory"
 
   rm example -r
@@ -34,15 +40,18 @@ for directory in $directories; do
   rm -rf .dart_tool/build/
 
   grep -q build_runner pubspec.yaml && \
-      ../flutter/bin/flutter pub run build_runner build \
+      flutter pub run build_runner build \
           --delete-conflicting-outputs \
           --fail-on-severe
 done
 
+echo ""
+echo "##### DART ANALYZER"
+echo "#####"
+echo ""
+
 for directory in $directories; do
-  echo
   echo "*** Analyzing $directory..."
-  echo
   cd "$parent_directory/$directory"
 
   dartanalyzer \
@@ -52,7 +61,10 @@ for directory in $directories; do
       $(find bin lib test -name \*.dart 2>/dev/null)
 done
 
-
+echo ""
+echo "##### UNIT TESTS"
+echo "#####"
+echo ""
 
 for directory in $directories; do
   echo
@@ -60,37 +72,33 @@ for directory in $directories; do
   echo
   cd "$parent_directory/$directory"
 
-  ../flutter/bin/flutter pub run test
+  flutter pub run test
 done
 
-branch_name="$(git rev-parse --abbrev-ref HEAD)"
+echo ""
+echo "##### COVERAGE ANALYSIS"
+echo "#####"
+echo ""
 
+dart_directories="finject finject_generator"
+flutter_directories="finject_flutter"
 
-if [ "$branch_name" == "master" ]
-then
+for directory in $dart_directories; do
+  echo
+  echo "*** Test coverage $directory..."
+  echo
+  cd "$parent_directory/$directory"
 
-	dart_directories="finject finject_generator"
-	flutter_directories="finject_flutter"
-  
-	for directory in $dart_directories; do
-	  echo
-	  echo "*** Test coverage $directory..."
-	  echo
-	  cd "$parent_directory/$directory"
+  pub run test_coverage
+done
 
-	  pub run test_coverage
-	done
+for directory in $flutter_directories; do
+  echo
+  echo "*** Test coverage $directory..."
+  echo
+  cd "$parent_directory/$directory"
 
-	for directory in $flutter_directories; do
-	  echo
-	  echo "*** Test coverage $directory..."
-	  echo
-	  cd "$parent_directory/$directory"
+  flutter test --coverage
+done
 
-	  ../flutter/bin/flutter test --coverage
-	done
-
-	cd $parent_directory
-
-	bash <(curl -s https://codecov.io/bash)
-fi
+cd "$parent_directory"

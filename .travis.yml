@@ -1,7 +1,14 @@
 language: dart
 dart: dev
 before_script:
-  - git clone https://github.com/flutter/flutter.git -b beta
-  - ./flutter/bin/flutter doctor
+  - git clone https://github.com/flutter/flutter.git -b stable
+  - export PATH=$PATH:$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin
+  - flutter doctor
 script:
   - tool/ci_analize
+  - if [ $FLUTTER_CHANNEL = "stable" ]; then
+    bash <(curl -s https://codecov.io/bash);
+    fi
+cache:
+  directories:
+    - $HOME/.pub-cache
