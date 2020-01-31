@@ -23,6 +23,8 @@ void main() {
   });
 }
 
+
+// ignore: must_be_immutable
 class InjectableWidget extends StatelessWidget{
 
   Test value;
