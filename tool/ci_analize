@@ -10,6 +10,7 @@ directories="finject finject_generator finject_flutter"
 parent_directory=$PWD
 
 echo ""
+echo "#####"
 echo "##### CODE_FORMATTING"
 echo "#####"
 echo ""
@@ -22,6 +23,7 @@ for directory in $directories; do
 done
 
 echo ""
+echo "#####"
 echo "##### BUILD_RUNNER"
 echo "#####"
 echo ""
@@ -46,6 +48,7 @@ for directory in $directories; do
 done
 
 echo ""
+echo "#####"
 echo "##### DART ANALYZER"
 echo "#####"
 echo ""
@@ -62,20 +65,20 @@ for directory in $directories; do
 done
 
 echo ""
+echo "#####"
 echo "##### UNIT TESTS"
 echo "#####"
 echo ""
 
 for directory in $directories; do
-  echo
   echo "*** Testing $directory..."
-  echo
   cd "$parent_directory/$directory"
 
   flutter pub run test
 done
 
 echo ""
+echo "#####"
 echo "##### COVERAGE ANALYSIS"
 echo "#####"
 echo ""
@@ -84,18 +87,14 @@ dart_directories="finject finject_generator"
 flutter_directories="finject_flutter"
 
 for directory in $dart_directories; do
-  echo
   echo "*** Test coverage $directory..."
-  echo
   cd "$parent_directory/$directory"
 
   pub run test_coverage
 done
 
 for directory in $flutter_directories; do
-  echo
   echo "*** Test coverage $directory..."
-  echo
   cd "$parent_directory/$directory"
 
   flutter test --coverage
