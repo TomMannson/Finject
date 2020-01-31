@@ -66,35 +66,23 @@ done
 
 echo ""
 echo "#####"
-echo "##### UNIT TESTS"
-echo "#####"
-echo ""
-
-for directory in $directories; do
-  echo "*** Testing $directory..."
-  cd "$parent_directory/$directory"
-
-  flutter pub run test
-done
-
-echo ""
-echo "#####"
-echo "##### COVERAGE ANALYSIS"
+echo "##### UNIT TESTS and COVERAGE"
 echo "#####"
 echo ""
 
 dart_directories="finject finject_generator"
 flutter_directories="finject_flutter"
 
-for directory in $dart_directories; do
-  echo "*** Test coverage $directory..."
+for directory in dart_directories; do
+  echo "*** Testing and coverage dart modules $directory..."
   cd "$parent_directory/$directory"
 
+  pub run test
   pub run test_coverage
 done
 
 for directory in $flutter_directories; do
-  echo "*** Test coverage $directory..."
+  echo "*** Testing and coverage flutter modules $directory..."
   cd "$parent_directory/$directory"
 
   flutter test --coverage
