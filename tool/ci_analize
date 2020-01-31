@@ -73,7 +73,7 @@ echo ""
 dart_directories="finject finject_generator"
 flutter_directories="finject_flutter"
 
-for directory in dart_directories; do
+for directory in $dart_directories; do
   echo "*** Testing and coverage dart modules $directory..."
   cd "$parent_directory/$directory"
 
