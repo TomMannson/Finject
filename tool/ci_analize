@@ -23,7 +23,7 @@ for directory in $directories; do
   echo "*** Building $directory..."
   echo
   cd "$parent_directory/$directory"
-  
+
   rm example -r
 
   ../flutter/bin/flutter pub get
@@ -62,3 +62,35 @@ for directory in $directories; do
 
   ../flutter/bin/flutter pub run test
 done
+
+branch_name="$(git rev-parse --abbrev-ref HEAD)"
+
+
+if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$branch_name" == "master" ]
+then
+
+	dart_directories="finject finject_generator"
+	flutter_directories="finject_flutter"
+  
+	for directory in $dart_directories; do
+	  echo
+	  echo "*** Test coverage $directory..."
+	  echo
+	  cd "$parent_directory/$directory"
+
+	  pub run test_coverage
+	done
+
+	for directory in $flutter_directories; do
+	  echo
+	  echo "*** Test coverage $directory..."
+	  echo
+	  cd "$parent_directory/$directory"
+
+	  ../flutter/bin/flutter test --coverage
+	done
+
+	cd $parent_directory
+
+	bash <(curl -s https://codecov.io/bash)
+fi

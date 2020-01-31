@@ -3,6 +3,7 @@
 ![alt text](https://raw.githubusercontent.com/TomMannson/Finject/master/art/injection.png "Finject Logo")
 
 [![Build Status](https://api.travis-ci.com/TomMannson/Finject.svg?branch=master)](https://travis-ci.com/TomMannson/Finject)
+[![codecov](https://codecov.io/gh/TomMannson/Finject/branch/master/graph/badge.svg)](https://codecov.io/gh/TomMannson/Finject)<br>
 Tool that generates dependency injection Dart code.
 
 Library was inspired by 3 other solution:
