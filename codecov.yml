@@ -1,0 +1,24 @@
+codecov:
+  branch: master
+  status:
+    project:
+      default: off
+      finject_lib:
+        target: 80%
+        flags: finject_lib
+      finject_generator:
+        target: 80%
+        flags: finject_generator
+      finject_flutter:
+        flags: finject_flutter
+
+flags:
+  finject_lib:
+    paths:
+      - finject
+  finject_generator:
+    paths:
+      - finject_generator
+  finject_flutter:
+    paths:
+      - finject_flutter
