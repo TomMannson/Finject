@@ -76,7 +76,7 @@ class Analizer {
             element: constructors[0].enclosingElement);
       }
     }
-    if (numberOfInjection < 1 && constructors.isNotEmpty) {
+    if (numberOfInjection < 1 && constructors.length > 1) {
       throw InvalidGenerationSourceError(
           'No constructor found with annotation @Inject',
           todo: 'Consider adding one to existing constructor:\n\n',

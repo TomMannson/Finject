@@ -12,6 +12,10 @@ void main() {
       expect(await generate(basicInjectable),
           '''[{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test","libraryId":"id1"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{"value":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"}},"namedNames":{"value":"value_one"}},"methodInjections":[],"dependencies":[{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"}]},{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[]}]''');
     });
+    test('valid Injectable with no costructor', () async {
+      expect(await generate(basicInjectableWithNoConstructor),
+          '''[{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test","libraryId":"id1"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[]}]''');
+    });
     test('valid Injectable with constructor', () async {
       expect(await generate(basicConstructorInjectable),
           '''[{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test","libraryId":"id1"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"}],"namedParameters":{"value2":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"}},"blackList":["value","value2"],"orderedNames":[null],"namedNames":{"value2":null}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"}]},{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":null,"orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[]}]''');
@@ -50,7 +54,7 @@ void main() {
           '''Class which is @Injectable can't be  private''');
     });
     test('invalid Injectable with no injection at any constructor', () async {
-      expect(await generate(privateNoAnnotatedConstructor),
+      expect(await generate(noAnnotatedConstructor),
           '''No constructor found with annotation @Inject''');
     });
     test('invalid Injectable with 2 injections', () async {
@@ -141,6 +145,15 @@ class Test {
 
 @Injectable()
 class Test2 {
+
+}
+''';
+
+String basicInjectableWithNoConstructor = r'''
+import 'package:finject/finject.dart';
+
+@Injectable()
+class Test {
 
 }
 ''';
@@ -271,13 +284,17 @@ class _Test2 {
 }
 ''';
 
-String privateNoAnnotatedConstructor = r'''
+String noAnnotatedConstructor = r'''
 import 'package:finject/finject.dart';
 
 @Injectable()
 class Test2 {
 
   Test2(String value){
+  
+  }
+  
+  Test2(Test2 value){
   
   }
 
