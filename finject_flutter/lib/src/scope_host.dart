@@ -107,11 +107,13 @@ class ScopeInjectionProviderImpl extends AbstractInjectionProvider {
       return value;
     }
 
-    var foundInjection = findParrent(context);
-    var parentInjector = foundInjection.provider;
-    if (parentInjector != null) {
-      value = parentInjector.get(name);
-      return value;
+    if(context != null) {
+      var foundInjection = findParrent(context);
+      var parentInjector = foundInjection.provider;
+      if (parentInjector != null) {
+        value = parentInjector.get(name);
+        return value;
+      }
     }
 
     var factory = rootDependencyResolver["factory"][qualifier] as Factory;

@@ -66,6 +66,9 @@ class _MyHomePageState extends State<MyHomePage> {
               scopeName: "test",
               child: Test(),
             ),
+            FInjectHost.inject(
+              child: Test(),
+            ),
             FInjectHost.scoped(
               scopeName: "test",
               child: Column(
@@ -116,7 +119,11 @@ class Test extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[Text(one.value), Text(two.value), Text(three.value)],
+      children: <Widget>[
+        Text(one?.value ?? "null"),
+        Text(two?.value ?? "null"),
+        Text(three.value)
+      ],
     );
   }
 }

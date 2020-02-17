@@ -1,5 +1,14 @@
 # CHANGELOG.md
 
+## (0.3.1)
+
+Features:
+
+  - Added FInject class which allow for inline injections if you really need it. In this case variants of same type has to be selected manually
+  - Added DiState class which extends State class for translarent injection inside state class
+    IMPORTANT You need do keep State class public. In that way fields can be accessed be generated code
+
+
 ## (0.3.0)
 
 Features:
