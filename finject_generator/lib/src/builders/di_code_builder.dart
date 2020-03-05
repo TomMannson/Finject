@@ -149,7 +149,7 @@ class DiCodeBuilder implements Builder {
   }
 
   void analizeGraph(List<InjectorDs> listOfInjectorDs) {
-    DependencyBag bag = DependencyBag();
+    final bag = DependencyBag();
     for (final injector in listOfInjectorDs) {
       bag.addType(injector);
     }

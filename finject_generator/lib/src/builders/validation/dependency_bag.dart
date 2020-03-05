@@ -14,7 +14,7 @@ class DependencyBag {
       EqualityMap<DependencyCache, InjectorDs>(DefaultEquality());
 
   void addType(InjectorDs injectorDs) {
-    TypeInfo type = injectorDs.typeName;
+    final type = injectorDs.typeName;
 
     final cache = DependencyCache()
       ..name = injectorDs.name
@@ -23,16 +23,15 @@ class DependencyBag {
     if (!duplicateDetector.add(cache)) {
       duplicates.add(cache);
       throw InvalidGenerationSourceError(
-          "circular dependency in graph in ${cache}"); //if was not added we have duplicate so We need Error
+          'circular dependency in graph in ${cache}'); //if was not added we have duplicate so We need Error
     }
 
     cacheOfInjectors[cache] = injectorDs;
   }
 
   void process() {
-    for (MapEntry<DependencyCache, InjectorDs> entry
-        in cacheOfInjectors.entries) {
-      GraphNode node = GraphNode();
+    for (final entry in cacheOfInjectors.entries) {
+      final node = GraphNode();
       node.cache = entry.key;
       node.visited = true;
       bagCache[entry.key] = node;
@@ -53,39 +52,39 @@ class DependencyBag {
 
   void processFactoryMethodInjection(
       InjectorDs injectorDs, GraphNode parentNode) {
-    MethodInjection method = injectorDs.methodInjections[0];
+    final method = injectorDs.methodInjections[0];
     for (var index = 0; index < method.orderedParameters.length; index++) {
-      TypeInfo typeInfo = method.orderedParameters[index];
-      String name = method.orderedNames[index];
+      final typeInfo = method.orderedParameters[index];
+      final name = method.orderedNames[index];
       processTypeWithName(typeInfo, name, parentNode);
     }
     for (var paramName in method.namedParameters.keys) {
-      TypeInfo typeInfo = method.namedParameters[paramName];
-      String name = method.namedNames[paramName];
+      final typeInfo = method.namedParameters[paramName];
+      final name = method.namedNames[paramName];
       processTypeWithName(typeInfo, name, parentNode);
     }
   }
 
   void processConstructorInjection(
       InjectorDs injectorDs, GraphNode parentNode) {
-    MethodInjection method = injectorDs.constructorInjection;
+    final method = injectorDs.constructorInjection;
     for (var index = 0; index < method.orderedParameters.length; index++) {
-      TypeInfo typeInfo = method.orderedParameters[index];
-      String name = method.orderedNames[index];
+      final typeInfo = method.orderedParameters[index];
+      final name = method.orderedNames[index];
       processTypeWithName(typeInfo, name, parentNode);
     }
     for (var paramName in method.namedParameters.keys) {
-      TypeInfo typeInfo = method.namedParameters[paramName];
-      String name = method.namedNames[paramName];
+      final typeInfo = method.namedParameters[paramName];
+      final name = method.namedNames[paramName];
       processTypeWithName(typeInfo, name, parentNode);
     }
   }
 
   void processFieldInjection(InjectorDs injectorDs, GraphNode parentNode) {
-    FieldInjection method = injectorDs.fieldInjection;
+    final method = injectorDs.fieldInjection;
     for (var paramName in method.namedParameter.keys) {
-      TypeInfo typeInfo = method.namedParameter[paramName];
-      String name = method.namedNames[paramName];
+      final typeInfo = method.namedParameter[paramName];
+      final name = method.namedNames[paramName];
       processTypeWithName(typeInfo, name, parentNode);
     }
   }
@@ -96,10 +95,10 @@ class DependencyBag {
       ..typeName = typeInfo
       ..name = name;
 
-    GraphNode cacheForType = bagCache[cache];
+    var cacheForType = bagCache[cache];
 
     if (cacheForType == null) {
-      GraphNode node = GraphNode();
+      final node = GraphNode();
       node.cache = cache;
       node.visited = true;
       bagCache[cache] = node;
@@ -111,14 +110,14 @@ class DependencyBag {
 
     if (cacheForType.visited) {
       throw InvalidGenerationSourceError(
-          "circular dependency in graph in ${cacheForType.cache}");
+          'circular dependency in graph in ${cacheForType.cache}');
     }
 
     parentNode.dependencies.add(cache);
   }
 
   InjectorDs getSubDependency(DependencyCache cache) {
-    InjectorDs injector = cacheOfInjectors[cache];
+    final injector = cacheOfInjectors[cache];
 
     if (injector == null) {
       throw InvalidGenerationSourceError(

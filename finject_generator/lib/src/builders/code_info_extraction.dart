@@ -35,14 +35,7 @@ TypeInfo convert(ClassElement element) {
         todo:
             'Unknown type found, no import or something. Find compilation error');
   }
-  var uriOfClass = element.librarySource.uri;
-  var libraryId = 0;
-  if (!knownLibraries.containsKey(uriOfClass.path)) {
-    currentLibraryNumber++;
-    knownLibraries[uriOfClass.path] = currentLibraryNumber;
-  }
-  libraryId = knownLibraries[uriOfClass.path];
-
+  final uriOfClass = element.librarySource.uri;
   return TypeInfo(uriOfClass.scheme, uriOfClass.path, element.name);
 }
 
