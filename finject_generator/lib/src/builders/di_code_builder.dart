@@ -5,6 +5,7 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:dartpoet/dartpoet.dart';
 import 'package:finject/finject.dart';
+import 'package:finject_generator/src/builders/validation/dependency_bag.dart';
 import 'package:glob/glob.dart';
 import 'package:path/path.dart' as p;
 
@@ -45,26 +46,10 @@ class DiCodeBuilder implements Builder {
     var allInjectors = <ClassSpec>[];
     var scopes = <String, List<InjectorDs>>{};
     var allTypes = <InjectorDs>[];
-    var profiles = <String>[];
 
-    await for (final input in buildStep.findAssets(declaratedProfiles)) {
-      var library = await buildStep.resolver.libraryFor(input);
-      var profilesValue = library.topLevelElements
-          .whereType<TopLevelVariableElement>()
-          .where(
-              (TopLevelVariableElement element) => element.name == 'profiles')
-          .map((TopLevelVariableElement element) =>
-              element.computeConstantValue())
-          .toList();
+    final profiles = await processProfiles(buildStep);
 
-      if (profilesValue.length == 1) {
-        profiles = profilesValue[0]
-            .toListValue()
-            .map((dartObject) => dartObject.toStringValue())
-            .toList();
-      }
-    }
-
+    final listOfInjectorDs = <InjectorDs>[];
     await for (final input in buildStep.findAssets(_allFilesInLib)) {
       if (input.path.endsWith('summary.json')) {
         var injectorJson = await buildStep.readAsString(input);
@@ -72,27 +57,30 @@ class DiCodeBuilder implements Builder {
         var readData = (jsonDecode(injectorJson) as Iterable)
             .map((value) => InjectorDs.fromJson(value as Map<String, dynamic>))
             .toList();
-
-        for (var oneInjectable in readData) {
-          if (oneInjectable.profiles.isNotEmpty &&
-              notContainsOneOf(oneInjectable.profiles, profiles)) {
-            continue;
-          }
-
-          if (oneInjectable.scopeName != null) {
-            var scopeList = scopes[oneInjectable.scopeName];
-            if (scopeList == null) {
-              scopeList = <InjectorDs>[];
-              scopes[oneInjectable.scopeName] = scopeList;
-            }
-
-            scopeList.add(oneInjectable);
-          }
-
-          allTypes.add(oneInjectable);
-          allInjectors.addAll(createClassesForSummary(oneInjectable));
-        }
+        listOfInjectorDs.addAll(readData);
       }
+    }
+
+    analizeGraph(listOfInjectorDs);
+
+    for (var oneInjectable in listOfInjectorDs) {
+      if (oneInjectable.profiles.isNotEmpty &&
+          notContainsOneOf(oneInjectable.profiles, profiles)) {
+        continue;
+      }
+
+      if (oneInjectable.scopeName != null) {
+        var scopeList = scopes[oneInjectable.scopeName];
+        if (scopeList == null) {
+          scopeList = <InjectorDs>[];
+          scopes[oneInjectable.scopeName] = scopeList;
+        }
+
+        scopeList.add(oneInjectable);
+      }
+
+      allTypes.add(oneInjectable);
+      allInjectors.addAll(createClassesForSummary(oneInjectable));
     }
 
     allInjectors.add(createClassesForScope(scopes));
@@ -124,6 +112,28 @@ class DiCodeBuilder implements Builder {
     return buildStep.writeAsString(output, dartFile.outputContent());
   }
 
+  Future<List<String>> processProfiles(BuildStep buildStep) async {
+    var profiles = <String>[];
+    await for (final input in buildStep.findAssets(declaratedProfiles)) {
+      var library = await buildStep.resolver.libraryFor(input);
+      var profilesValue = library.topLevelElements
+          .whereType<TopLevelVariableElement>()
+          .where(
+              (TopLevelVariableElement element) => element.name == 'profiles')
+          .map((TopLevelVariableElement element) =>
+              element.computeConstantValue())
+          .toList();
+
+      if (profilesValue.length == 1) {
+        profiles = profilesValue[0]
+            .toListValue()
+            .map((dartObject) => dartObject.toStringValue())
+            .toList();
+      }
+    }
+    return profiles;
+  }
+
   ClassSpec createClassesForScope(Map<String, List<InjectorDs>> scopes) {
     return ClassSpec.build('ScopeFactoryImpl',
         superClass: TypeToken.of(ScopeFactory),
@@ -136,6 +146,16 @@ class DiCodeBuilder implements Builder {
               codeBlock:
                   CodeBlockSpec.lines(generateMethodCodeForScopes(scopes)))
         ]);
+  }
+
+  void analizeGraph(List<InjectorDs> listOfInjectorDs) {
+    DependencyBag bag = DependencyBag();
+    for (final injector in listOfInjectorDs) {
+      bag.addType(injector);
+    }
+
+    bag.process();
+    bag.toString();
   }
 }
 

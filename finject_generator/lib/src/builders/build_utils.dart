@@ -2,12 +2,14 @@ import 'package:dartpoet/dartpoet.dart';
 import 'package:finject_generator/src/dart_poet_extensions/dependency_spec_ext.dart';
 
 import '../json_schema/injector_Info.dart';
+import 'code_info_extraction.dart';
 
 Iterable<DependencySpec> generateImport(List<InjectorDs> allTypes) sync* {
   yield DependencySpec.import('package:finject/finject.dart');
   for (var injectable in allTypes) {
     var info = injectable.typeName;
-    yield DependencySpecExt.import(libraryPath(info), info.libraryId);
+    yield DependencySpecExt.import(
+        libraryPath(info), generateIdForLibrary(info));
   }
 }
 
@@ -37,7 +39,10 @@ CodeBlockSpec generateCodeForFactory(InjectorDs ds) {
 
     lines.add(');');
   } else {
-    lines.add('var value = ' + generateTypeFromTypeInfo(ds.typeName) + generateNamedConstructorPart(ds) +'(');
+    lines.add('var value = ' +
+        generateTypeFromTypeInfo(ds.typeName) +
+        generateNamedConstructorPart(ds) +
+        '(');
 
     for (var i = 0; i < ds.constructorInjection.orderedParameters.length; i++) {
       lines.add(
@@ -121,7 +126,7 @@ CodeBlockSpec generateCodeForMappers(List<InjectorDs> allTypes) {
 String generatePrefixClassName(InjectorDs data) {
   var buffer = StringBuffer(data.typeName.className);
 
-  buffer.write('_${data.typeName.libraryId}');
+  buffer.write('_${generateIdForLibrary(data.typeName)}');
 
   if (data.name != null) {
     buffer
@@ -151,11 +156,11 @@ String generateTypeFromTypeInfo(TypeInfo typeInfo) {
   if ('${typeInfo.packageName}:${typeInfo.libraryName}' == 'dart:core') {
     return '${typeInfo.className}';
   }
-  return '${typeInfo.libraryId}.${typeInfo.className}';
+  return '${generateIdForLibrary(typeInfo)}.${typeInfo.className}';
 }
 
 String generateNamedConstructorPart(InjectorDs typeInfo) {
-  if(typeInfo.constructorInjection.name != null){
+  if (typeInfo.constructorInjection.name != null) {
     return '.${typeInfo.constructorInjection.name}';
   }
   return '';

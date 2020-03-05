@@ -18,11 +18,22 @@ String findName(List<ElementAnnotation> annotations) {
   return null;
 }
 
+String generateIdForLibrary(TypeInfo typeInfo) {
+  var libraryId = 0;
+  if (!knownLibraries.containsKey(typeInfo.libraryName)) {
+    currentLibraryNumber++;
+    knownLibraries[typeInfo.libraryName] = currentLibraryNumber;
+  }
+  libraryId = knownLibraries[typeInfo.libraryName];
+  return 'id$libraryId';
+}
+
 TypeInfo convert(ClassElement element) {
   if (element == null) {
     throw InvalidGenerationSourceError(
         'Unknown type found, no import or something. Find compilation error',
-        todo: 'Unknown type found, no import or something. Find compilation error');
+        todo:
+            'Unknown type found, no import or something. Find compilation error');
   }
   var uriOfClass = element.librarySource.uri;
   var libraryId = 0;
@@ -32,8 +43,7 @@ TypeInfo convert(ClassElement element) {
   }
   libraryId = knownLibraries[uriOfClass.path];
 
-  return TypeInfo(
-      uriOfClass.scheme, uriOfClass.path, element.name, 'id$libraryId');
+  return TypeInfo(uriOfClass.scheme, uriOfClass.path, element.name);
 }
 
 ClassElement getType(DartType type) {
