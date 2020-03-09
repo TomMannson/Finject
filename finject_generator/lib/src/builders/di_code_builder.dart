@@ -14,7 +14,8 @@ import 'build_utils.dart';
 
 class DiCodeBuilder implements Builder {
   static final _allFilesInLib = Glob('lib/**');
-  static final declaratedProfiles = Glob('lib/declarated_profiles.dart');
+  static final declaratedProfiles =
+      Glob('lib/declarated_profiles.dart'); //TODO rename to smth more expresive
   static const output_file = 'finject_config.dart';
 
   static AssetId _allFileOutput(BuildStep buildStep) {
@@ -57,18 +58,21 @@ class DiCodeBuilder implements Builder {
         var readData = (jsonDecode(injectorJson) as Iterable)
             .map((value) => InjectorDs.fromJson(value as Map<String, dynamic>))
             .toList();
-        listOfInjectorDs.addAll(readData);
+
+        for (var oneInjectable in readData) {
+          if (oneInjectable.profiles.isNotEmpty &&
+              notContainsOneOf(oneInjectable.profiles, profiles)) {
+            continue;
+          }
+
+          listOfInjectorDs.add(oneInjectable);
+        }
       }
     }
 
     analizeGraph(listOfInjectorDs);
 
     for (var oneInjectable in listOfInjectorDs) {
-      if (oneInjectable.profiles.isNotEmpty &&
-          notContainsOneOf(oneInjectable.profiles, profiles)) {
-        continue;
-      }
-
       if (oneInjectable.scopeName != null) {
         var scopeList = scopes[oneInjectable.scopeName];
         if (scopeList == null) {

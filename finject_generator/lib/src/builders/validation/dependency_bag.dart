@@ -23,7 +23,7 @@ class DependencyBag {
     if (!duplicateDetector.add(cache)) {
       duplicates.add(cache);
       throw InvalidGenerationSourceError(
-          'circular dependency in graph in ${cache}'); //if was not added we have duplicate so We need Error
+          'Duplicate dependency detected ${cache}'); //if was not added we have duplicate so We need Error
     }
 
     cacheOfInjectors[cache] = injectorDs;
@@ -33,6 +33,7 @@ class DependencyBag {
     for (final entry in cacheOfInjectors.entries) {
       final node = GraphNode();
       node.cache = entry.key;
+      node.scopeName = entry.value.scopeName;
       node.visited = true;
       bagCache[entry.key] = node;
       processDependencies(entry.value, node);
@@ -101,11 +102,16 @@ class DependencyBag {
       final node = GraphNode();
       node.cache = cache;
       node.visited = true;
+      node.scopeName = getSubDependency(cache).scopeName;
+
+      checkConflictedScopes(parentNode, node);
       bagCache[cache] = node;
       processDependencies(getSubDependency(cache), node);
       node.procesed = true;
       node.visited = false;
       cacheForType = node;
+    } else {
+      checkConflictedScopes(parentNode, cacheForType);
     }
 
     if (cacheForType.visited) {
@@ -115,6 +121,16 @@ class DependencyBag {
 
     parentNode.dependencies.add(cache);
   }
+
+  void checkConflictedScopes(GraphNode parentNode, GraphNode node) {
+    if (parentNode.scopeName != null && hasConflict(parentNode, node)) {
+      throw InvalidGenerationSourceError(
+          'scoped dependency of ${parentNode.cache} can depends on \'${parentNode.scopeName}\' scope or ROOT_SCOPE but is dependent on ${node.cache} with scope \'${node.scopeName}\'');
+    }
+  }
+
+  bool hasConflict(GraphNode parentNode, GraphNode node) =>
+      !(parentNode.scopeName == node.scopeName || node.scopeName == null);
 
   InjectorDs getSubDependency(DependencyCache cache) {
     final injector = cacheOfInjectors[cache];

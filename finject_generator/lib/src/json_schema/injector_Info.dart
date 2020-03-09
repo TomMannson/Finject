@@ -10,6 +10,7 @@ class GraphNode {
   DependencyCache cache;
   bool visited;
   bool procesed;
+  String scopeName;
 
   EqualitySet<DependencyCache> dependencies = EqualitySet(DefaultEquality());
 }
@@ -27,11 +28,11 @@ class DependencyCache {
           name == other.name;
 
   @override
-  int get hashCode => 0;
+  int get hashCode => typeName.hashCode ^ name.hashCode;
 
   @override
   String toString() {
-    return 'DependencyCache{typeName: $typeName, name: ${name ?? '<no_name>'}';
+    return 'DependencyCache{typeName: $typeName, name: ${name ?? '<no_name>'}}';
   }
 }
 
@@ -240,7 +241,7 @@ class TypeInfo {
 
   @override
   String toString() {
-    return '$packageName:$libraryName/$className}';
+    return '$packageName:$libraryName $className';
   }
 }
 

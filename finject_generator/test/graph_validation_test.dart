@@ -19,6 +19,10 @@ void main() {
       expect(generate(graphInvalidDependencyDuplicate),
           throwsA(TypeMatcher<InvalidGenerationSourceError>()));
     });
+    test('dependency with conflicted scopes', () {
+      expect(generate(graphInvalidWithConflictedScope),
+          throwsA(TypeMatcher<InvalidGenerationSourceError>()));
+    });
   });
 }
 
@@ -77,5 +81,12 @@ String graphInvalidDependencyDuplicate = r'''
 [
 {"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":"name","orderedParameters":[{"packageName":"package","libraryName":"pkg/test.dart","className":"Test","libraryId":"id1"}],"namedParameters":{},"blackList":[],"orderedNames":[null],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[{"packageName":"package","libraryName":"pkg/test.dart","className":"Test","libraryId":"id1"}]},
 {"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"},"singleton":false,"scopeName":null,"name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":"name","orderedParameters":[{"packageName":"package","libraryName":"pkg/test.dart","className":"Test","libraryId":"id1"}],"namedParameters":{},"blackList":[],"orderedNames":[null],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[{"packageName":"package","libraryName":"pkg/test.dart","className":"Test","libraryId":"id1"}]}
+]
+''';
+
+String graphInvalidWithConflictedScope = r'''
+[
+{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test2","libraryId":"id1"},"singleton":false,"scopeName":"Scope1","name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":"name","orderedParameters":[{"packageName":"package","libraryName":"pkg/test.dart","className":"Test3","libraryId":"id1"}],"namedParameters":{},"blackList":[],"orderedNames":[null],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[{"packageName":"package","libraryName":"pkg/test.dart","className":"Test3","libraryId":"id1"}]},
+{"typeName":{"packageName":"package","libraryName":"pkg/test.dart","className":"Test3","libraryId":"id1"},"singleton":false,"scopeName":"Scope2","name":null,"profiles":[],"factoryTypeName":null,"constructorInjection":{"name":"name","orderedParameters":[],"namedParameters":{},"blackList":[],"orderedNames":[],"namedNames":{}},"setterInjection":{"namedParameter":{}},"fieldInjection":{"namedParameter":{},"namedNames":{}},"methodInjections":[],"dependencies":[]}
 ]
 ''';
