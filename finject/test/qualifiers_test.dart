@@ -10,16 +10,24 @@ void main() {
     var qualifierNamedText2 = NamedQualifier(String, 'text');
     var qualifierNamedOtherText = NamedQualifier(String, 'otherText');
 
-
     test('map should return valid injector', () {
       expect(qualifierNamed, qualifierNamedText2);
       expect(qualifierNamed.hashCode, qualifierNamedText2.hashCode);
       expect(qualifierNamedText2 == qualifierNamedOtherText, false);
-      expect(qualifierNamedText2.hashCode == qualifierNamedOtherText.hashCode, false);
+      expect(
+        qualifierNamedText2.hashCode == qualifierNamedOtherText.hashCode,
+        false,
+      );
       expect(qualifierTypedString, qualifierTypedString2);
       expect(qualifierTypedString.hashCode, qualifierTypedString2.hashCode);
-      expect(qualifierNamed.hashCode == qualifierTypedFuture.hashCode, false);
-      expect(qualifierTypedString == qualifierTypedFuture, false);
+      expect(
+        qualifierNamed.hashCode == qualifierTypedFuture.hashCode,
+        false,
+      );
+      expect(
+        qualifierTypedString == qualifierTypedFuture,
+        false,
+      );
     });
   });
 }
