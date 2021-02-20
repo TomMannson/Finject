@@ -1,5 +1,13 @@
 # CHANGELOG.md
 
+## (0.3.2)
+
+Features:
+  - Added graph validation in code generation process
+
+Other:
+  - Added some tests
+
 ## (0.3.1)
 
   - If Injectable class has only one constructor there is no need for annotating it with Inject()
