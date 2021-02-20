@@ -1,5 +1,11 @@
 # CHANGELOG.md
 
+## (0.3.2)
+
+Features:
+
+  - Fixes in injection process. Custom scope is processing properly now
+
 ## (0.3.1)
 
 Features:

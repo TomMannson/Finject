@@ -1,6 +1,6 @@
 name: finject
 description: Package contains required annotations and classes for DI definition.
-version: 0.3.0
+version: 0.3.2
 homepage: https://github.com/TomMannson/Finject
 
 environment:
