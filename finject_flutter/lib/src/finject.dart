@@ -4,16 +4,14 @@ import '../finject_flutter.dart';
 
 class FInject {
   static void inject(BuildContext context, Object target) {
-    final injector = InjectionProviderImpl();
+    final scopedContext = context.getElementForInheritedWidgetOfExactType<ScopeInjectHost>() as ScopeInjecHostElement;
+    final injector = InjectionProviderImpl(scopedContext);
     injector.inject(target);
   }
 
   static T of<T>(BuildContext context, {String name, bool flat = false}) {
-    final injector = InjectionProviderImpl();
-    if (!flat) {
-      injector.context =
-          context.getElementForInheritedWidgetOfExactType<ScopeInjectHost>();
-    }
+    final scopedContext = context.getElementForInheritedWidgetOfExactType<ScopeInjectHost>() as ScopeInjecHostElement;
+    final injector = InjectionProviderImpl(scopedContext);
     return injector.get(name);
   }
 }

@@ -1,0 +1,7 @@
+targets:
+  $default:
+    builders:
+      finject_generator:summary_builder:
+        generate_for:
+#          include:
+#            - lib/**/data_model/*.dart

@@ -7,15 +7,19 @@ class BuilderInjectHost extends StatelessWidget {
   final InjectionProviderImpl _provider;
 
   @protected
-  BuilderInjectHost(this.builder) : _provider = InjectionProviderImpl();
+  BuilderInjectHost(this.builder) : _provider = InjectionProviderImpl(null);
 
   @override
   Widget build(BuildContext context) {
-    _provider.context = context.getElementForInheritedWidgetOfExactType<ScopeInjectHost>();
-    Widget child = builder(context, _provider);
+    _provider.context =
+        context.getElementForInheritedWidgetOfExactType<ScopeInjectHost>();
+    final child = builder(context, _provider);
     _provider.inject(child);
     return child;
   }
 }
 
-typedef LayoutInjectWidgetBuilder = Widget Function(BuildContext context, InjectionProvider finjector);
+typedef LayoutInjectWidgetBuilder = Widget Function(
+  BuildContext context,
+  InjectionProvider finjector,
+);

@@ -78,14 +78,15 @@ for directory in $dart_directories; do
   cd "$parent_directory/$directory"
 
   pub run test
-  pub run test_coverage
+#  pub run test_coverage
 done
 
 for directory in $flutter_directories; do
   echo "*** Testing and coverage flutter modules $directory..."
   cd "$parent_directory/$directory"
 
-  flutter test --coverage
+#  flutter test --coverage
+  flutter test
 done
 
 cd "$parent_directory"
