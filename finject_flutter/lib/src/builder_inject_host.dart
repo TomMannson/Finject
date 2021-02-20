@@ -13,7 +13,7 @@ class BuilderInjectHost extends StatelessWidget {
   Widget build(BuildContext context) {
     _provider.context =
         context.getElementForInheritedWidgetOfExactType<ScopeInjectHost>();
-    Widget child = builder(context, _provider);
+    final child = builder(context, _provider);
     _provider.inject(child);
     return child;
   }

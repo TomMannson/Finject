@@ -7,7 +7,7 @@ class WidgetTestUtils {
       home: Scaffold(
         body: SafeArea(
           child: Container(
-            key: const Key("mockContainer"),
+            key: const Key('mockContainer'),
             child: widget,
           ),
         ),
@@ -20,7 +20,7 @@ class WidgetTestUtils {
       home: Scaffold(
         body: SafeArea(
           child: Column(
-            key: const Key("mockContainer"),
+            key: const Key('mockContainer'),
             children: <Widget>[widget],
           ),
         ),

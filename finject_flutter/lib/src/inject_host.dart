@@ -18,7 +18,7 @@ class InjectHost extends StatelessWidget {
     _provider.context =
         context.getElementForInheritedWidgetOfExactType<ScopeInjectHost>();
     _provider.inject(child);
-    log("InjectHost build");
+    log('InjectHost build');
     return child;
   }
 }
@@ -43,16 +43,17 @@ class InjectionProviderImpl extends AbstractInjectionProvider {
       }
     }
 
-    Factory factory = rootDependencyResolver['factory'][qualifier] as Factory;
+    final factory = rootDependencyResolver['factory'][qualifier] as Factory;
     if (factory != null) {
       value = factory.create(this) as T;
-      rootDependencyResolver["injector"][qualifier].inject(value, this);
+      rootDependencyResolver['injector'][qualifier].inject(value, this);
       return value;
     }
     return null;
   }
 
-  inject(Object target, [String name]) {
+  @override
+  void inject(Object target, [String name]) {
     var qualifier = QualifierFactory.create(target.runtimeType, name);
 
     if (scopedContext != null) {
@@ -66,7 +67,7 @@ class InjectionProviderImpl extends AbstractInjectionProvider {
       }
     }
 
-    var injector = rootDependencyResolver["injector"][qualifier] as Injector;
+    var injector = rootDependencyResolver['injector'][qualifier] as Injector;
     if (injector != null) {
       injector.inject(target, this);
     }
@@ -74,8 +75,8 @@ class InjectionProviderImpl extends AbstractInjectionProvider {
 
   @override
   FoundInjection findParrent(BuildContext context) {
-    ScopeInjecHostElement scopeElement = context as ScopeInjecHostElement;
-    ScopeInjectHost scopeHost = scopeElement.widget as ScopeInjectHost;
+    final scopeElement = context as ScopeInjecHostElement;
+    final scopeHost = scopeElement.widget as ScopeInjectHost;
     if (context == null) {
       return FoundInjection(null, null);
     }
