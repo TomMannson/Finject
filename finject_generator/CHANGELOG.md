@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+## (0.3.3)
+
+  - Some dependency changes
+
 ## (0.3.2)
 
 Features:
