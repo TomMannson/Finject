@@ -12,8 +12,8 @@ class ScopeInjectHost extends InheritedWidget {
   @protected
   ScopeInjectHost({Widget child, this.scopeName})
       : _getItContainer = ScopeInjectionProviderImpl(
-    defaultScopeFactory.createScope(scopeName),
-  ),
+          defaultScopeFactory.createScope(scopeName),
+        ),
         super(child: child);
 
   @override
@@ -32,7 +32,11 @@ class ScopeInjectHost extends InheritedWidget {
 }
 
 class ScopeInjecHostElement extends InheritedElement {
-  ScopeInjecHostElement(ScopeInjectHost widget) : super(widget);
+  ScopeInjectionProviderImpl injectorProvider;
+
+  ScopeInjecHostElement(ScopeInjectHost widget) : super(widget) {
+    injectorProvider = widget._getItContainer as ScopeInjectionProviderImpl;
+  }
 
   @override
   Widget build() {
@@ -64,8 +68,7 @@ class _ScopeInjectHostState extends State<HostStatefulWidget> {
 
       provider.disposables = lastDisposables;
       provider.scope = lastScope;
-    }
-    else{
+    } else {
       provider = widget.parent.currentInjector as ScopeInjectionProviderImpl;
     }
 
@@ -107,7 +110,7 @@ class ScopeInjectionProviderImpl extends AbstractInjectionProvider {
       return value;
     }
 
-    if(context != null) {
+    if (context != null) {
       var foundInjection = findParrent(context);
       var parentInjector = foundInjection.provider;
       if (parentInjector != null) {
@@ -156,9 +159,9 @@ class ScopeInjectionProviderImpl extends AbstractInjectionProvider {
       return false;
     });
 
-    ScopeInjecHostElement foundScopeInjectHost =
-    firstParentOfScopedHost.getElementForInheritedWidgetOfExactType<
-        ScopeInjectHost>() as ScopeInjecHostElement;
+    ScopeInjecHostElement foundScopeInjectHost = firstParentOfScopedHost
+            .getElementForInheritedWidgetOfExactType<ScopeInjectHost>()
+        as ScopeInjecHostElement;
     if (foundScopeInjectHost == null) {
       return FoundInjection(null, null);
     }

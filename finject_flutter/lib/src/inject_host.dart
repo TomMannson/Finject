@@ -11,7 +11,7 @@ class InjectHost extends StatelessWidget {
   final InjectionProviderImpl _provider;
 
   @protected
-  InjectHost({this.child}) : _provider = InjectionProviderImpl();
+  InjectHost({this.child}) : _provider = InjectionProviderImpl(null);
 
   @override
   Widget build(BuildContext context) {
@@ -24,21 +24,22 @@ class InjectHost extends StatelessWidget {
 }
 
 class InjectionProviderImpl extends AbstractInjectionProvider {
-  BuildContext context;
+  ScopeInjecHostElement scopedContext;
 
-  InjectionProviderImpl();
+  InjectionProviderImpl(this.scopedContext);
 
   @override
   T get<T>([String name]) {
     T value;
     var qualifier = QualifierFactory.create(T, name);
 
-    if (context != null) {
-      var foundInjection = findParrent(context);
-      var parentInjector = foundInjection.provider;
-      if (parentInjector != null) {
-        value = parentInjector.get(name);
-        return value;
+    if (scopedContext != null) {
+      final scope = scopedContext.injectorProvider?.scope;
+      if (scope != null) {
+        final injector = scope.factory(qualifier);
+        if(injector != null) {
+          return injector.create(this) as T;
+        }
       }
     }
 
@@ -54,12 +55,14 @@ class InjectionProviderImpl extends AbstractInjectionProvider {
   inject(Object target, [String name]) {
     var qualifier = QualifierFactory.create(target.runtimeType, name);
 
-    if (context != null) {
-      var foundInjection = findParrent(context);
-      var parentInjector = foundInjection.provider;
-      if (parentInjector != null) {
-        parentInjector.inject(target, name);
-        return;
+    if (scopedContext != null) {
+      final scope = scopedContext.injectorProvider?.scope;
+      if (scope != null) {
+        final injector = scope.injector(qualifier);
+        if(injector != null) {
+          injector.inject(target, this);
+          return;
+        }
       }
     }
 
@@ -78,4 +81,11 @@ class InjectionProviderImpl extends AbstractInjectionProvider {
     }
     return FoundInjection(scopeHost.currentInjector, scopeElement);
   }
+}
+
+class InjectionContext {
+  final scopes = <Scope>[];
+
+
+
 }

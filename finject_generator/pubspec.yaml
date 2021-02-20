@@ -7,7 +7,7 @@ environment:
   sdk: '>=2.3.0 <3.0.0'
 
 dependencies:
-  analyzer: ^0.39.4
+  analyzer: 0.39.4
   build: '>=0.12.0 <2.0.0'
   source_gen: ^0.9.0
   finject: ^0.3.0

@@ -15,8 +15,7 @@ class FInjectHost extends StatelessWidget {
   FInjectHost.flat({@required Widget child})
       : host = JustInjectHost(child: child);
 
-  FInjectHost.builder(
-      {@required LayoutInjectWidgetBuilder builder})
+  FInjectHost.builder({@required LayoutInjectWidgetBuilder builder})
       : host = BuilderInjectHost(builder);
 
   @override
