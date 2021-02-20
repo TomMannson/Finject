@@ -1,5 +1,41 @@
 import 'dart:core';
 
+import 'package:collection/collection.dart';
+
+class GraphInfo {
+  List<GraphInfo> nodeList;
+}
+
+class GraphNode {
+  DependencyCache cache;
+  bool visited;
+  bool procesed;
+  String scopeName;
+
+  EqualitySet<DependencyCache> dependencies = EqualitySet(DefaultEquality());
+}
+
+class DependencyCache {
+  TypeInfo typeName;
+  String name;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DependencyCache &&
+          runtimeType == other.runtimeType &&
+          typeName == other.typeName &&
+          name == other.name;
+
+  @override
+  int get hashCode => typeName.hashCode ^ name.hashCode;
+
+  @override
+  String toString() {
+    return 'DependencyCache{typeName: $typeName, name: ${name ?? '<no_name>'}}';
+  }
+}
+
 class InjectorDs {
   TypeInfo typeName;
   TypeInfo factoryTypeName;
@@ -176,21 +212,18 @@ class TypeInfo {
   String packageName;
   String libraryName;
   String className;
-  String libraryId;
 
-  TypeInfo(this.packageName, this.libraryName, this.className, this.libraryId);
+  TypeInfo(this.packageName, this.libraryName, this.className);
 
   TypeInfo.fromJson(Map<String, dynamic> json)
       : packageName = json['packageName'] as String,
         libraryName = json['libraryName'] as String,
-        className = json['className'] as String,
-        libraryId = json['libraryId'] as String;
+        className = json['className'] as String;
 
   Map<String, dynamic> toJson() => {
         'packageName': packageName,
         'libraryName': libraryName,
         'className': className,
-        'libraryId': libraryId
       };
 
   @override
@@ -200,15 +233,16 @@ class TypeInfo {
           runtimeType == other.runtimeType &&
           packageName == other.packageName &&
           libraryName == other.libraryName &&
-          className == other.className &&
-          libraryId == other.libraryId;
+          className == other.className;
 
   @override
   int get hashCode =>
-      packageName.hashCode ^
-      libraryName.hashCode ^
-      className.hashCode ^
-      libraryId.hashCode;
+      packageName.hashCode ^ libraryName.hashCode ^ className.hashCode;
+
+  @override
+  String toString() {
+    return '$packageName:$libraryName $className';
+  }
 }
 
 class DependencyInfo {

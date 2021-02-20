@@ -6,7 +6,7 @@ import 'mock.dart';
 import 'widget_test_util.dart';
 
 void main() {
-  group("simple test for counting coverage", () {
+  group('simple test for counting coverage', () {
     init();
     testWidgets('flat inject host', (WidgetTester tester) async {
       final sut = WidgetTestUtils.prepareWidget(
@@ -53,8 +53,8 @@ void main() {
   });
 }
 
-testInjection() {
-  Element found = find.byType(InjectableWidget).evaluate().toList().first;
+void testInjection() {
+  final found = find.byType(InjectableWidget).evaluate().toList().first;
   var value = found.widget as InjectableWidget;
   expect(value.value, isInstanceOf<Test>());
 }
@@ -65,6 +65,6 @@ class InjectableWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("text");
+    return Text('text');
   }
 }

@@ -23,19 +23,20 @@ class JustInjectionProviderImpl extends InjectionProvider {
     T value;
     var qualifier = QualifierFactory.create(T, name);
 
-    var factory = rootDependencyResolver["factory"][qualifier] as Factory;
+    var factory = rootDependencyResolver['factory'][qualifier] as Factory;
     if (factory != null) {
       value = factory.create(this) as T;
-      rootDependencyResolver["injector"][qualifier].inject(value, this);
+      rootDependencyResolver['injector'][qualifier].inject(value, this);
       return value;
     }
     return null;
   }
 
+  @override
   void inject(Object target, [String name]) {
     var qualifier = QualifierFactory.create(target.runtimeType, name);
 
-    var injector = rootDependencyResolver["injector"][qualifier] as Injector;
+    var injector = rootDependencyResolver['injector'][qualifier] as Injector;
     if (injector != null) {
       injector.inject(target, this);
     }
