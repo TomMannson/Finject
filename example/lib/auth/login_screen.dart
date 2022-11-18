@@ -48,7 +48,7 @@ class LoginScreenState extends DiState<LoginScreen> {
                       labelText: "Password"
                   )
               ),
-              RaisedButton(
+              MaterialButton(
                 child: Text("Login"),
                 onPressed: () async {
                   await bloc.performLogin();

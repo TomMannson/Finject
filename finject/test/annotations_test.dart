@@ -1,7 +1,6 @@
 import 'package:finject/finject.dart';
 import 'package:test/test.dart';
 
-
 void main() {
   group('annotations ', () {
     test('works', () {

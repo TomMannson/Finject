@@ -5,12 +5,9 @@ import 'main_test.dart';
 Map<Qualifier, Injector> injectorMapper = {};
 Map<Qualifier, Factory> factoryMapper = {};
 
-class Test {
-
-}
+class Test {}
 
 class ScopeFactoryImpl extends ScopeFactory {
-
   @override
   Scope createScope(String scopeName) {
 //default value
@@ -20,7 +17,6 @@ class ScopeFactoryImpl extends ScopeFactory {
 
 /// this is factory for id4.TestClass class
 class Test_Factory extends Factory<Test> {
-
   @override
   Test create(InjectionProvider injectionProvider) {
     return Test();
@@ -29,17 +25,13 @@ class Test_Factory extends Factory<Test> {
 
 /// this is injector for TestClass class
 class Test_Injector extends Injector<Test> {
-
   @override
-  void inject(Test instance, InjectionProvider injectionProvider){
-
-  }
+  void inject(Test instance, InjectionProvider injectionProvider) {}
 }
 
 class InjectableWidget_Injector extends Injector<InjectableWidget> {
-
   @override
-  void inject(InjectableWidget instance, InjectionProvider injectionProvider){
+  void inject(InjectableWidget instance, InjectionProvider injectionProvider) {
     instance.value = injectionProvider.get();
   }
 }

@@ -37,7 +37,7 @@ class InjectionProviderImpl extends AbstractInjectionProvider {
       final scope = scopedContext.injectorProvider?.scope;
       if (scope != null) {
         final injector = scope.factory(qualifier);
-        if(injector != null) {
+        if (injector != null) {
           return injector.create(this) as T;
         }
       }
@@ -60,7 +60,7 @@ class InjectionProviderImpl extends AbstractInjectionProvider {
       final scope = scopedContext.injectorProvider?.scope;
       if (scope != null) {
         final injector = scope.injector(qualifier);
-        if(injector != null) {
+        if (injector != null) {
           injector.inject(target, this);
           return;
         }
@@ -86,7 +86,4 @@ class InjectionProviderImpl extends AbstractInjectionProvider {
 
 class InjectionContext {
   final scopes = <Scope>[];
-
-
-
 }
