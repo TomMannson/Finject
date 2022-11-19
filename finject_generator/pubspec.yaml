@@ -4,23 +4,36 @@ version: 0.3.3
 homepage: https://github.com/TomMannson/Finject
 
 environment:
-  sdk: '>=2.3.0 <3.0.0'
+  sdk: '>=2.3.0 <3.5.0'
 
 dependencies:
+#  collection: ^1.14.13
+#  analyzer: '>=0.39.4 <0.39.5'
+#  build: '>=0.12.0 <2.0.0'
+#  source_gen: ^0.9.0
+#  finject: ^0.3.2
+#  dartpoet: ^1.0.6+3
+#  path: ^1.6.4
+#  glob: ^1.2.0
+
+
   collection: ^1.14.13
-  analyzer: '>=0.39.4 <0.39.5'
-  build: '>=0.12.0 <2.0.0'
-  source_gen: ^0.9.0
+  analyzer: '>=4.4.0 <6.0.0'
+  build: '>=2.1.0 <2.4.0'
+  source_gen: ^1.2.6
   finject: ^0.3.2
-  dartpoet: ^1.0.6+3
-  path: ^1.6.4
-  glob: ^1.2.0
+  code_builder: ^4.2.0
+#  dartpoet: ^1.0.6+3
+  path: ^1.8.2
+  glob: ^2.1.1
+  type_token: ^1.0.4
+  xfile: ^1.1.0
   
 dev_dependencies:
-  pedantic: ^1.0.0
-  build_test: ^0.10.0
-  build_runner: 1.7.2
-  test: ^1.0.0
-  mockito: ^4.1.1
-  logging: ^0.11.0
-  test_coverage: ^0.4.1
+  pedantic: ^1.11.1
+  build_test: ^2.1.5
+  build_runner: 2.3.2
+  test: ^1.22.0
+  mockito: ^5.3.2
+  logging: ^1.1.0
+#  test_coverage: ^0.5.0

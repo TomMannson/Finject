@@ -1,10 +1,8 @@
 import 'dart:developer';
 
-import 'package:finject/finject.dart';
 import 'package:flutter/material.dart';
 
 import '../finject_flutter.dart';
-import 'injection_provider.dart';
 
 class InjectHost extends StatelessWidget {
   final Widget child;

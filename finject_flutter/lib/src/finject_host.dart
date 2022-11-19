@@ -7,7 +7,7 @@ class FInjectHost extends StatelessWidget {
   final Widget host;
 
   FInjectHost.scoped({@required Widget child, String scopeName})
-      : host = ScopeInjectHost(child: child, scopeName: scopeName);
+      : host = ScopeInjectHost(scopeName: scopeName, child: child);
 
   FInjectHost.inject({@required Widget child})
       : host = InjectHost(child: child);

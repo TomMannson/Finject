@@ -1,4 +1,6 @@
-import 'package:dartpoet/dartpoet.dart';
+// import 'package:dartpoet/dartpoet.dart';
+// import '../dart_poet_extensions/dart_poet.dart';
+import '../dartpoet.dart';
 import 'package:finject_generator/src/dart_poet_extensions/dependency_spec_ext.dart';
 
 import '../json_schema/injector_Info.dart';

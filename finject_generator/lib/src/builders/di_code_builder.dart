@@ -3,7 +3,9 @@ import 'dart:convert';
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
-import 'package:dartpoet/dartpoet.dart';
+// import 'package:dartpoet/dartpoet.dart';
+// import '../dart_poet_extensions/dart_poet.dart';
+import '../dartpoet.dart';
 import 'package:finject/finject.dart';
 import 'package:finject_generator/src/builders/validation/dependency_bag.dart';
 import 'package:glob/glob.dart';
