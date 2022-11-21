@@ -9,7 +9,7 @@ class Test {}
 
 class ScopeFactoryImpl extends ScopeFactory {
   @override
-  Scope createScope(String scopeName) {
+  Scope? createScope(String scopeName) {
 //default value
     return null;
   }

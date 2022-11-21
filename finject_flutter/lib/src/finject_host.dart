@@ -6,16 +6,15 @@ import '../finject_flutter.dart';
 class FInjectHost extends StatelessWidget {
   final Widget host;
 
-  FInjectHost.scoped({@required Widget child, String scopeName})
+  FInjectHost.scoped({required Widget child, required String scopeName})
       : host = ScopeInjectHost(scopeName: scopeName, child: child);
 
-  FInjectHost.inject({@required Widget child})
-      : host = InjectHost(child: child);
+  FInjectHost.inject({required Widget child}) : host = InjectHost(child: child);
 
-  FInjectHost.flat({@required Widget child})
+  FInjectHost.flat({required Widget child})
       : host = JustInjectHost(child: child);
 
-  FInjectHost.builder({@required LayoutInjectWidgetBuilder builder})
+  FInjectHost.builder({required LayoutInjectWidgetBuilder builder})
       : host = BuilderInjectHost(builder);
 
   @override

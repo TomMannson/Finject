@@ -4,7 +4,7 @@ version: 0.3.2
 homepage: https://github.com/TomMannson/Finject
 
 environment:
-  sdk: ">=2.3.0 <3.5.0"
+  sdk: ">=2.18.0 <3.5.0"
 
 dependencies:
   flutter:
@@ -15,3 +15,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   lints: any
+
+
+dependency_overrides:
+  finject:
+    path: ../finject

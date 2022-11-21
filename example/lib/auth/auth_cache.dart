@@ -6,7 +6,7 @@ import 'package:finject_flutter/finject_flutter.dart';
 class AuthCache implements DisposableScopedObject{
 
   bool loaded = false;
-  bool loggedIn;
+  late bool loggedIn;
 
   SessionService service;
 

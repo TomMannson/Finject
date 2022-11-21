@@ -11,7 +11,7 @@ class FInject {
     injector.inject(target);
   }
 
-  static T of<T>(BuildContext context, {String name, bool flat = false}) {
+  static T of<T>(BuildContext context, {String? name, bool flat = false}) {
     final scopedContext =
         context.getElementForInheritedWidgetOfExactType<ScopeInjectHost>()
             as ScopeInjecHostElement;

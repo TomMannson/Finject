@@ -3,7 +3,7 @@ description: A project used to demo the Todo Reporter
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.3.0 <3.4.0'
+  sdk: '>=2.18.0 <3.4.0'
 
 dependencies:
   finject_flutter: ^0.3.2

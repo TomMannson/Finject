@@ -12,7 +12,7 @@ Map<Qualifier, Injector> injectorMapper = {};
 Map<Qualifier, Factory> factoryMapper = {};
 
 class ScopeFactoryImpl extends ScopeFactory {
-  Scope createScope(String scopeName) {
+  Scope? createScope(String scopeName) {
     if (scopeName == 'screen') {
       return Scope([
         ScopeEntry<Injector>(const TypeQualifier(id6.AuthCache),
@@ -66,7 +66,7 @@ class AuthService_id5_Injector extends Injector<id5.AuthService> {
 
 /// this is factory for id5.AuthConfiguration class
 class AuthConfiguration_id5_Factory extends Factory<id5.AuthConfiguration> {
-  id5.AuthConfiguration cache;
+  late id5.AuthConfiguration cache;
 
   id5.AuthConfiguration create(InjectionProvider injectionProvider) {
     if (cache != null) {
@@ -93,7 +93,7 @@ class AuthConfiguration_id5_Injector extends Injector<id5.AuthConfiguration> {
 
 /// this is factory for id5.SessionService class
 class SessionService_id5_Factory extends Factory<id5.SessionService> {
-  id5.SessionService cache;
+  late id5.SessionService cache;
 
   id5.SessionService create(InjectionProvider injectionProvider) {
     if (cache != null) {
@@ -147,7 +147,7 @@ class LoginScreenState_id3_Factory extends Factory<id3.LoginScreenState> {
 /// this is injector for LoginScreenState class
 class LoginScreenState_id3_Injector extends Injector<id3.LoginScreenState> {
   void inject(
-          id3.LoginScreenState instance, InjectionProvider injectionProvider) =>
+      id3.LoginScreenState instance, InjectionProvider injectionProvider) =>
       instance.bloc = injectionProvider.get();
 }
 
@@ -178,7 +178,7 @@ class MyFeedPageState_id1_Factory extends Factory<id1.MyFeedPageState> {
 /// this is injector for MyFeedPageState class
 class MyFeedPageState_id1_Injector extends Injector<id1.MyFeedPageState> {
   void inject(
-          id1.MyFeedPageState instance, InjectionProvider injectionProvider) =>
+      id1.MyFeedPageState instance, InjectionProvider injectionProvider) =>
       instance.bloc = injectionProvider.get();
 }
 

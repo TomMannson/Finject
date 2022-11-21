@@ -8,6 +8,7 @@ class PropertySpec implements Spec {
   String name;
   dynamic defaultValue;
   List<MetaSpec> metas = [];
+  bool late;
 
   PropertySpec.of(
     this.name, {
@@ -15,6 +16,7 @@ class PropertySpec implements Spec {
     this.type,
     this.defaultValue,
     this.metas,
+    this.late = false,
   }) {
     metas ??= [];
   }
@@ -154,7 +156,11 @@ class PropertySpec implements Spec {
   @override
   String code({Map<String, Object> args = const {}}) {
     var withDefValue = args[KEY_WITH_DEF_VALUE] as bool ?? false;
-    var raw = '${_getType()} $name';
+    var raw = "";
+    if (late) {
+      raw += "late ";
+    }
+    raw += '${_getType()} $name';
     if (withDefValue && defaultValue != null) {
       raw += '=${_formatValue(defaultValue)}';
     }

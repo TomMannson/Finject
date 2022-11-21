@@ -6,11 +6,13 @@ class MethodSpec implements Spec {
   List<MetaSpec> metas = [];
   List<ParameterSpec> parameters = [];
   TypeToken returnType;
+  bool returnNullable;
   CodeBlockSpec codeBlock;
   bool isStatic;
   bool isFactory;
   bool isAbstract;
   List<TypeToken> generics = [];
+
   bool get hasGeneric => generics.isNotEmpty;
   AsynchronousMode asynchronousMode;
 
@@ -24,6 +26,7 @@ class MethodSpec implements Spec {
     this.isStatic = false,
     this.isFactory = false,
     this.isAbstract = false,
+    this.returnNullable = false,
     this.asynchronousMode = AsynchronousMode.none,
     this.generics,
   }) {
@@ -38,7 +41,13 @@ class MethodSpec implements Spec {
     var elements = [];
     if (isFactory) elements.add('factory');
     if (isStatic) elements.add('static');
-    if (returnType != null) elements.add(returnType.fullTypeName);
+    var nullableState = "";
+    if (returnNullable) {
+      nullableState = "?";
+    }
+    if (returnType != null) {
+      elements.add(returnType.fullTypeName + nullableState);
+    }
     elements.add(methodName);
     if (hasGeneric) elements.add("<${generics.join(", ")}>");
     raw += elements.join(' ');

@@ -10,7 +10,7 @@ class MyFeedPage extends StatefulWidget {
 @Injectable()
 class MyFeedPageState extends DiState<MyFeedPage> {
   @Inject()
-  MyFeedBloc bloc;
+  late MyFeedBloc bloc;
 
   MyFeedPageState();
 
@@ -24,9 +24,10 @@ class MyFeedPageState extends DiState<MyFeedPage> {
         initialData: null,
         stream: bloc.feedStream,
         builder: (_, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.hasData && snapshot.data != null) {
+            var data = snapshot.data!;
             return ListView.builder(
-              itemCount: snapshot.data.length,
+              itemCount: data.length,
               itemBuilder: (_, __) => Text("sdfsfd"),
             );
           } else {

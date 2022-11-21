@@ -28,7 +28,8 @@ class WidgetTestUtils {
     );
   }
 
-  static Future performAsyncPump({WidgetTester tester, Widget widget}) async {
+  static Future performAsyncPump(
+      {required WidgetTester tester, required Widget widget}) async {
     await tester.runAsync(() async {
       final sut = WidgetTestUtils.prepareWidget(widget);
       await tester.pumpWidget(sut);
