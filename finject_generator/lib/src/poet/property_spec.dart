@@ -9,6 +9,7 @@ class PropertySpec implements Spec {
   dynamic defaultValue;
   List<MetaSpec> metas = [];
   bool late;
+  bool nullable;
 
   PropertySpec.of(
     this.name, {
@@ -17,6 +18,7 @@ class PropertySpec implements Spec {
     this.defaultValue,
     this.metas,
     this.late = false,
+    this.nullable = false,
   }) {
     metas ??= [];
   }
@@ -160,7 +162,12 @@ class PropertySpec implements Spec {
     if (late) {
       raw += "late ";
     }
-    raw += '${_getType()} $name';
+    var nullInfo = "";
+    if (nullable) {
+      nullInfo += "?";
+    }
+
+    raw += '${_getType()}$nullInfo $name';
     if (withDefValue && defaultValue != null) {
       raw += '=${_formatValue(defaultValue)}';
     }

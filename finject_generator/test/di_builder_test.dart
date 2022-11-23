@@ -299,11 +299,11 @@ class String2_id2_Injector extends Injector<String2> {
 
 /// this is factory for id1.Config class
 class Config_id1_Factory extends Factory<id1.Config> {
-  late id1.Config cache;
+  id1.Config? cache;
 
   id1.Config create(InjectionProvider injectionProvider) {
     if (cache != null) {
-      return cache;
+      return cache!;
     }
     var value = id1.Config();
     cache = value;

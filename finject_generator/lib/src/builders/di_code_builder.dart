@@ -246,7 +246,7 @@ Iterable<PropertySpec> createPropertyFactoryForScopedSingleton(
       type: TypeToken.ofName2(
         generateTypeFromTypeInfo(data.typeName),
       ),
-      late: true,
+      nullable: true,
     );
   }
 }

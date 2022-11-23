@@ -59,7 +59,7 @@ class LoginScreenState extends DiState<LoginScreen> {
                 initialData: false,
                 stream: bloc.progress,
                 builder: (_, snapshot) {
-                  if(snapshot.hasData && snapshot.data != null){
+                  if(snapshot.hasData && snapshot.data == true){
                     return CircularProgressIndicator();
                   }
                   return Container();

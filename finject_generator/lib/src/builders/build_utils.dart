@@ -20,7 +20,7 @@ CodeBlockSpec generateCodeForFactory(InjectorDs ds) {
 
   if (ds.singleton) {
     lines.add('if(cache != null){');
-    lines.add('return cache;');
+    lines.add('return cache!;');
     lines.add('}');
   }
 
