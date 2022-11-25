@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+## (0.3.2)
+
+  - Some tests added
+
 ## (0.3.0)
 
 Features:
