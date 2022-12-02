@@ -1,0 +1,52 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  schedule:
+    # runs the CI everyday at 10AM
+    - cron: "0 10 * * *"
+
+jobs:
+  funject:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        package:
+          - finject
+          - finject_generator
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: ${{ true }}
+
+      # It is executed separately
+      - name: Example folder removed
+        run: rm -rf example
+        working-directory: ${{ matrix.package }}
+
+      - name: Install dependencies
+        run: |
+          flutter pub get
+        working-directory: ${{ matrix.package }}
+
+      - name: Check format
+        # Check format only on master
+        if: matrix.channel == 'master'
+        run: flutter format --set-exit-if-changed .
+        working-directory: ${{ matrix.package }}
+
+      - name: Analyze
+        run: flutter analyze
+        working-directory: ${{ matrix.package }}
+
+      - name: Run tests
+        run: flutter test
+        working-directory: ${{ matrix.package }}
