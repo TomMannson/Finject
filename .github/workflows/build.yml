@@ -48,8 +48,8 @@ jobs:
       - name: Run tests
         run: |
           if grep -q "name: finject_generator" "pubspec.yaml"; then
-            flutter test
-          else
             dart test
+          else
+            flutter test
           fi
         working-directory: ${{ matrix.package }}
