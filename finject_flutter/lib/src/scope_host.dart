@@ -10,7 +10,7 @@ class ScopeInjectHost extends InheritedWidget {
   final InjectionProvider _getItContainer;
 
   @protected
-  ScopeInjectHost({Widget child, this.scopeName})
+  ScopeInjectHost({required Widget child, required this.scopeName})
       : _getItContainer = ScopeInjectionProviderImpl(
           defaultScopeFactory.createScope(scopeName),
         ),
@@ -32,7 +32,7 @@ class ScopeInjectHost extends InheritedWidget {
 }
 
 class ScopeInjecHostElement extends InheritedElement {
-  ScopeInjectionProviderImpl injectorProvider;
+  late ScopeInjectionProviderImpl injectorProvider;
 
   ScopeInjecHostElement(ScopeInjectHost widget) : super(widget) {
     injectorProvider = widget._getItContainer as ScopeInjectionProviderImpl;
@@ -57,24 +57,31 @@ class HostStatefulWidget extends StatefulWidget {
 }
 
 class _ScopeInjectHostState extends State<HostStatefulWidget> {
-  ScopeInjectionProviderImpl provider;
+  ScopeInjectionProviderImpl? provider;
 
   @override
   Widget build(BuildContext context) {
     if (provider != null) {
-      var lastDisposables = provider.disposables;
-      var lastScope = provider.scope;
+      var lastDisposables = provider!.disposables;
+      var lastScope = provider!.scope;
       provider = widget.parent.currentInjector as ScopeInjectionProviderImpl;
 
-      provider.disposables = lastDisposables;
-      provider.scope = lastScope;
+      final safeProvider = provider!;
+      safeProvider.disposables = lastDisposables;
+      safeProvider.scope = lastScope;
     } else {
       provider = widget.parent.currentInjector as ScopeInjectionProviderImpl;
     }
 
-    provider.context =
+    var safeContext =
         context.getElementForInheritedWidgetOfExactType<ScopeInjectHost>();
-    provider.inject(widget.child);
+
+    if (safeContext == null) {
+      throw "there is no scope in widget tree";
+    }
+
+    provider!.context = safeContext;
+    provider!.inject(widget.child);
 
     log('_ScopeInjectHostState build');
     return widget.child;
@@ -82,28 +89,28 @@ class _ScopeInjectHostState extends State<HostStatefulWidget> {
 
   @override
   void dispose() {
-    provider.clean();
+    provider!.clean();
     super.dispose();
   }
 }
 
 class ScopeInjectionProviderImpl extends AbstractInjectionProvider {
-  Scope scope;
+  Scope? scope;
   Set<DisposableScopedObject> disposables = {};
 
   ScopeInjectionProviderImpl(this.scope);
 
   @override
-  T get<T>([String name]) {
+  T get<T>([String? name]) {
     T value;
 
     var qualifier = QualifierFactory.create(T, name);
 
     if (scope != null &&
-        scope.factory(qualifier) != null &&
-        scope.injector(qualifier) != null) {
-      value = scope.factory(qualifier).create(this) as T;
-      scope.injector(qualifier).inject(value, this);
+        scope!.factory(qualifier) != null &&
+        scope!.injector(qualifier) != null) {
+      value = scope!.factory(qualifier)!.create(this) as T;
+      scope!.injector(qualifier)!.inject(value, this);
       if (value is DisposableScopedObject) {
         disposables.add(value);
       }
@@ -111,7 +118,7 @@ class ScopeInjectionProviderImpl extends AbstractInjectionProvider {
     }
 
     if (context != null) {
-      var foundInjection = findParrent(context);
+      var foundInjection = findParent(context!);
       var parentInjector = foundInjection.provider;
       if (parentInjector != null) {
         value = parentInjector.get(name);
@@ -119,41 +126,43 @@ class ScopeInjectionProviderImpl extends AbstractInjectionProvider {
       }
     }
 
-    var factory = rootDependencyResolver['factory'][qualifier] as Factory;
+    var factory = rootDependencyResolver['factory']![qualifier] as Factory?;
     if (factory != null) {
       value = factory.create(this) as T;
-      rootDependencyResolver['injector'][qualifier].inject(value, this);
+      rootDependencyResolver['injector']![qualifier].inject(value, this);
 
       return value;
     }
-    return null;
+
+    throw "value not found";
+    // return null;
   }
 
   @override
-  void inject(Object target, [String name]) {
+  void inject(Object target, [String? name]) {
     var qualifier = QualifierFactory.create(target.runtimeType, name);
 
-    if (scope != null && scope.injector(qualifier) != null) {
-      scope.injector(qualifier).inject(target, this);
+    if (scope != null && scope!.injector(qualifier) != null) {
+      scope!.injector(qualifier)!.inject(target, this);
       return;
     }
 
-    var foundInjection = findParrent(context);
+    var foundInjection = findParent(context!);
     var parentInjector = foundInjection.provider;
     if (parentInjector != null) {
       parentInjector.inject(target, name);
       return;
     }
 
-    var injector = rootDependencyResolver['injector'][qualifier] as Injector;
+    var injector = rootDependencyResolver['injector']![qualifier] as Injector?;
     if (injector != null) {
       injector.inject(target, this);
     }
   }
 
   @override
-  FoundInjection findParrent(BuildContext context) {
-    Element firstParentOfScopedHost;
+  FoundInjection findParent(BuildContext context) {
+    Element firstParentOfScopedHost = context as Element;
 
     context.visitAncestorElements((el) {
       firstParentOfScopedHost = el;
@@ -162,7 +171,8 @@ class ScopeInjectionProviderImpl extends AbstractInjectionProvider {
 
     final foundScopeInjectHost = firstParentOfScopedHost
             .getElementForInheritedWidgetOfExactType<ScopeInjectHost>()
-        as ScopeInjecHostElement;
+        as ScopeInjecHostElement?;
+
     if (foundScopeInjectHost == null) {
       return FoundInjection(null, null);
     }

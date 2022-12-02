@@ -35,7 +35,7 @@ class TypeQualifier implements Qualifier {
 }
 
 class QualifierFactory {
-  static Qualifier create(Type type, String name) {
+  static Qualifier create(Type type, String? name) {
     if (name != null) {
       return NamedQualifier(type, name);
     } else {

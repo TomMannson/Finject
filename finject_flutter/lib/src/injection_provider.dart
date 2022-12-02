@@ -3,14 +3,14 @@ import 'package:finject/finject.dart';
 import 'package:flutter/material.dart';
 
 abstract class AbstractInjectionProvider extends InjectionProvider {
-  BuildContext context;
+  BuildContext? context;
 
-  FoundInjection findParrent(BuildContext context);
+  FoundInjection findParent(BuildContext context);
 }
 
 class FoundInjection {
-  InjectionProvider provider;
-  BuildContext foundIn;
+  InjectionProvider? provider;
+  BuildContext? foundIn;
 
   FoundInjection(this.provider, this.foundIn);
 }

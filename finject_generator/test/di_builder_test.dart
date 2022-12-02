@@ -223,7 +223,7 @@ Map<Qualifier, Injector> injectorMapper = {};
 Map<Qualifier, Factory> factoryMapper = {};
 
 class ScopeFactoryImpl extends ScopeFactory {
-  Scope createScope(String scopeName) {
+  Scope? createScope(String scopeName) {
     if (scopeName == 'test') {
       return Scope([
         ScopeEntry<Injector>(const NamedQualifier(id1.Test, "name"),
@@ -299,11 +299,11 @@ class String2_id2_Injector extends Injector<String2> {
 
 /// this is factory for id1.Config class
 class Config_id1_Factory extends Factory<id1.Config> {
-  id1.Config cache;
+  id1.Config? cache;
 
   id1.Config create(InjectionProvider injectionProvider) {
     if (cache != null) {
-      return cache;
+      return cache!;
     }
     var value = id1.Config();
     cache = value;

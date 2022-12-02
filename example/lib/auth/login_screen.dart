@@ -15,10 +15,10 @@ class LoginScreen extends StatefulWidget {
 class LoginScreenState extends DiState<LoginScreen> {
 
   @Inject()
-  AuthBloc bloc;
+  late AuthBloc bloc;
 
-  TextEditingController _loginControler;
-  TextEditingController _passwordControler;
+  late TextEditingController _loginControler;
+  late TextEditingController _passwordControler;
 
   @override
   void initState() {
@@ -48,7 +48,7 @@ class LoginScreenState extends DiState<LoginScreen> {
                       labelText: "Password"
                   )
               ),
-              RaisedButton(
+              MaterialButton(
                 child: Text("Login"),
                 onPressed: () async {
                   await bloc.performLogin();
@@ -59,7 +59,7 @@ class LoginScreenState extends DiState<LoginScreen> {
                 initialData: false,
                 stream: bloc.progress,
                 builder: (_, snapshot) {
-                  if(snapshot.hasData && snapshot.data){
+                  if(snapshot.hasData && snapshot.data == true){
                     return CircularProgressIndicator();
                   }
                   return Container();

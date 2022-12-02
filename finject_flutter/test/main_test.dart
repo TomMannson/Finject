@@ -42,7 +42,7 @@ void main() {
     testWidgets('inject_host', (WidgetTester tester) async {
       final sut = WidgetTestUtils.prepareWidget(
         FInjectHost.scoped(
-          scopeName: null,
+          scopeName: "SCOPE",
           child: InjectableWidget(),
         ),
       );
@@ -61,7 +61,7 @@ void testInjection() {
 
 // ignore: must_be_immutable
 class InjectableWidget extends StatelessWidget {
-  Test value;
+  late Test value;
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,3 @@
-import 'package:finject/finject.dart';
 import 'package:finject_flutter/finject_flutter.dart';
 import 'package:flutter/material.dart';
 

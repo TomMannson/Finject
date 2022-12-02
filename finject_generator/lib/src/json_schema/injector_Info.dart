@@ -110,7 +110,7 @@ class InjectorDs {
         ..addAll(constructorInjection.orderedParameters)
         ..addAll(constructorInjection.namedParameters.values.toList());
     }
-    dependencies..addAll(fieldInjection.namedParameter.values);
+    dependencies.addAll(fieldInjection.namedParameter.values);
 
     methodInjections.forEach((value) {
       dependencies.addAll(value.orderedParameters);

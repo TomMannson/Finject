@@ -46,6 +46,7 @@ class TestClass_withScope_id1_Injector extends Injector<TestClass> {
 class TestClass_Factory extends Factory<TestClass> {
   @override
   TestClass create(InjectionProvider provider) {
-    return null;
+    throw 'NULL value';
+    // return null;
   }
 }

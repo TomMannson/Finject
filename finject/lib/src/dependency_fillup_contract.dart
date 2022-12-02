@@ -1,7 +1,7 @@
 import '../finject.dart';
 
 Map<String, Map> rootDependencyResolver = {};
-ScopeFactory defaultScopeFactory;
+late ScopeFactory defaultScopeFactory;
 
 abstract class Injector<T> {
   void inject(T instance, InjectionProvider provider);
@@ -25,17 +25,17 @@ class Scope {
     }
   }
 
-  Injector injector(Qualifier type) {
+  Injector? injector(Qualifier type) {
     return _injectors[type];
   }
 
-  Factory factory(Qualifier type) {
+  Factory? factory(Qualifier type) {
     return _factories[type];
   }
 }
 
 abstract class ScopeFactory {
-  Scope createScope(String scopeName);
+  Scope? createScope(String scopeName);
 }
 
 class ScopeEntry<T> {

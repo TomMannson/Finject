@@ -3,12 +3,14 @@ import 'dart:convert';
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
-import 'package:dartpoet/dartpoet.dart';
 import 'package:finject/finject.dart';
 import 'package:finject_generator/src/builders/validation/dependency_bag.dart';
 import 'package:glob/glob.dart';
 import 'package:path/path.dart' as p;
 
+// import 'package:dartpoet/dartpoet.dart';
+// import '../dart_poet_extensions/dart_poet.dart';
+import '../dartpoet.dart';
 import '../json_schema/injector_Info.dart';
 import 'build_utils.dart';
 
@@ -144,6 +146,7 @@ class DiCodeBuilder implements Builder {
         methods: [
           MethodSpec.build('createScope',
               returnType: TypeToken.of(Scope),
+              returnNullable: true,
               parameters: [
                 ParameterSpec.build('scopeName', type: TypeToken.ofString())
               ],
@@ -238,8 +241,13 @@ Iterable<ClassSpec> createClassesForSummary(InjectorDs readData) sync* {
 Iterable<PropertySpec> createPropertyFactoryForScopedSingleton(
     InjectorDs data) sync* {
   if (data.singleton) {
-    yield PropertySpec.of('cache',
-        type: TypeToken.ofName2(generateTypeFromTypeInfo(data.typeName)));
+    yield PropertySpec.of(
+      'cache',
+      type: TypeToken.ofName2(
+        generateTypeFromTypeInfo(data.typeName),
+      ),
+      nullable: true,
+    );
   }
 }
 

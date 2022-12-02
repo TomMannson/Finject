@@ -1,5 +1,3 @@
-
-
 import 'package:example/auth/auth_cache.dart';
 import 'package:finject_flutter/finject_flutter.dart';
 
@@ -12,18 +10,16 @@ class ProductionAuthService extends AuthService {
   Future<bool> login() {
     throw UnimplementedError();
   }
-
 }
 
 class TestAuthService extends AuthService {
-
   final AuthCache cache;
 
   TestAuthService(this.cache);
 
   @override
   Future<bool> login() async {
-    if(!cache.loaded) {
+    if (!cache.loaded) {
       await Future.delayed(Duration(seconds: 1));
     }
     cache.loaded = true;

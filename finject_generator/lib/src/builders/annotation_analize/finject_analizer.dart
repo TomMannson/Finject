@@ -95,15 +95,17 @@ class Analizer {
     }
     for (var element in accessors) {
       if (element.isSetter && hasAnnotation(element.metadata, 'Inject')) {
-        var function = element.type.element as PropertyAccessorElement;
-        var classInfo = function.parameters[0].type.element as ClassElement;
+        // var function = element.type.element;
+        // var classInfo = function.parameters[0].type.element as ClassElement;
+        var classInfo = element.parameters[0].type.element as ClassElement;
         injection.fieldInjection.addNamedParameter(
             element.name, convert(classInfo), findName(element.metadata));
       }
     }
   }
 
-  void _attachSuperClassInjections(InjectorDs injection, ClassElement element) {
+  void _attachSuperClassInjections(
+      InjectorDs injection, InterfaceElement element) {
     if (element.supertype == null) {
       return;
     }

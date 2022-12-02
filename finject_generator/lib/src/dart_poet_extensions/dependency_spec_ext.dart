@@ -1,4 +1,5 @@
-import 'package:dartpoet/dartpoet.dart';
+// import 'dart_poet.dart';
+import '../dartpoet.dart';
 
 class DependencySpecExt extends DependencySpec {
   String libraryId;
@@ -6,7 +7,7 @@ class DependencySpecExt extends DependencySpec {
   DependencySpecExt.import(String route, this.libraryId) : super.import(route);
 
   @override
-  String code({Map<String, dynamic> args = const {}}) {
+  String code({Map<String, Object> args = const {}}) {
     if (!route.contains('dart:core')) {
       var result = super.code(args: args).replaceAll(';', '');
       return '$result as $libraryId;';

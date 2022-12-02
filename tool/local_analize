@@ -1,0 +1,90 @@
+#!/bin/bash --
+# Copyright (c) 2016, Google Inc. Please see the AUTHORS file for details.
+# All rights reserved. Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+set -e
+
+directories="finject finject_generator finject_flutter"
+
+parent_directory=$PWD
+
+echo ""
+echo "#####"
+echo "##### CODE_FORMATTING"
+echo "#####"
+echo ""
+
+for directory in $directories; do
+  echo "*** Formatting $directory..."
+  cd "$parent_directory/$directory"
+  dart format $(find bin lib test -name \*.dart 2>/dev/null)
+done
+
+echo ""
+echo "#####"
+echo "##### BUILD_RUNNER"
+echo "#####"
+echo ""
+
+for directory in $directories; do
+  echo "*** Building $directory..."
+  cd "$parent_directory/$directory"
+
+ flutter pub get
+ flutter pub upgrade
+
+  # Clear any pre-existing build output so package:build doesn't get confused
+  # when we use built_value to build itself.
+  rm -rf .dart_tool/build/
+
+  grep -q build_runner pubspec.yaml && \
+      flutter pub run build_runner build \
+          --delete-conflicting-outputs \
+          --fail-on-severe
+done
+
+echo ""
+echo "#####"
+echo "##### DART ANALYZER"
+echo "#####"
+echo ""
+
+for directory in $directories; do
+  echo "*** Analyzing $directory..."
+  cd "$parent_directory/$directory"
+
+# --packages="$PWD/.packages" \
+
+  dart analyze \
+      --fatal-warnings \
+      --fatal-infos \
+      $(find bin lib test -name \*.dart 2>/dev/null)
+done
+
+echo ""
+echo "#####"
+echo "##### UNIT TESTS and COVERAGE"
+echo "#####"
+echo ""
+
+dart_directories="finject finject_generator"
+flutter_directories="finject_flutter"
+
+for directory in $dart_directories; do
+  echo "*** Testing and coverage dart modules $directory..."
+  cd "$parent_directory/$directory"
+
+  dart test
+#  pub run test_coverage
+done
+
+for directory in $flutter_directories; do
+  echo "*** Testing and coverage flutter modules $directory..."
+  cd "$parent_directory/$directory"
+
+#  flutter test --coverage
+  flutter test
+done
+
+cd "$parent_directory"

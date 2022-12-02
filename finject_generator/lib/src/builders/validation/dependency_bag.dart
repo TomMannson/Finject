@@ -23,7 +23,7 @@ class DependencyBag {
     if (!duplicateDetector.add(cache)) {
       duplicates.add(cache);
       throw InvalidGenerationSourceError(
-          'Duplicate dependency detected ${cache}'); //if was not added we have duplicate so We need Error
+          'Duplicate dependency detected $cache'); //if was not added we have duplicate so We need Error
     }
 
     cacheOfInjectors[cache] = injectorDs;
@@ -137,7 +137,7 @@ class DependencyBag {
 
     if (injector == null) {
       throw InvalidGenerationSourceError(
-          'Injection for ${cache} can\'t be found');
+          'Injection for $cache can\'t be found');
     }
 
     return injector;
